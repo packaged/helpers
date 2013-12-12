@@ -1,0 +1,23 @@
+{
+  "name":              "packaged/helpers",
+  "license":           "MIT",
+  "authors":           [
+    {
+      "name":  "Brooke Bryan",
+      "email": "brooke@bajb.net"
+    }
+  ],
+  "require":           {
+    "php": ">=5.4.0"
+  },
+  "autoload":          {
+    "files": [
+      "src/GlobalFunctions.php",
+      "src/Phutil.php"
+    ],
+    "psr-0": {
+      "Packaged\\Helpers": "src"
+    }
+  },
+  "minimum-stability": "dev"
+}

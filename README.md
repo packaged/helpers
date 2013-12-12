@@ -1,4 +1,4 @@
-helpers
+Generic Helper Library
 =======
 
-Generic Helper Library
+Some useful functions & helper classes
