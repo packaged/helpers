@@ -929,3 +929,40 @@ function array_interleave($interleave, array $array)
   array_pop($result);
   return $result;
 }
+
+/**
+ * Assert that passed data can be converted to string.
+ *
+ * @param  string $parameter Assert that this data is valid.
+ *
+ * @return void
+ *
+ * @throws InvalidArgumentException
+ */
+function assert_stringlike($parameter)
+{
+  switch(gettype($parameter))
+  {
+    case 'string':
+    case 'NULL':
+    case 'boolean':
+    case 'double':
+    case 'integer':
+      return;
+    case 'object':
+      if(method_exists($parameter, '__toString'))
+      {
+        return;
+      }
+      break;
+    case 'array':
+    case 'resource':
+    case 'unknown type':
+    default:
+      break;
+  }
+
+  throw new InvalidArgumentException(
+    "Argument must be scalar or object which implements __toString()!"
+  );
+}
