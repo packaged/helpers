@@ -524,6 +524,255 @@ class PhutilTest extends PHPUnit_Framework_TestCase
       );
     }
   }
+
+  public function testMpull()
+  {
+    $a    = new MFilterTestHelper('1', 'a', 'q');
+    $b    = new MFilterTestHelper('2', 'b', 'q');
+    $c    = new MFilterTestHelper('3', 'c', 'q');
+    $list = array($a, $b, $c);
+
+    $expected = array(1, 2, 3);
+    $this->assertEquals($expected, mpull($list, 'getH'));
+
+    $expected = array('a' => 1, 'b' => 2, 'c' => 3);
+    $this->assertEquals($expected, mpull($list, 'getH', 'getI'));
+
+    $expected = array('a' => $a, 'b' => $b, 'c' => $c);
+    $this->assertEquals($expected, mpull($list, null, 'getI'));
+  }
+
+  public function testPpull()
+  {
+    $a        = new stdClass();
+    $a->name  = "a";
+    $a->value = 1;
+    $b        = new stdClass();
+    $b->name  = "b";
+    $b->value = 2;
+    $c        = new stdClass();
+    $c->name  = "c";
+    $c->value = 3;
+    $list     = array($a, $b, $c);
+
+    $expected = array("a", "b", "c");
+    $this->assertEquals($expected, ppull($list, 'name'));
+
+    $expected = array('a' => 1, 'b' => 2, 'c' => 3);
+    $this->assertEquals($expected, ppull($list, 'value', 'name'));
+
+    $expected = array('a' => $a, 'b' => $b, 'c' => $c);
+    $this->assertEquals($expected, ppull($list, null, 'name'));
+  }
+
+  public function testIpull()
+  {
+    $list = array(
+      array('name' => 'a', 'value' => 1),
+      array('name' => 'b', 'value' => 2),
+      array('name' => 'c', 'value' => 3),
+    );
+
+    $expected = array("a", "b", "c");
+    $this->assertEquals($expected, ipull($list, 'name'));
+
+    $expected = array('a' => 1, 'b' => 2, 'c' => 3);
+    $this->assertEquals($expected, ipull($list, 'value', 'name'));
+
+    $expected = array(
+      'a' => array('name' => 'a', 'value' => 1),
+      'b' => array('name' => 'b', 'value' => 2),
+      'c' => array('name' => 'c', 'value' => 3),
+    );
+    $this->assertEquals($expected, ipull($list, null, 'name'));
+  }
+
+  public function testMsort()
+  {
+    $a    = new MFilterTestHelper('1', 'a', 'q');
+    $b    = new MFilterTestHelper('2', 'b', 'q');
+    $c    = new MFilterTestHelper('3', 'c', 'q');
+    $list = array("b" => $b, "a" => $a, "c" => $c);
+
+    $expected = array("a" => $a, "b" => $b, "c" => $c);
+    $this->assertEquals($expected, msort($list, 'getI'));
+  }
+
+  public function testIsort()
+  {
+    $list = array(
+      'b' => array('name' => 'b', 'value' => 2),
+      'a' => array('name' => 'a', 'value' => 1),
+      'c' => array('name' => 'c', 'value' => 3),
+    );
+
+    $expected = array(
+      'a' => array('name' => 'a', 'value' => 1),
+      'b' => array('name' => 'b', 'value' => 2),
+      'c' => array('name' => 'c', 'value' => 3),
+    );
+    $this->assertEquals($expected, isort($list, 'name'));
+  }
+
+  public function testArraySelectKeys()
+  {
+    $list = array(
+      'a' => 1,
+      'b' => 2,
+      'c' => 3
+    );
+
+    $expect = array('a' => 1, 'b' => 2);
+    $this->assertEquals($expect, array_select_keys($list, array('a', 'b')));
+  }
+
+  public function testNewv()
+  {
+    $expect = new Pancake('Blueberry', "Maple Syrup");
+    $this->assertEquals(
+      $expect,
+      newv('Pancake', array('Blueberry', "Maple Syrup"))
+    );
+    $expect = new Pancake();
+    $this->assertEquals(
+      $expect,
+      newv('Pancake', array())
+    );
+  }
+
+  public function testIGroup()
+  {
+    $apple  = array(
+      'name'   => 'Apple',
+      'type'   => 'fruit',
+      'colour' => 'green',
+      'group'  => 'food'
+    );
+    $bear   = array(
+      'name'   => 'Bear',
+      'type'   => 'animal',
+      'colour' => 'brown',
+      'group'  => 'creature'
+    );
+    $carrot = array(
+      'name'   => 'Carrot',
+      'type'   => 'vegetable',
+      'colour' => 'brown',
+      'group'  => 'food'
+    );
+
+    $list = array('a' => $apple, 'b' => $bear, 'c' => $carrot);
+
+    $expect = array(
+      'fruit'     => array('a' => $apple),
+      'animal'    => array('b' => $bear),
+      'vegetable' => array('c' => $carrot),
+    );
+    $this->assertEquals($expect, igroup($list, 'type'));
+
+    $expect = array(
+      'food'     => array(
+        'fruit'     => array('a' => $apple),
+        'vegetable' => array('c' => $carrot)
+      ),
+      'creature' => array(
+        'animal' => array('b' => $bear)
+      ),
+    );
+    $this->assertEquals($expect, igroup($list, 'group', 'type'));
+
+    $expect = array(
+      'food'     => array(
+        'a' => $apple,
+        'c' => $carrot
+      ),
+      'creature' => array(
+        'b' => $bear
+      ),
+    );
+    $this->assertEquals($expect, igroup($list, 'group'));
+  }
+
+  public function testMGroup()
+  {
+    $apple  = new Thing('Apple', 'fruit', 'green', 'food');
+    $bear   = new Thing('Bear', 'animal', 'brown', 'creature');
+    $carrot = new Thing('Carrot', 'vegetable', 'brown', 'food');
+
+    $list = array('a' => $apple, 'b' => $bear, 'c' => $carrot);
+
+    $expect = array(
+      'fruit'     => array('a' => $apple),
+      'animal'    => array('b' => $bear),
+      'vegetable' => array('c' => $carrot),
+    );
+    $this->assertEquals($expect, mgroup($list, 'type'));
+
+    $expect = array(
+      'food'     => array(
+        'fruit'     => array('a' => $apple),
+        'vegetable' => array('c' => $carrot)
+      ),
+      'creature' => array(
+        'animal' => array('b' => $bear)
+      ),
+    );
+    $this->assertEquals($expect, mgroup($list, 'group', 'type'));
+
+    $expect = array(
+      'food'     => array(
+        'a' => $apple,
+        'c' => $carrot
+      ),
+      'creature' => array(
+        'b' => $bear
+      ),
+    );
+    $this->assertEquals($expect, mgroup($list, 'group'));
+  }
+}
+
+final class Thing
+{
+  public function __construct($name, $type, $colour, $group)
+  {
+    $this->_name   = $name;
+    $this->_type   = $type;
+    $this->_colour = $colour;
+    $this->_group  = $group;
+  }
+
+  public function type()
+  {
+    return $this->_type;
+  }
+
+  public function group()
+  {
+    return $this->_group;
+  }
+}
+
+final class Pancake
+{
+  public $fruit;
+  public $sauce;
+
+  public function __construct($fruit = null, $sauce = null)
+  {
+    $this->fruit = $fruit;
+    $this->sauce = $sauce;
+  }
+
+  public function getFruit()
+  {
+    return $this->fruit;
+  }
+
+  public function getSauce()
+  {
+    return $this->sauce;
+  }
 }
 
 final class MFilterTestHelper

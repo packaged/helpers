@@ -494,12 +494,9 @@ function mfilter(array $list, $method, $negate = false)
         $result[$key] = $object;
       }
     }
-    else
+    else if(empty($value))
     {
-      if(empty($value))
-      {
-        $result[$key] = $object;
-      }
+      $result[$key] = $object;
     }
   }
 
