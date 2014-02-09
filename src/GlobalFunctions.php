@@ -15,14 +15,14 @@ if(!function_exists("var_dump_json"))
   /**
    * Output an object as json in a pretty format
    *
-   * @param mixed $object            object to json_encode
-   * @param bool  $echoJsonForNonCli force echo with json pretty output
+   * @param mixed     $object object to json_encode
+   * @param bool|null $echo   null will echo if running from cli
    *
    * @return string Pretty Printed JSON
    */
-  function var_dump_json($object, $echoJsonForNonCli = false)
+  function var_dump_json($object, $echo = null)
   {
-    if($echoJsonForNonCli || php_sapi_name() === 'cli')
+    if($echo === true || (php_sapi_name() === 'cli' && $echo === null))
     {
       echo json_encode($object, JSON_PRETTY_PRINT);
     }
@@ -362,7 +362,7 @@ if(!function_exists('build_path_custom'))
         else
         {
           $fullPath = rtrim($fullPath, '/\\' . $directorySeparator) .
-          $directorySeparator . ltrim($section, '/\\' . $directorySeparator);
+            $directorySeparator . ltrim($section, '/\\' . $directorySeparator);
         }
       }
     }

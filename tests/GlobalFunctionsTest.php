@@ -20,9 +20,10 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $this->expectOutputString(
       '{
     "x": "y"
-}{
+}string(16) "{
     "x": "y"
-}'
+}"
+'
     );
     var_dump_json(["x" => "y"], true);
     var_dump_json(["x" => "y"], false);
