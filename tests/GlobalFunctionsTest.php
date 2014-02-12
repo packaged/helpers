@@ -1,8 +1,8 @@
 <?php
+
 /**
  * @author  brooke.bryan
  */
-
 class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
 {
   public function testDirectorySeparator()
@@ -211,10 +211,13 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
   public function testArrayAdd()
   {
     $initialArray = ["a" => 1, "b" => 2];
-    $this->assertEquals($initialArray + ["x"], array_add($initialArray, "x"));
+    $this->assertEquals(
+      $initialArray + ["x"],
+      array_add_value($initialArray, "x")
+    );
     $this->assertEquals(
       $initialArray + ["c" => 3],
-      array_add($initialArray, 3, "c")
+      array_add_value($initialArray, 3, "c")
     );
   }
 

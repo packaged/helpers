@@ -371,7 +371,7 @@ if(!function_exists('build_path_custom'))
   }
 }
 
-if(!function_exists("array_add"))
+if(!function_exists("array_add_value"))
 {
   /**
    * Add a new value to an array, by name or pushed onto the end
@@ -385,7 +385,7 @@ if(!function_exists("array_add"))
    *
    * @return array
    */
-  function array_add(array $array, $value = true, $name = null)
+  function array_add_value(array $array, $value = true, $name = null)
   {
     if($name === null)
     {
