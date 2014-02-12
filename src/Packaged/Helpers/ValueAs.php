@@ -15,7 +15,7 @@ class ValueAs
    *
    * @return bool
    */
-  public function bool($value, $default = false)
+  public static function bool($value, $default = false)
   {
     if($value === null)
     {
@@ -43,7 +43,7 @@ class ValueAs
    *
    * @return int
    */
-  public function int($value, $default = 0)
+  public static function int($value, $default = 0)
   {
     if($value === null)
     {
@@ -61,7 +61,7 @@ class ValueAs
    *
    * @return float
    */
-  public function float($value, $default = 0.0)
+  public static function float($value, $default = 0.0)
   {
     if($value === null)
     {
@@ -79,7 +79,7 @@ class ValueAs
    *
    * @return string
    */
-  public function string($value, $default = "")
+  public static function string($value, $default = "")
   {
     if($value === null)
     {
@@ -99,7 +99,7 @@ class ValueAs
    *
    * @return mixed|string
    */
-  public function normalisedString($value, $default = "")
+  public static function normalisedString($value, $default = "")
   {
     if($value === null)
     {
@@ -124,7 +124,7 @@ class ValueAs
    *
    * @return array
    */
-  public function arr($value, $default = [])
+  public static function arr($value, $default = [])
   {
     if($value === null)
     {
@@ -167,7 +167,7 @@ class ValueAs
    *
    * @return null|object
    */
-  public function obj($value, $default = null)
+  public static function obj($value, $default = null)
   {
     if($value === null)
     {

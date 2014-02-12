@@ -7,8 +7,10 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
    */
   public function testExactConversions($method, $value, $default, $expect)
   {
-    $subject = new \Packaged\Helpers\ValueAs();
-    $this->assertSame($expect, $subject->$method($value, $default));
+    $this->assertSame(
+      $expect,
+      \Packaged\Helpers\ValueAs::$method($value, $default)
+    );
   }
 
   /**
@@ -16,8 +18,10 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
    */
   public function testEqualConversions($method, $value, $default, $expect)
   {
-    $subject = new \Packaged\Helpers\ValueAs();
-    $this->assertEquals($expect, $subject->$method($value, $default));
+    $this->assertEquals(
+      $expect,
+      \Packaged\Helpers\ValueAs::$method($value, $default)
+    );
   }
 
   public function exactProvider()
