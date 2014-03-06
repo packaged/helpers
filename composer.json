@@ -12,11 +12,11 @@
   },
   "autoload":          {
     "files": [
-      "src/GlobalFunctions.php",
-      "src/Phutil.php"
+      "inc/GlobalFunctions.php",
+      "inc/Phutil.php"
     ],
-    "psr-0": {
-      "Packaged\\Helpers": "src"
+    "psr-4": {
+      "Packaged\\Helpers\\": "src"
     }
   },
   "minimum-stability": "dev"
