@@ -417,6 +417,21 @@ if(!function_exists("idp"))
   }
 }
 
+if(!function_exists("get_public_properties"))
+{
+  /**
+   * Return an array with only the public properties
+   *
+   * @param object $object Source object
+   *
+   * @return mixed
+   */
+  function get_public_properties($object)
+  {
+    return get_object_vars($object);
+  }
+}
+
 if(!function_exists("exploded"))
 {
   /**
