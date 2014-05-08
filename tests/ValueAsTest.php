@@ -47,6 +47,8 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
       ['float', "0.1", null, 0.1],
       ['string', null, null, null],
       ['string', "hello", null, "hello"],
+      ['string', true, null, "true"],
+      ['string', false, null, "false"],
       ['string', 123, null, "123"],
       ['normalisedString', null, null, null],
       ['normalisedString', "hey\r\nhow", null, "hey\nhow"],
