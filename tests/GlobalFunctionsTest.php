@@ -261,4 +261,32 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
 
     $this->assertFalse(between(2, 1, 2, false));
   }
+
+  public function testProperties()
+  {
+    $expect = ['name' => null, 'age' => null];
+    $class  = new PropertyClass();
+    $this->assertNotEquals($expect, $class->objectVars());
+    $this->assertEquals($expect, $class->publicVars());
+    $this->assertEquals($expect, get_object_vars($class));
+    $this->assertEquals($expect, get_public_properties($class));
+  }
+}
+
+class PropertyClass
+{
+  public $name;
+  public $age;
+  protected $_gender;
+  private $_ryan;
+
+  public function objectVars()
+  {
+    return get_object_vars($this);
+  }
+
+  public function publicVars()
+  {
+    return get_public_properties($this);
+  }
 }

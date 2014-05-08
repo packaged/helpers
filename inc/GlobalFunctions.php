@@ -422,6 +422,10 @@ if(!function_exists("get_public_properties"))
   /**
    * Return an array with only the public properties
    *
+   * If calling get_object_vars withing a class,
+   * will return protected and private properties,
+   * this function fixes this instance
+   *
    * @param object $object Source object
    *
    * @return mixed
