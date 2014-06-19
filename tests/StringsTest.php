@@ -248,4 +248,15 @@ class StringsTest extends PHPUnit_Framework_TestCase
       );
     }
   }
+
+  public function testRandomString()
+  {
+    foreach([1, 10, 50, 100, 500] as $length)
+    {
+      $this->assertEquals(
+        $length,
+        strlen(\Packaged\Helpers\Strings::randomString($length))
+      );
+    }
+  }
 }
