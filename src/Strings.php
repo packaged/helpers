@@ -226,6 +226,13 @@ class Strings
     return [$part1, $part2];
   }
 
+  /**
+   * Generate a random string of $length bytes
+   *
+   * @param int $length
+   *
+   * @return string
+   */
   public static function randomString($length = 40)
   {
     if(function_exists('mcrypt_create_iv'))
@@ -237,7 +244,7 @@ class Strings
       $randomData = openssl_random_pseudo_bytes(100);
     }
     else if(@file_exists('/dev/urandom'))
-    { // Get 100 bytes of random data
+    {
       $randomData = file_get_contents('/dev/urandom', false, null, 0, 100)
         . uniqid(mt_rand(), true);
     }
@@ -246,6 +253,7 @@ class Strings
       $randomData = mt_rand() . mt_rand() . mt_rand() . mt_rand()
         . microtime(true) . uniqid(mt_rand(), true);
     }
+
     $hashed = hash('sha512', $randomData);
     while(strlen($hashed) < $length)
     {
