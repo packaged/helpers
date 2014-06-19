@@ -258,5 +258,20 @@ class StringsTest extends PHPUnit_Framework_TestCase
         strlen(\Packaged\Helpers\Strings::randomString($length))
       );
     }
+
+    $types = [
+      \Packaged\Helpers\Strings::RANDOM_STRING_MCRYPT,
+      \Packaged\Helpers\Strings::RANDOM_STRING_OPENSSL,
+      \Packaged\Helpers\Strings::RANDOM_STRING_URANDOM,
+      \Packaged\Helpers\Strings::RANDOM_STRING_CUSTOM,
+      'invalid'
+    ];
+    foreach($types as $type)
+    {
+      $this->assertEquals(
+        40,
+        strlen(\Packaged\Helpers\Strings::randomString(40, $type))
+      );
+    }
   }
 }

@@ -226,24 +226,36 @@ class Strings
     return [$part1, $part2];
   }
 
+  const RANDOM_STRING_MCRYPT = 'mcrypt';
+  const RANDOM_STRING_OPENSSL = 'openssl';
+  const RANDOM_STRING_URANDOM = 'urandom';
+  const RANDOM_STRING_CUSTOM = 'custom';
+
   /**
    * Generate a random string of $length bytes
    *
-   * @param int $length
+   * @param int    $length
+   * @param string $forceMethod
    *
    * @return string
    */
-  public static function randomString($length = 40)
+  public static function randomString($length = 40, $forceMethod = null)
   {
-    if(function_exists('mcrypt_create_iv'))
+    if(($forceMethod == self::RANDOM_STRING_MCRYPT || $forceMethod == null) &&
+      function_exists('mcrypt_create_iv')
+    )
     {
       $randomData = mcrypt_create_iv(100, MCRYPT_DEV_URANDOM);
     }
-    else if(function_exists('openssl_random_pseudo_bytes'))
+    elseif(($forceMethod == self::RANDOM_STRING_OPENSSL || $forceMethod == null)
+      && function_exists('openssl_random_pseudo_bytes')
+    )
     {
       $randomData = openssl_random_pseudo_bytes(100);
     }
-    else if(@file_exists('/dev/urandom'))
+    elseif(($forceMethod == self::RANDOM_STRING_URANDOM || $forceMethod == null)
+      && @file_exists('/dev/urandom')
+    )
     {
       $randomData = file_get_contents('/dev/urandom', false, null, 0, 100)
         . uniqid(mt_rand(), true);
