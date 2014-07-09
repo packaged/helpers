@@ -1,8 +1,8 @@
 <?php
+
 /**
  * @author  brooke.bryan
  */
-
 class StringsTest extends PHPUnit_Framework_TestCase
 {
   public function testSplitOnCamelCase()
@@ -273,5 +273,50 @@ class StringsTest extends PHPUnit_Framework_TestCase
         strlen(\Packaged\Helpers\Strings::randomString(40, $type))
       );
     }
+  }
+
+  /**
+   * @dataProvider excerptProvider
+   */
+  public function testExcerpt($length, $expect, $append = '...', $string = null)
+  {
+    if($string === null)
+    {
+      $string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+        . 'Sed tincidunt arcu eu purus facilisis placerat. '
+        . 'Cras elementum massa justo, et aliquam nisl ultricies nec. '
+        . 'Sed tempus turpis dolor, vitae iaculis enim imperdiet quis. '
+        . 'Ut condimentum lectus a auctor gravida. Nunc pellentesque faucibus '
+        . 'ante sed cursus. Pellentesque quis justo bibendum, tempor lectus sit'
+        . ' amet, varius nibh. Morbi gravida ut mauris at mattis. '
+        . 'Etiam augue augue, tincidunt a tincidunt sed, suscipit quis leo.'
+        . ' Pellentesque eu libero pulvinar, tristique sapien in,'
+        . ' pellentesque dui. Cras arcu quam, molestie non ante at,'
+        . ' facilisis luctus lacus. Donec sodales vitae nulla eu volutpat.'
+        . ' Vestibulum ante ipsum primis in faucibus orci luctus et ultrices'
+        . ' posuere cubilia Curae; Vestibulum pellentesque porttitor felis,'
+        . ' porta viverra dui imperdiet sit amet. Suspendisse tellus neque,'
+        . ' euismod sed dui eget, malesuada pretium magna. Proin ac consequat'
+        . ' libero. Curabitur egestas sem eu metus porta,'
+        . ' at vestibulum lacus luctus.';
+    }
+    $this->assertEquals(
+      $expect,
+      \Packaged\Helpers\Strings::excerpt($string, $length, $append)
+    );
+  }
+
+  public function excerptProvider()
+  {
+    return [
+      [10, "qwertyuiop...", '...', 'qwertyuiopasdfghjklzxcvbnm'],
+      [5, "qwert...", '...', 'qwertyuiopasdfghjklzxcvbnm'],
+      [50, "qwertyuiopasdfghjklzxcvbnm", '...', 'qwertyuiopasdfghjklzxcvbnm'],
+      [10, "Lorem..."],
+      [15, "Lorem ipsum..."],
+      [1, "L..."],
+      [5, "Lorem..."],
+      [50, "Lorem ipsum dolor sit amet, consectetur..."],
+    ];
   }
 }

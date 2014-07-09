@@ -273,4 +273,25 @@ class Strings
     }
     return substr($hashed, 0, $length);
   }
+
+  /**
+   * Take a short extract from a string.
+   *
+   * @param        $string
+   * @param        $length
+   * @param string $append
+   *
+   * @return string
+   */
+  public static function excerpt($string, $length, $append = ' ...')
+  {
+    if(mb_strlen($string) < $length)
+    {
+      return $string;
+    }
+
+    $string = mb_substr($string, 0, $length);
+    $pos    = mb_strrpos($string, " ");
+    return mb_substr($string, 0, !$pos ? $length : $pos) . $append;
+  }
 }
