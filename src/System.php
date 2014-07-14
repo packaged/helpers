@@ -3,6 +3,8 @@ namespace Packaged\Helpers;
 
 class System
 {
+  private static $commandCache = [];
+
   /**
    * Detect if the server is running Windows
    *
@@ -64,5 +66,42 @@ class System
     }
 
     return preg_match('/^PHP \d\.\d\.\d Development Server/', $server) === 1;
+  }
+
+  /**
+   * Check to see if a command exists
+   *
+   * @param $cmd
+   *
+   * @return bool
+   */
+  public static function commandExists($cmd)
+  {
+    return (bool)self::findCommand($cmd);
+  }
+
+  /**
+   * Retrieve the path of a command
+   *
+   * @param $cmd
+   *
+   * @return mixed
+   */
+  public static function findCommand($cmd)
+  {
+    if(!isset(self::$commandCache[$cmd]))
+    {
+      $path      = false;
+      $retval    = -1;
+      $searchCmd = System::isWindows() ? 'where' : 'which';
+      exec(sprintf('%s "%s"', $searchCmd, $cmd), $output, $retval);
+      if($retval === 0)
+      {
+        $path = $output[0];
+      }
+      self::$commandCache[$cmd] = $path;
+    }
+
+    return self::$commandCache[$cmd];
   }
 }

@@ -54,4 +54,18 @@ class SystemTest extends PHPUnit_Framework_TestCase
       )
     );
   }
+
+  public function testCommandFinder()
+  {
+    $this->assertInternalType(
+      'bool',
+      \Packaged\Helpers\System::commandExists('whois')
+    );
+    $this->assertTrue(
+      \Packaged\Helpers\System::commandExists('echo')
+    );
+    $this->assertFalse(
+      \Packaged\Helpers\System::commandExists('madeupcommand2')
+    );
+  }
 }
