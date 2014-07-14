@@ -43,13 +43,13 @@ class SystemTest extends PHPUnit_Framework_TestCase
   {
     $test                       = $_SERVER['SERVER_SOFTWARE'];
     $_SERVER['SERVER_SOFTWARE'] = 'PHP 5.5.1 Development Server';
-    $this->assertTrue(\Packaged\Helpers\System::isBuildInDevServer());
+    $this->assertTrue(\Packaged\Helpers\System::isBuiltInDevServer());
     $_SERVER['SERVER_SOFTWARE'] = $test;
     $this->assertFalse(
-      \Packaged\Helpers\System::isBuildInDevServer('Google App Engine/1.9.6')
+      \Packaged\Helpers\System::isBuiltInDevServer('Google App Engine/1.9.6')
     );
     $this->assertTrue(
-      \Packaged\Helpers\System::isBuildInDevServer(
+      \Packaged\Helpers\System::isBuiltInDevServer(
         'PHP 5.5.1 Development Server'
       )
     );

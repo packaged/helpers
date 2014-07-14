@@ -50,13 +50,13 @@ class System
   }
 
   /**
-   * Detect if the script is running on the build in php dev server
+   * Detect if the script is running on the built-in php dev server
    *
    * @param string $server $_SERVER['SERVER_SOFTWARE']
    *
    * @return bool
    */
-  public static function isBuildInDevServer($server = null)
+  public static function isBuiltInDevServer($server = null)
   {
     if($server === null && isset($_SERVER['SERVER_SOFTWARE']))
     {
