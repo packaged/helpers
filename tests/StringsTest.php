@@ -316,7 +316,8 @@ class StringsTest extends PHPUnit_Framework_TestCase
       [15, "Lorem ipsum..."],
       [1, "L..."],
       [5, "Lorem..."],
-      [50, "Lorem ipsum dolor sit amet, consectetur..."],
+      [50, "Lorem ipsum dolor sit amet, consectetur adipiscing..."],
+      [10, "once wefhr...", '...', "once wefhrekjgferjgf"],
     ];
   }
 }

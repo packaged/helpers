@@ -292,6 +292,11 @@ class Strings
 
     $string = mb_substr($string, 0, $length);
     $pos    = mb_strrpos($string, " ");
+    //Ensure we do not cut the string too early on
+    if($length - $pos > 5)
+    {
+      $pos = false;
+    }
     return mb_substr($string, 0, !$pos ? $length : $pos) . $append;
   }
 }
