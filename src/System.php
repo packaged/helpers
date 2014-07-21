@@ -93,7 +93,7 @@ class System
     {
       $path      = false;
       $retval    = -1;
-      $searchCmd = System::isWindows() ? 'where' : 'which';
+      $searchCmd = System::isWindows() ? 'where /Q' : 'which';
       exec(sprintf('%s "%s"', $searchCmd, $cmd), $output, $retval);
       if($retval === 0)
       {
