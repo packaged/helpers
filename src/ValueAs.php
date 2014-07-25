@@ -118,7 +118,7 @@ class ValueAs
 
     // Normalize newlines.
     return \str_replace(
-      array("\r\n", "\r"),
+      ["\r\n", "\r"],
       "\n",
       $value
     );
@@ -156,14 +156,23 @@ class ValueAs
       return (array)$value;
     }
 
-    if(is_string($value) && stristr($value, ','))
+    if(is_string($value))
     {
-      return explode(',', $value);
+      if(stristr($value, '=') && stristr($value, '&'))
+      {
+        $array = [];
+        parse_str($value, $array);
+        return $array;
+      }
+      if(stristr($value, ','))
+      {
+        return explode(',', $value);
+      }
     }
 
     if(is_scalar($value))
     {
-      return array($value);
+      return [$value];
     }
 
     return $default;

@@ -57,6 +57,7 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
       ['arr', ["hey"], null, ["hey"]],
       ['arr', "hey", null, ["hey"]],
       ['arr', "hello,world", null, ["hello", "world"]],
+      ['arr', "test=one&unit=two", null, ["test" => 'one', "unit" => 'two']],
       ['arr', "", ["test"], ["test"]],
       ['arr', tmpfile(), ["test"], ["test"]],
       ['arr', $objectTest, ["test"], ["item" => "value"]],
