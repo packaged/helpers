@@ -93,9 +93,9 @@ class System
     {
       $path      = false;
       $retval    = -1;
-      $searchCmd = System::isWindows() ? 'where /Q' : 'which';
-      exec(sprintf('%s "%s"', $searchCmd, $cmd), $output, $retval);
-      if($retval === 0)
+      $searchCmd = System::isWindows() ? 'where "%s" 2>nul' : 'which "%s"';
+      exec(sprintf($searchCmd, $cmd), $output, $retval);
+      if($retval === 0 && isset($output[0]))
       {
         $path = $output[0];
       }
