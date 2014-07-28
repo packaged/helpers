@@ -95,7 +95,7 @@ if(!function_exists("psort"))
 
     asort($surrogate);
 
-    $result = array();
+    $result = [];
     foreach($surrogate as $key => $value)
     {
       $result[$key] = $list[$key];
@@ -225,6 +225,30 @@ if(!function_exists("strip_start"))
     if(starts_with($haystack, $needle))
     {
       $haystack = substr($haystack, strlen($needle));
+    }
+    return $haystack;
+  }
+}
+
+if(!function_exists("string_from"))
+{
+  /**
+   * Retrieve the final part of a string, after the first instance of the
+   * needle has been located
+   *
+   * @param $haystack
+   * @param $needle
+   *
+   * @return string
+   */
+  function string_from($haystack, $needle)
+  {
+    if(stristr($haystack, $needle))
+    {
+      $haystack = substr(
+        $haystack,
+        strpos($haystack, $needle) + strlen($needle)
+      );
     }
     return $haystack;
   }
