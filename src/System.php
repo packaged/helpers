@@ -25,13 +25,25 @@ class System
   }
 
   /**
-   * Detect if the script is running under HipHop
+   * Detect if the script is running under HHVM
+   *
+   * @return bool
+   */
+  public static function isHHVM()
+  {
+    return (array_key_exists('HPHP', $_ENV) && $_ENV['HPHP'] === 1);
+  }
+
+  /**
+   * @alias isHHVM
+   *
+   * Detect if the script is running under HHVM
    *
    * @return bool
    */
   public static function isHipHop()
   {
-    return (array_key_exists('HPHP', $_ENV) && $_ENV['HPHP'] === 1);
+    return self::isHHVM();
   }
 
   /**

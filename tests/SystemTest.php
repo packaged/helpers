@@ -20,6 +20,7 @@ class SystemTest extends PHPUnit_Framework_TestCase
 
   public function testGlobals()
   {
+    $this->assertInternalType('bool', \Packaged\Helpers\System::isHHVM());
     $this->assertInternalType('bool', \Packaged\Helpers\System::isHipHop());
     $this->assertInternalType('bool', \Packaged\Helpers\System::isMac());
     $this->assertInternalType('bool', \Packaged\Helpers\System::isWindows());
