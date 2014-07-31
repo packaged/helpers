@@ -308,6 +308,27 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $this->assertFalse(contains_any('aBCdef', ['x', 'y', 'bc']));
     $this->assertFalse(contains_any('abcdef', ['x', 'y', 'z']));
   }
+
+  public function testGlobRecursive()
+  {
+    $baseDir = dirname(__DIR__);
+    $this->assertContains(
+      build_path($baseDir, 'composer.json'),
+      glob_recursive($baseDir, '*.json')
+    );
+    $this->assertContains(
+      build_path($baseDir, 'phpunit.xml'),
+      glob_recursive($baseDir, '*.xml')
+    );
+    $this->assertContains(
+      build_path($baseDir, 'inc', 'GlobalFunctions.php'),
+      glob_recursive(build_path($baseDir, 'inc'), '*.php')
+    );
+    $this->assertContains(
+      build_path($baseDir, 'src', 'Traits', 'ArrayAccessTrait.php'),
+      glob_recursive($baseDir, '*.php')
+    );
+  }
 }
 
 class PropertyClass
