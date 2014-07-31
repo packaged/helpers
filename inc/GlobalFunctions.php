@@ -209,6 +209,54 @@ if(!function_exists("ends_with_any"))
   }
 }
 
+if(!function_exists("contains_any"))
+{
+  /**
+   * Check a string contains one of the provided needles
+   *
+   * @param       $haystack
+   * @param array $needles
+   * @param bool  $case
+   *
+   * @return bool
+   */
+  function contains_any($haystack, array $needles, $case = true)
+  {
+    foreach($needles as $needle)
+    {
+      if(str_contains($haystack, $needle, $case))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
+if(!function_exists("str_contains"))
+{
+  /**
+   * Check a string contains another string
+   *
+   * @param       $haystack
+   * @param array $needle
+   * @param bool  $case
+   *
+   * @return bool
+   */
+  function str_contains($haystack, $needle, $case = true)
+  {
+    if($case)
+    {
+      return strstr($haystack, $needle) !== false;
+    }
+    else
+    {
+      return stristr($haystack, $needle) !== false;
+    }
+  }
+}
+
 if(!function_exists("strip_start"))
 {
   /**

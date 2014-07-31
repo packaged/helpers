@@ -289,6 +289,25 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('-', nformat('-'));
     $this->assertEquals('10,000', nformat('10000'));
   }
+
+  public function testStrContains()
+  {
+    $this->assertTrue(str_contains('abcdef', 'bcd'));
+    $this->assertTrue(str_contains('abcdef', 'bcd', false));
+    $this->assertFalse(str_contains('abCdef', 'bcd'));
+    $this->assertTrue(str_contains('aBcDeF', 'aBcDeF'));
+    $this->assertTrue(str_contains('aBcDeF', 'BcD'));
+    $this->assertTrue(str_contains('aBcDeF', 'bcd', false));
+  }
+
+  public function testContainsAny()
+  {
+    $this->assertTrue(contains_any('abcdef', ['x', 'y', 'bc']));
+    $this->assertFalse(contains_any('abcdef', ['x', 'y', 'z']));
+    $this->assertTrue(contains_any('aBCdef', ['x', 'y', 'bc'], false));
+    $this->assertFalse(contains_any('aBCdef', ['x', 'y', 'bc']));
+    $this->assertFalse(contains_any('abcdef', ['x', 'y', 'z']));
+  }
 }
 
 class PropertyClass
