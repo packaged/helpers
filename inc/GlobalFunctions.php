@@ -512,3 +512,30 @@ if(!function_exists("between"))
     }
   }
 }
+
+if(!function_exists("nformat"))
+{
+  /**
+   * Number format integers only, any other string will be returned as is
+   *
+   * @param mixed  $number       The number being formatted.
+   * @param int    $decimals     [optional] Sets the number of decimal points.
+   * @param string $decPoint     [optional]
+   * @param string $thousandsSep [optional]
+   *
+   * @return string A formatted version of number.
+   */
+  function nformat(
+    $number, $decimals = 0, $decPoint = '.', $thousandsSep = ','
+  )
+  {
+    if(is_numeric($number))
+    {
+      return number_format($number, $decimals, $decPoint, $thousandsSep);
+    }
+    else
+    {
+      return $number;
+    }
+  }
+}

@@ -283,6 +283,12 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
       string_from('X\Y\Z\Com\Views\Dyn', 'Mi\\')
     );
   }
+
+  public function testNFormat()
+  {
+    $this->assertEquals('-', nformat('-'));
+    $this->assertEquals('10,000', nformat('10000'));
+  }
 }
 
 class PropertyClass
