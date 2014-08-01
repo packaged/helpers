@@ -279,11 +279,12 @@ class Strings
    *
    * @param        $string
    * @param        $length
+   * @param        $cutLimit
    * @param string $append
    *
    * @return string
    */
-  public static function excerpt($string, $length, $append = ' ...')
+  public static function excerpt($string, $length, $append = ' ...', $cutLimit = 0)
   {
     if(mb_strlen($string) < $length)
     {
@@ -293,6 +294,11 @@ class Strings
     $string = mb_substr($string, 0, $length);
     $pos    = mb_strrpos($string, " ");
 
+    //Ensure we do not cut the string too early on
+    if($cutLimit > 0 && ($length - $pos > $cutLimit))
+    {
+      $pos = false;
+    }
     return mb_substr($string, 0, !$pos ? $length : $pos) . $append;
   }
 }
