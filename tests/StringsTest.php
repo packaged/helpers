@@ -275,10 +275,13 @@ class StringsTest extends PHPUnit_Framework_TestCase
     }
   }
 
+
   /**
    * @dataProvider excerptProvider
    */
-  public function testExcerpt($length, $expect, $append = '...', $string = null, $cutLimit = 0)
+  public function testExcerpt(
+    $length, $expect, $append = '...', $string = null, $forceOnSpace = false
+  )
   {
     if($string === null)
     {
@@ -302,7 +305,12 @@ class StringsTest extends PHPUnit_Framework_TestCase
     }
     $this->assertEquals(
       $expect,
-      \Packaged\Helpers\Strings::excerpt($string, $length, $append, $cutLimit)
+      \Packaged\Helpers\Strings::excerpt(
+        $string,
+        $length,
+        $append,
+        $forceOnSpace
+      )
     );
   }
 
@@ -316,10 +324,10 @@ class StringsTest extends PHPUnit_Framework_TestCase
       [15, "Lorem ipsum..."],
       [1, "L..."],
       [5, "Lorem..."],
-      [50, "Lorem ipsum dolor sit amet, consectetur..."],
-      [10, "once...", '...', "once wefhrekjgferjgf"],
-      [2, "qw...", '...', "qwertyuiopasdfghjklzxcvbnm", 5],
-      [2, "q...", '...', "q qwertyuiopasdfghjklzxcvbnm", 5],
+      [50, "Lorem ipsum dolor sit amet, consectetur adipiscing..."],
+      [50, "Lorem ipsum dolor sit amet, consectetur adipiscing..."],
+      [10, "once wefhr...", '...', "once wefhrekjgferjgf"],
+      [15, "once...", '...', "once wefhrekjgefpiferjgf",true],
     ];
   }
 }
