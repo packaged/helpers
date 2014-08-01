@@ -280,10 +280,13 @@ class Strings
    * @param        $string
    * @param        $length
    * @param string $append
+   * @param bool   $forceOnSpace
    *
    * @return string
    */
-  public static function excerpt($string, $length, $append = ' ...')
+  public static function excerpt(
+    $string, $length, $append = ' ...', $forceOnSpace = false
+  )
   {
     if(mb_strlen($string) < $length)
     {
@@ -293,10 +296,11 @@ class Strings
     $string = mb_substr($string, 0, $length);
     $pos    = mb_strrpos($string, " ");
     //Ensure we do not cut the string too early on
-    if($length - $pos > 5)
+    if(!$forceOnSpace && $length - $pos > 5)
     {
       $pos = false;
     }
     return mb_substr($string, 0, !$pos ? $length : $pos) . $append;
   }
+
 }
