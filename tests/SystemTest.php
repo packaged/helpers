@@ -62,9 +62,18 @@ class SystemTest extends PHPUnit_Framework_TestCase
       'bool',
       \Packaged\Helpers\System::commandExists('whois')
     );
-    $this->assertTrue(
-      \Packaged\Helpers\System::commandExists('echo')
-    );
+    if(\Packaged\Helpers\System::isWindows())
+    {
+      $this->assertTrue(
+        \Packaged\Helpers\System::commandExists('explorer')
+      );
+    }
+    else
+    {
+      $this->assertTrue(
+        \Packaged\Helpers\System::commandExists('echo')
+      );
+    }
     $this->assertFalse(
       \Packaged\Helpers\System::commandExists('madeupcommand2')
     );
