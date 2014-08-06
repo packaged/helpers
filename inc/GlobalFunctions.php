@@ -601,9 +601,9 @@ if(!function_exists('glob_recursive'))
    */
   function glob_recursive($baseDir, $pattern = '*', $flags = 0)
   {
-    $files = glob($baseDir . '/' . $pattern, $flags);
+    $files = glob($baseDir . DS . $pattern, $flags);
 
-    foreach(glob($baseDir . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir)
+    foreach(glob($baseDir . DS . '*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir)
     {
       $files = array_merge($files, glob_recursive($dir, $pattern, $flags));
     }
