@@ -74,4 +74,9 @@ class ArrayHelper
   {
     return $this->_data;
   }
+
+  public static function toArray($object)
+  {
+    return json_decode(json_encode($object), true);
+  }
 }

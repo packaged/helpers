@@ -53,6 +53,28 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
       $arr->getValues()
     );
   }
+
+  public function testToArray()
+  {
+    $testClass                 = new stdClass();
+    $testClass->value1         = 'value one';
+    $testClass->array          = ['test' => 'test1', 'test'];
+    $testClass->nested         = new stdClass();
+    $testClass->nested->value1 = 'value one';
+    $testClass->nested->array  = ['test' => 'test1', 'test'];
+
+    $this->assertEquals(
+      [
+        'value1' => 'value one',
+        'array'  => ['test' => 'test1', 'test'],
+        'nested' => [
+          'value1' => 'value one',
+          'array'  => ['test' => 'test1', 'test']
+        ]
+      ],
+      \Packaged\Helpers\ArrayHelper::toArray($testClass)
+    );
+  }
 }
 
 class ObjectArrayHelper
