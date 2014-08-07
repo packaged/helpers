@@ -54,6 +54,22 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
     );
   }
 
+  public function testArrayAccess()
+  {
+    $testClass         = new stdClass();
+    $testClass->value1 = 'value one';
+    $testClass->value2 = 'value two';
+    $testClass->array  = ['test' => 'test1', 'test'];
+    $array             = \Packaged\Helpers\ArrayHelper::create($testClass);
+    $this->assertEquals('value one', $array['value1']);
+    $this->assertTrue(isset($array['value2']));
+    unset($array['value2']);
+    $this->assertFalse(isset($array['value2']));
+    $this->assertNull($array['value2']);
+    $array['value2'] = 'value new';
+    $this->assertEquals('value new', $array['value2']);
+  }
+
   public function testToArray()
   {
     $testClass                 = new stdClass();

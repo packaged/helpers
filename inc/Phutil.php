@@ -128,7 +128,7 @@ if(!function_exists('mpull'))
 {
   function mpull(array $list, $method, $keyMethod = null)
   {
-    $result = array();
+    $result = [];
     foreach($list as $key => $object)
     {
       if($keyMethod !== null)
@@ -213,7 +213,7 @@ if(!function_exists('ppull'))
 {
   function ppull(array $list, $property, $keyProperty = null)
   {
-    $result = array();
+    $result = [];
     foreach($list as $key => $object)
     {
       if($keyProperty !== null)
@@ -272,7 +272,7 @@ if(!function_exists('ipull'))
 {
   function ipull(array $list, $index, $keyIndex = null)
   {
-    $result = array();
+    $result = [];
     foreach($list as $key => $array)
     {
       if($keyIndex !== null)
@@ -333,11 +333,11 @@ if(!function_exists('mgroup'))
   {
     $map = mpull($list, $by);
 
-    $groups = array();
+    $groups = [];
     foreach($map as $group)
     {
       // Can't array_fill_keys() here because 'false' gets encoded wrong.
-      $groups[$group] = array();
+      $groups[$group] = [];
     }
 
     foreach($map as $key => $group)
@@ -382,10 +382,10 @@ if(!function_exists('igroup'))
   {
     $map = ipull($list, $by);
 
-    $groups = array();
+    $groups = [];
     foreach($map as $group)
     {
-      $groups[$group] = array();
+      $groups[$group] = [];
     }
 
     foreach($map as $key => $group)
@@ -437,7 +437,7 @@ if(!function_exists('msort'))
 
     asort($surrogate);
 
-    $result = array();
+    $result = [];
     foreach($surrogate as $key => $value)
     {
       $result[$key] = $list[$key];
@@ -467,7 +467,7 @@ if(!function_exists('isort'))
 
     asort($surrogate);
 
-    $result = array();
+    $result = [];
     foreach($surrogate as $key => $value)
     {
       $result[$key] = $list[$key];
@@ -511,19 +511,12 @@ if(!function_exists('mfilter'))
       throw new InvalidArgumentException('Argument method is not a string.');
     }
 
-    $result = array();
+    $result = [];
     foreach($list as $key => $object)
     {
       $value = $object->$method();
 
-      if(!$negate)
-      {
-        if(!empty($value))
-        {
-          $result[$key] = $object;
-        }
-      }
-      else if(empty($value))
+      if((!$negate && !empty($value)) || ($negate && empty($value)))
       {
         $result[$key] = $object;
       }
@@ -566,7 +559,7 @@ if(!function_exists('ifilter'))
       throw new InvalidArgumentException('Argument index is not a scalar.');
     }
 
-    $result = array();
+    $result = [];
     if(!$negate)
     {
       foreach($list as $key => $array)
@@ -613,7 +606,7 @@ if(!function_exists('array_select_keys'))
 {
   function array_select_keys(array $dict, array $keys)
   {
-    $result = array();
+    $result = [];
     foreach($keys as $key)
     {
       if(array_key_exists($key, $dict))
@@ -874,7 +867,7 @@ if(!function_exists('array_mergev'))
   {
     if(!$arrayv)
     {
-      return array();
+      return [];
     }
 
     return call_user_func_array('array_merge', $arrayv);
@@ -900,7 +893,7 @@ if(!function_exists('phutil_split_lines'))
   {
     if(!strlen($corpus))
     {
-      return array('');
+      return [''];
     }
 
     // Split on "\r\n" or "\n".
@@ -952,7 +945,7 @@ if(!function_exists('array_fuse'))
     {
       return array_combine($list, $list);
     }
-    return array();
+    return [];
   }
 }
 
@@ -988,7 +981,7 @@ if(!function_exists('array_interleave'))
 {
   function array_interleave($interleave, array $array)
   {
-    $result = array();
+    $result = [];
     foreach($array as $item)
     {
       $result[] = $item;
