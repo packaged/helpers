@@ -249,6 +249,10 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
       [1, 2, 3, 4, 5],
       exploded(",", "1,2,3,4,5", $defaults)
     );
+    $this->assertEquals(
+      [1, 2, 3, '-', '-'],
+      exploded(",", "1,2,3", '-', 5)
+    );
   }
 
   public function testBetween()

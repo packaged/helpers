@@ -513,15 +513,16 @@ if(!function_exists("exploded"))
   /**
    * Explode a string, filling the remainder with provided defaults.
    *
-   * @param string   $delimiter The boundary string
-   * @param string   $string    The input string.
-   * @param array    $defaults  Array to return, with replacements made
-   * @param int|null $limit     Passed through to the initial explode
+   * @param string      $delimiter The boundary string
+   * @param string      $string    The input string.
+   * @param array|mixed $defaults  Array to return, with replacements made,
+   *                               or a padding value
+   * @param int|null    $limit     Passed through to the initial explode
    *
    * @return array
    *
    */
-  function exploded($delimiter, $string, array $defaults = [], $limit = null)
+  function exploded($delimiter, $string, $defaults = null, $limit = null)
   {
     if($limit === null)
     {
@@ -532,7 +533,12 @@ if(!function_exists("exploded"))
       $parts = explode($delimiter, $string, $limit);
     }
 
-    return array_replace($defaults, $parts);
+    if(is_array($defaults))
+    {
+      return array_replace($defaults, $parts);
+    }
+
+    return array_pad($parts, $limit, $defaults);
   }
 }
 
