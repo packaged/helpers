@@ -116,4 +116,16 @@ class System
 
     return self::$commandCache[$cmd];
   }
+
+  /**
+   * Check to see if a function has been disabled through php.ini
+   *
+   * @param string $function function name to verify
+   *
+   * @return bool
+   */
+  public static function isFunctionDisabled($function)
+  {
+    return in_array($function, explode(',', ini_get('disable_functions')));
+  }
 }

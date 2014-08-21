@@ -78,4 +78,21 @@ class SystemTest extends PHPUnit_Framework_TestCase
       \Packaged\Helpers\System::commandExists('madeupcommand2')
     );
   }
+
+  public function testDisabledFunctionCheck()
+  {
+    $verify = explode(',', ini_get('disable_functions'));
+    if(empty($verify))
+    {
+      ini_set('disable_functions', 'packaged_exec');
+      $verify = ['packaged_exec'];
+    }
+
+    foreach($verify as $check)
+    {
+      $this->assertTrue(\Packaged\Helpers\System::isFunctionDisabled($check));
+    }
+
+    $this->assertFalse(\Packaged\Helpers\System::isFunctionDisabled('echo'));
+  }
 }
