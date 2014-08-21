@@ -120,12 +120,43 @@ class System
   /**
    * Check to see if a function has been disabled through php.ini
    *
-   * @param string $function function name to verify
+   * @param string $function         function name to verify
+   * @param mixed  $enabledFunctions known enabled functions
    *
    * @return bool
    */
-  public static function isFunctionDisabled($function)
+  public static function isFunctionDisabled($function, $enabledFunctions = null)
   {
-    return in_array($function, explode(',', ini_get('disable_functions')));
+    $disabledFunctions = explode(',', ini_get('disable_functions'));
+    if(self::isAppEngine())
+    {
+      if($enabledFunctions === null)
+      {
+        $enabledFunctions = ini_get('google_app_engine.enable_functions');
+      }
+      $aeDisabled        = array_diff(
+        [
+          'gc_collect_cycles',
+          'gc_enable',
+          'gc_disable',
+          'gc_enabled',
+          'getmypid',
+          'getmyuid',
+          'getmygid',
+          'getrusage',
+          'getmyinode',
+          'get_current_user',
+          'libxml_disable_entity_loader',
+          'parse_str',
+          'phpinfo',
+          'phpversion',
+          'php_uname',
+          'php_sapi_name'
+        ],
+        ValueAs::arr($enabledFunctions)
+      );
+      $disabledFunctions = array_merge($disabledFunctions, $aeDisabled);
+    }
+    return in_array($function, $disabledFunctions);
   }
 }

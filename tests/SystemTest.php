@@ -95,4 +95,19 @@ class SystemTest extends PHPUnit_Framework_TestCase
 
     $this->assertFalse(\Packaged\Helpers\System::isFunctionDisabled('echo'));
   }
+
+  public function testAppEngineDisabledFunctions()
+  {
+    $test                       = $_SERVER['SERVER_SOFTWARE'];
+    $_SERVER['SERVER_SOFTWARE'] = 'Google App Engine/1.9.6';
+    $this->assertTrue(\Packaged\Helpers\System::isAppEngine());
+    $this->assertTrue(\Packaged\Helpers\System::isFunctionDisabled('phpinfo'));
+    $this->assertFalse(
+      \Packaged\Helpers\System::isFunctionDisabled(
+        'phpinfo',
+        'phpinfo,parse_str'
+      )
+    );
+    $_SERVER['SERVER_SOFTWARE'] = $test;
+  }
 }
