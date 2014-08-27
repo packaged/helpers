@@ -620,6 +620,9 @@ if(!function_exists('glob_recursive'))
 if(!function_exists('in_arrayi'))
 {
   /**
+   * A case-insensitive in_array function
+   * Checks to see if a value exists in an array
+   *
    * @param mixed $needle
    * @param mixed[] $haystack
    *
@@ -627,11 +630,11 @@ if(!function_exists('in_arrayi'))
    */
   function in_arrayi($needle, $haystack)
   {
-    $search_array = array_combine(
+    $search = array_combine(
       array_map('strtolower', $haystack),
       $haystack
     );
 
-    return (isset($search_array[strtolower($needle)]));
+    return (isset($search[strtolower($needle)]));
   }
 }
