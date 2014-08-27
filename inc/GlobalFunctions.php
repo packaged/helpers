@@ -616,3 +616,22 @@ if(!function_exists('glob_recursive'))
     return $files;
   }
 }
+
+if(!function_exists('in_arrayi'))
+{
+  /**
+   * @param mixed $needle
+   * @param mixed[] $haystack
+   *
+   * @return bool
+   */
+  function in_arrayi($needle, $haystack)
+  {
+    $search_array = array_combine(
+      array_map('strtolower', $haystack),
+      $haystack
+    );
+
+    return (isset($search_array[strtolower($needle)]));
+  }
+}
