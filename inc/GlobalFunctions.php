@@ -630,11 +630,10 @@ if(!function_exists('in_arrayi'))
    */
   function in_arrayi($needle, $haystack)
   {
-    $search = array_combine(
-      array_map('strtolower', $haystack),
-      $haystack
+    return in_array(
+      strtolower($needle),
+      array_map('strtolower', $haystack)
     );
-
-    return (isset($search[strtolower($needle)]));
   }
 }
+return in_array(strtolower($needle), array_map('strtolower', $haystack));
