@@ -636,4 +636,3 @@ if(!function_exists('in_arrayi'))
     );
   }
 }
-return in_array(strtolower($needle), array_map('strtolower', $haystack));
