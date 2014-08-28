@@ -333,6 +333,15 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
       glob_recursive($baseDir, '*.php')
     );
   }
+
+  public function testInArrayI()
+  {
+    $array = ['ab', 'cd', 'EF', "GH"];
+    $this->assertTrue(in_arrayi('ab', $array));
+    $this->assertTrue(in_arrayi('ef', $array));
+    $this->assertTrue(in_arrayi('CD', $array));
+    $this->assertFalse(in_arrayi('ij', $array));
+  }
 }
 
 class PropertyClass
