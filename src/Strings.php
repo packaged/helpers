@@ -302,5 +302,4 @@ class Strings
     }
     return mb_substr($string, 0, !$pos ? $length : $pos) . $append;
   }
-
 }

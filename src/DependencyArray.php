@@ -9,12 +9,12 @@ class DependencyArray
 
   public function __construct()
   {
-    $this->_items         = array();
-    $this->_depends       = array();
-    $this->_hasDependency = array();
+    $this->_items         = [];
+    $this->_depends       = [];
+    $this->_hasDependency = [];
   }
 
-  public function add($item, $dependsOn = array())
+  public function add($item, $dependsOn = [])
   {
     $this->_items[] = $item;
     $dependsOn      = (array)$dependsOn;
@@ -30,7 +30,7 @@ class DependencyArray
 
   public function getLoadOrder()
   {
-    $order    = array();
+    $order    = [];
     $itmCount = count($this->_items);
 
     $hasChanged = true;

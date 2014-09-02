@@ -623,7 +623,7 @@ if(!function_exists('in_arrayi'))
    * A case-insensitive in_array function
    * Checks to see if a value exists in an array
    *
-   * @param mixed $needle
+   * @param mixed   $needle
    * @param mixed[] $haystack
    *
    * @return bool
