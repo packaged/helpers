@@ -22,12 +22,12 @@ class ValueAs
       return $default;
     }
 
-    if($value === 'true')
+    if(strcasecmp($value, 'true') === 0)
     {
       return true;
     }
 
-    if($value === 'false')
+    if(strcasecmp($value, 'false') === 0)
     {
       return false;
     }
