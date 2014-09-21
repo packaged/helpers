@@ -93,6 +93,11 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $this->assertFalse(is_assoc(["A", "B"]));
   }
 
+  public function testShuffleAssoc()
+  {
+    // shuffle_assoc
+  }
+
   public function testStartsWith()
   {
     $this->assertTrue(starts_with("abcdef", "ab", true));
