@@ -122,6 +122,13 @@ if(!function_exists("is_assoc"))
 
 if(!function_exists('shuffle_assoc'))
 {
+  /**
+   * Shuffles an array maintaining key association
+   *
+   * @param array $array
+   *
+   * @return array
+   */
   function shuffle_assoc($array)
   {
     if (!is_array($array)){
