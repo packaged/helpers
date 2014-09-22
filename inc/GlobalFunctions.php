@@ -120,6 +120,30 @@ if(!function_exists("is_assoc"))
   }
 }
 
+if(!function_exists('shuffle_assoc'))
+{
+  /**
+   * Shuffles an array maintaining key association
+   *
+   * @param array $array
+   *
+   * @return array
+   */
+  function shuffle_assoc($array)
+  {
+    if (!is_array($array)){
+      return $array;
+    }
+    $keys = array_keys($array);
+    shuffle($keys);
+    $return = [];
+    foreach ($keys as $key){
+      $return[$key] = $array[$key];
+    }
+    return $return;
+  }
+}
+
 if(!function_exists("starts_with"))
 {
   /**

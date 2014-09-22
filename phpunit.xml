@@ -18,6 +18,7 @@
   </testsuites>
   <filter>
     <whitelist>
+      <directory suffix=".php">inc</directory>
       <directory suffix=".php">src</directory>
     </whitelist>
     <blacklist>

@@ -93,6 +93,21 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $this->assertFalse(is_assoc(["A", "B"]));
   }
 
+  public function testShuffleAssoc()
+  {
+    $this->assertEquals('string', shuffle_assoc('string'));
+
+    $expected = ['x' => 'x', 'y' => 'y', 'z' => 'z'];
+    $shuffled = shuffle_assoc($expected);
+    $this->assertFalse((bool)array_diff_assoc($expected, $shuffled));
+    $this->assertFalse((bool)array_diff_assoc($shuffled, $expected));
+
+    srand(40);
+    $expected = ['z' => 'z', 'y' => 'y', 'x' => 'x'];
+    $shuffled = shuffle_assoc($expected);
+    $this->assertEquals(json_encode($expected), json_encode($shuffled));
+  }
+
   public function testStartsWith()
   {
     $this->assertTrue(starts_with("abcdef", "ab", true));
