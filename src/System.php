@@ -31,7 +31,8 @@ class System
    */
   public static function isHHVM()
   {
-    return (array_key_exists('HPHP', $_ENV) && $_ENV['HPHP'] === 1);
+    return defined('HHVM_VERSION')
+    || (array_key_exists('HPHP', $_ENV) && $_ENV['HPHP'] === 1);
   }
 
   /**
