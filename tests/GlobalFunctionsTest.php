@@ -113,6 +113,8 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $this->assertTrue(starts_with("abcdef", "ab", true));
     $this->assertTrue(starts_with("aBcdef", "aB", true));
     $this->assertTrue(starts_with("abcdef", "aB", false));
+    $this->assertTrue(starts_with("aBcdef", ["cd", 'aB'], true));
+
     $this->assertFalse(starts_with("aBcdef", "ab", true));
     $this->assertFalse(starts_with("aBcdef", "cd", false));
     $this->assertFalse(starts_with("aBcdef", "cd", true));
@@ -132,6 +134,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $this->assertTrue(ends_with("abcdef", "f", true));
     $this->assertTrue(ends_with("aBcdeF", "eF", true));
     $this->assertTrue(ends_with("aBcdeF", "ef", false));
+    $this->assertTrue(ends_with("aBcdeF", ["de", "ef"], false));
 
     $this->assertFalse(ends_with("aBcdef", "de", false));
     $this->assertFalse(ends_with("aBcdef", "eF", true));

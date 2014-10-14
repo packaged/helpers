@@ -131,13 +131,15 @@ if(!function_exists('shuffle_assoc'))
    */
   function shuffle_assoc($array)
   {
-    if (!is_array($array)){
+    if(!is_array($array))
+    {
       return $array;
     }
     $keys = array_keys($array);
     shuffle($keys);
     $return = [];
-    foreach ($keys as $key){
+    foreach($keys as $key)
+    {
       $return[$key] = $array[$key];
     }
     return $return;
@@ -157,6 +159,11 @@ if(!function_exists("starts_with"))
    */
   function starts_with($haystack, $needle, $case = true)
   {
+    if(is_array($needle))
+    {
+      return starts_with_any($haystack, $needle, $case);
+    }
+
     if(!$case)
     {
       return strncasecmp($haystack, $needle, strlen($needle)) == 0;
@@ -205,6 +212,10 @@ if(!function_exists("ends_with"))
    */
   function ends_with($haystack, $needle, $case = true)
   {
+    if(is_array($needle))
+    {
+      return ends_with_any($haystack, $needle, $case);
+    }
     return starts_with(strrev($haystack), strrev($needle), $case);
   }
 }
