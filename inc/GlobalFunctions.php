@@ -478,6 +478,19 @@ if(!function_exists('build_path_custom'))
   }
 }
 
+if(!function_exists('concat'))
+{
+  /**
+   * Concatenate array items
+   *
+   * @return string
+   */
+  function concat( /* string... */)
+  {
+    return implode('', func_get_args());
+  }
+}
+
 if(!function_exists("array_add_value"))
 {
   /**

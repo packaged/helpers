@@ -226,6 +226,12 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $this->assertEquals("a|b", build_path_custom("|", ["a", "b"]));
   }
 
+  public function testConcat()
+  {
+    $this->assertEquals("ab", concat("a", "b"));
+    $this->assertEquals("a-b", concat("a", "-", "b"));
+  }
+
   public function testArrayAdd()
   {
     $initialArray = ["a" => 1, "b" => 2];
