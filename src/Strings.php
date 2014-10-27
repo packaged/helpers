@@ -302,4 +302,54 @@ class Strings
     }
     return mb_substr($string, 0, !$pos ? $length : $pos) . $append;
   }
+
+  /**
+   * Return substring between other strings (or string)
+   *
+   * @param string      $string    Haystack
+   * @param string|null $start     Left margin
+   * @param string|null $end       Right margin
+   * @param bool        $inclusive Include start and end items in response
+   *
+   * @return string|false         Return string if it was found, otherwise false
+   */
+  public static function between(
+    $string, $start = null, $end = null, $inclusive = false
+  )
+  {
+    if($start !== null)
+    {
+      $left = strpos($string, $start);
+      if($left === false)
+      {
+        return false;
+      }
+      $left += strlen($start);
+    }
+    else
+    {
+      $left = 0;
+    }
+
+    if($end !== null)
+    {
+      $right = strpos($string, $end, $left);
+      if($right === false)
+      {
+        return false;
+      }
+    }
+    else
+    {
+      $right = strlen($string);
+    }
+
+    $final = substr($string, $left, $right - $left);
+
+    if($inclusive)
+    {
+      return $start . $final . $end;
+    }
+    return $final;
+  }
 }

@@ -327,7 +327,42 @@ class StringsTest extends PHPUnit_Framework_TestCase
       [50, "Lorem ipsum dolor sit amet, consectetur adipiscing..."],
       [50, "Lorem ipsum dolor sit amet, consectetur adipiscing..."],
       [10, "once wefhr...", '...', "once wefhrekjgferjgf"],
-      [15, "once...", '...', "once wefhrekjgefpiferjgf",true],
+      [15, "once...", '...', "once wefhrekjgefpiferjgf", true],
+    ];
+  }
+
+  /**
+   * @param $string
+   * @param $start
+   * @param $end
+   * @param $expect
+   * @param $inclusive
+   *
+   * @return array
+   *
+   * @dataProvider betweenProvider
+   */
+  public function testBetween($string, $start, $end, $inclusive, $expect)
+  {
+    $this->assertEquals(
+      $expect,
+      \Packaged\Helpers\Strings::between($string, $start, $end, $inclusive)
+    );
+  }
+
+  public function betweenProvider()
+  {
+    return [
+      ["abcdef", "b", "e", false, "cd"],
+      ["abcdef", null, "e", false, "abcd"],
+      ["abcdef", "b", null, false, "cdef"],
+      ["abcdef", "z", null, false, false],
+      ["abcdef", "b", 'z', false, false],
+      ["abcdef", "b", "e", true, "bcde"],
+      ["abcdef", null, "e", true, "abcde"],
+      ["abcdef", "b", null, true, "bcdef"],
+      ["abcdef", "z", null, true, false],
+      ["abcdef", "b", 'z', true, false],
     ];
   }
 }
