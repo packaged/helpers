@@ -688,11 +688,13 @@ if(!function_exists('in_arrayi'))
 if(!function_exists('hydrate'))
 {
   /**
-   * Hydrate properties from
+   * Hydrate properties from the source object, into the destination
    *
    * @param object $destination
    * @param object $source
    * @param array  $properties
+   *
+   * @return void
    *
    * @throws Exception
    */
