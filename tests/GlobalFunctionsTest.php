@@ -366,6 +366,29 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $this->assertTrue(in_arrayi('CD', $array));
     $this->assertFalse(in_arrayi('ij', $array));
   }
+
+  public function testHydrate()
+  {
+    $dest = new stdClass();
+
+    $source       = new PropertyClass();
+    $source->name = 'Test';
+    $source->age  = 19;
+
+    hydrate($dest, $source, ['name']);
+
+    $this->assertObjectHasAttribute('name', $dest);
+    $this->assertEquals('Test', $dest->name);
+
+    $this->assertObjectNotHasAttribute('age', $dest);
+    hydrate($dest, $source, ['age']);
+
+    $this->assertObjectHasAttribute('age', $dest);
+    $this->assertEquals('19', $dest->age);
+
+    $this->setExpectedException("Exception");
+    hydrate(['' => ''], $source, []);
+  }
 }
 
 class PropertyClass

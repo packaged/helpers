@@ -684,3 +684,28 @@ if(!function_exists('in_arrayi'))
     );
   }
 }
+
+if(!function_exists('hydrate'))
+{
+  /**
+   * Hydrate properties from
+   *
+   * @param object $destination
+   * @param object $source
+   * @param array  $properties
+   *
+   * @throws Exception
+   */
+  function hydrate($destination, $source, array $properties)
+  {
+    if(!is_object($destination) || !is_object($source))
+    {
+      throw new Exception("hydrate() must be given objects");
+    }
+
+    foreach($properties as $property)
+    {
+      $destination->$property = idp($source, $property);
+    }
+  }
+}
