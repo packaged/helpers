@@ -369,11 +369,19 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
 
   public function testHydrate()
   {
-    $dest = new stdClass();
+    $dest          = new stdClass();
+    $dest->nullify = 'Please';
 
-    $source       = new PropertyClass();
-    $source->name = 'Test';
-    $source->age  = 19;
+    $source          = new PropertyClass();
+    $source->name    = 'Test';
+    $source->age     = 19;
+    $source->nullify = null;
+
+    hydrate($dest, $source, ['nullify'], false);
+    $this->assertEquals('Please', $dest->nullify);
+
+    hydrate($dest, $source, ['nullify'], true);
+    $this->assertNull($dest->nullify);
 
     hydrate($dest, $source, ['name']);
 

@@ -690,15 +690,16 @@ if(!function_exists('hydrate'))
   /**
    * Hydrate properties from the source object, into the destination
    *
-   * @param object $destination
-   * @param object $source
-   * @param array  $properties
+   * @param object $destination object to write data to
+   * @param object $source      object to read data from
+   * @param array  $properties  properties to read
+   * @param bool   $copyNull    Copy null values from source to destination
    *
    * @return void
    *
    * @throws Exception
    */
-  function hydrate($destination, $source, array $properties)
+  function hydrate($destination, $source, array $properties, $copyNull = true)
   {
     if(!is_object($destination) || !is_object($source))
     {
@@ -707,7 +708,11 @@ if(!function_exists('hydrate'))
 
     foreach($properties as $property)
     {
-      $destination->$property = idp($source, $property);
+      $newVal = idp($source, $property);
+      if($newVal !== null || $copyNull)
+      {
+        $destination->$property = $newVal;
+      }
     }
   }
 }
