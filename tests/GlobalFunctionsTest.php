@@ -209,6 +209,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
   public function testBuildPath()
   {
     $this->assertEquals("a" . DIRECTORY_SEPARATOR . "b", build_path("a", "b"));
+    $this->assertEquals("a" . DIRECTORY_SEPARATOR . "b", build_path("a", "b"));
   }
 
   public function testBuildWindowsPath()
@@ -224,6 +225,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
   public function testBuildCustomPath()
   {
     $this->assertEquals("a|b", build_path_custom("|", ["a", "b"]));
+    $this->assertEquals("a|b", build_path_custom("|", [0 => "a", 1 => "b"]));
   }
 
   public function testConcat()
@@ -396,6 +398,27 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
 
     $this->setExpectedException("Exception");
     hydrate(['' => ''], $source, []);
+  }
+
+  public function testSingleBit()
+  {
+    $this->assertTrue(is_single_bit(1));
+    $this->assertTrue(is_single_bit(2));
+    $this->assertTrue(is_single_bit(4));
+
+    $fails = [3, 5, 6, 7, 9, 10, 11, 13, 14, 15];
+    foreach($fails as $checkBit)
+    {
+      $this->assertFalse(is_single_bit($checkBit));
+    }
+
+    $checkBit = 4;
+    for($i = 0; $i < 10000; $i++)
+    {
+      $checkBit = bcmul($checkBit, 2);
+      $this->assertTrue(is_single_bit($checkBit));
+      $this->assertFalse(is_single_bit(bcsub($checkBit, 3)));
+    }
   }
 }
 

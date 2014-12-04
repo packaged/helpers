@@ -716,3 +716,22 @@ if(!function_exists('hydrate'))
     }
   }
 }
+
+if(!function_exists('is_single_bit'))
+{
+  /**
+   * Check to see if an integer is a single bit, or a combination
+   *
+   * @param int $bit Bit to check
+   *
+   * @return bool
+   */
+  function is_single_bit($bit)
+  {
+    if($bit === 1)
+    {
+      return true;
+    }
+    return $bit > 0 && bcmod($bit, 2) == 0 && ($bit & ($bit - 1)) == 0;
+  }
+}
