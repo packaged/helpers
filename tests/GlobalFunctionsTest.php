@@ -400,6 +400,9 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     hydrate(['' => ''], $source, []);
   }
 
+  /**
+   * @large
+   */
   public function testSingleBit()
   {
     $this->assertTrue(is_single_bit(1));
