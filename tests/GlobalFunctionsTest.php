@@ -67,11 +67,11 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
 
   public function testPsort()
   {
-    $apple       = new stdClass();
+    $apple = new stdClass();
     $apple->name = "apple";
-    $pear        = new stdClass();
-    $pear->name  = "pear";
-    $grape       = new stdClass();
+    $pear = new stdClass();
+    $pear->name = "pear";
+    $grape = new stdClass();
     $grape->name = "grape";
 
     $expectations = [
@@ -249,7 +249,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
 
   public function testIdp()
   {
-    $object       = new stdClass();
+    $object = new stdClass();
     $object->name = "apple";
     $this->assertEquals("apple", idp($object, "name", "pear"));
     $this->assertEquals("orange", idp($object, "noprop", "orange"));
@@ -295,7 +295,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
   public function testProperties()
   {
     $expect = ['name' => null, 'age' => null];
-    $class  = new PropertyClass();
+    $class = new PropertyClass();
     $this->assertNotEquals($expect, $class->objectVars());
     $this->assertEquals($expect, $class->publicVars());
     $this->assertEquals($expect, get_object_vars($class));
@@ -371,12 +371,12 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
 
   public function testHydrate()
   {
-    $dest          = new stdClass();
+    $dest = new stdClass();
     $dest->nullify = 'Please';
 
-    $source          = new PropertyClass();
-    $source->name    = 'Test';
-    $source->age     = 19;
+    $source = new PropertyClass();
+    $source->name = 'Test';
+    $source->age = 19;
     $source->nullify = null;
 
     hydrate($dest, $source, ['nullify'], false);
@@ -406,7 +406,9 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
   public function testSingleBit()
   {
     $this->assertTrue(is_single_bit(1));
+    $this->assertTrue(is_single_bit("1"));
     $this->assertTrue(is_single_bit(2));
+    $this->assertTrue(is_single_bit("2"));
     $this->assertTrue(is_single_bit(4));
 
     $fails = [3, 5, 6, 7, 9, 10, 11, 13, 14, 15];

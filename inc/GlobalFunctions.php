@@ -728,7 +728,7 @@ if(!function_exists('is_single_bit'))
    */
   function is_single_bit($bit)
   {
-    if($bit === 1)
+    if($bit == 1)
     {
       return true;
     }
