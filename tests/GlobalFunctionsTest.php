@@ -425,6 +425,30 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
       $this->assertFalse(is_single_bit(bcsub($checkBit, 3)));
     }
   }
+
+  public function testPropertyNonEmpty()
+  {
+    $object = new PropertyClass();
+    $object->name = 't_name';
+    $object->age = 't_age';
+
+    $this->assertEquals('t_age', pnonempty($object, ['miss', 'age', 'name']));
+    $this->assertNull(pnonempty($object, ['miss1', 'miss2']));
+    $this->assertNull(pnonempty($object, []));
+    $this->assertEquals('no', pnonempty($object, ['miss1', 'miss2'], 'no'));
+    $this->assertEquals('no', pnonempty($object, [], 'no'));
+  }
+
+  public function testArrayNonEmpty()
+  {
+    $array = ['name' => 't_name', 'age' => 't_age'];
+
+    $this->assertEquals('t_age', inonempty($array, ['miss', 'age', 'name']));
+    $this->assertNull(inonempty($array, ['miss1', 'miss2']));
+    $this->assertNull(inonempty($array, []));
+    $this->assertEquals('no', inonempty($array, ['miss1', 'miss2'], 'no'));
+    $this->assertEquals('no', inonempty($array, [], 'no'));
+  }
 }
 
 class PropertyClass

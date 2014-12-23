@@ -735,3 +735,53 @@ if(!function_exists('is_single_bit'))
     return $bit > 0 && bcmod($bit, 2) == 0 && ($bit & ($bit - 1)) == 0;
   }
 }
+
+if(!function_exists('pnonempty'))
+{
+  /**
+   * return the first non-empty property of an object from
+   * a specified list of properties
+   *
+   * @param object $object
+   * @param array  $properties
+   * @param null   $default
+   *
+   * @return mixed
+   */
+  function pnonempty($object, array $properties, $default = null)
+  {
+    foreach($properties as $prop)
+    {
+      if(isset($object->$prop) && !empty($object->$prop))
+      {
+        return $object->$prop;
+      }
+    }
+    return $default;
+  }
+}
+
+if(!function_exists('inonempty'))
+{
+  /**
+   * return the first non-empty value of an array from
+   * a specified list of keys
+   *
+   * @param array $array
+   * @param array $properties
+   * @param null  $default
+   *
+   * @return mixed
+   */
+  function inonempty(array $array, array $properties, $default = null)
+  {
+    foreach($properties as $prop)
+    {
+      if(isset($array[$prop]) && !empty($array[$prop]))
+      {
+        return $array[$prop];
+      }
+    }
+    return $default;
+  }
+}
