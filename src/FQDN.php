@@ -31,6 +31,10 @@ class FQDN
 
   public function setFqdn($fqdn)
   {
+    if(filter_var($fqdn, FILTER_VALIDATE_URL))
+    {
+      $fqdn = parse_url($fqdn, 1);
+    }
     $this->_fqdn = strtolower($fqdn);
     $this->_domain = $this->_subdomain = $this->_tld = null;
     $this->_processed = false;

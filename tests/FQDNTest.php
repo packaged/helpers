@@ -46,4 +46,12 @@ class FQDNTest extends PHPUnit_Framework_TestCase
 
     $this->assertEquals(['random.tld'], $fq->getDefinedTlds());
   }
+
+  public function testUrl()
+  {
+    $fq = new \Packaged\Helpers\FQDN('http://my.test.co.uk/webpage.html');
+    $this->assertEquals("test", $fq->domain());
+    $this->assertEquals("co.uk", $fq->tld());
+    $this->assertEquals("my", $fq->subDomain());
+  }
 }
