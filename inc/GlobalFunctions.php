@@ -624,11 +624,13 @@ if(!function_exists("nformat"))
    * @param int    $decimals     [optional] Sets the number of decimal points.
    * @param string $decPoint     [optional]
    * @param string $thousandsSep [optional]
+   * @param bool   $forceInt     [optional] force the output to be cast to an int when a numeric value is not available
    *
    * @return string A formatted version of number.
    */
   function nformat(
-    $number, $decimals = 0, $decPoint = '.', $thousandsSep = ','
+    $number, $decimals = 0, $decPoint = '.', $thousandsSep = ',',
+    $forceInt = false
   )
   {
     if(is_numeric($number))
@@ -637,7 +639,7 @@ if(!function_exists("nformat"))
     }
     else
     {
-      return $number;
+      return $forceInt ? (int)$number : $number;
     }
   }
 }

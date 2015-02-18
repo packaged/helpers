@@ -317,6 +317,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
   public function testNFormat()
   {
     $this->assertEquals('-', nformat('-'));
+    $this->assertEquals(0, nformat('-', 0, '.', ',', true));
     $this->assertEquals('10,000', nformat('10000'));
   }
 
