@@ -540,7 +540,7 @@ if(!function_exists("idp"))
 if(!function_exists("get_public_properties"))
 {
   /**
-   * Return an array with only the public properties
+   * Return an array with only the public properties and their values.
    *
    * If calling get_object_vars withing a class,
    * will return protected and private properties,
