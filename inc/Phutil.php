@@ -352,7 +352,7 @@ if(!function_exists('mgroup'))
       array_unshift($args, null);
       foreach($groups as $groupKey => $grouped)
       {
-        $args[0]           = $grouped;
+        $args[0] = $grouped;
         $groups[$groupKey] = call_user_func_array('mgroup', $args);
       }
     }
@@ -400,8 +400,56 @@ if(!function_exists('igroup'))
       array_unshift($args, null);
       foreach($groups as $groupKey => $grouped)
       {
-        $args[0]           = $grouped;
+        $args[0] = $grouped;
         $groups[$groupKey] = call_user_func_array('igroup', $args);
+      }
+    }
+
+    return $groups;
+  }
+}
+
+/**
+ * Group a list of arrays by the value of some property. This function is the
+ * same as @{function:mgroup}, except it operates on the values of object
+ * properties rather than the return values of method calls.
+ *
+ * @param   $list    array List of objects to group by some property value.
+ * @param   $by      string  Name of a property to select from each object in
+ *                   order to determine which group it should be placed into.
+ * @param   ...     Zero or more additional property names, to subgroup the
+ *                   groups.
+ *
+ * @return  array    Dictionary mapping distinct index values to lists of
+ *                  all objects which had that value at the index.
+ * @group   util
+ */
+if(!function_exists('pgroup'))
+{
+  function pgroup(array $list, $by /* , ... */)
+  {
+    $map = ppull($list, $by);
+
+    $groups = [];
+    foreach($map as $group)
+    {
+      $groups[$group] = [];
+    }
+
+    foreach($map as $key => $group)
+    {
+      $groups[$group][$key] = $list[$key];
+    }
+
+    $args = func_get_args();
+    $args = array_slice($args, 2);
+    if($args)
+    {
+      array_unshift($args, null);
+      foreach($groups as $groupKey => $grouped)
+      {
+        $args[0] = $grouped;
+        $groups[$groupKey] = call_user_func_array('pgroup', $args);
       }
     }
 
@@ -709,7 +757,7 @@ if(!function_exists('nonempty'))
 {
   function nonempty( /* ... */)
   {
-    $args   = func_get_args();
+    $args = func_get_args();
     $result = null;
     foreach($args as $arg)
     {

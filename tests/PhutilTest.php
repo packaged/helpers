@@ -1,11 +1,11 @@
 <?php
+
 /**
  * Tests ported from
  * https://github.com/facebook/libphutil/blob/master/src/utils/
  * __tests__/PhutilUtilsTestCase.php
  * @author  brooke.bryan
  */
-
 class PhutilTest extends PHPUnit_Framework_TestCase
 {
   public function testMFilterNullMethodThrowException()
@@ -13,7 +13,7 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     $caught = null;
     try
     {
-      mfilter(array(), null);
+      mfilter([], null);
     }
     catch(InvalidArgumentException $ex)
     {
@@ -29,17 +29,17 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     $b = new MFilterTestHelper('o', '', 'q');
     $c = new MFilterTestHelper('o', 'p', 'q');
 
-    $list = array(
+    $list = [
       'a' => $a,
       'b' => $b,
       'c' => $c,
-    );
+    ];
 
-    $actual   = mfilter($list, 'getI');
-    $expected = array(
+    $actual = mfilter($list, 'getI');
+    $expected = [
       'a' => $a,
       'c' => $c,
-    );
+    ];
 
     $this->assertEquals($expected, $actual);
   }
@@ -50,16 +50,16 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     $b = new MFilterTestHelper('o', '', 'q');
     $c = new MFilterTestHelper('o', 'p', 'q');
 
-    $list = array(
+    $list = [
       'a' => $a,
       'b' => $b,
       'c' => $c,
-    );
+    ];
 
-    $actual   = mfilter($list, 'getI', true);
-    $expected = array(
+    $actual = mfilter($list, 'getI', true);
+    $expected = [
       'b' => $b,
-    );
+    ];
 
     $this->assertEquals($expected, $actual);
   }
@@ -69,7 +69,7 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     $caught = null;
     try
     {
-      ifilter(array(), null);
+      ifilter([], null);
     }
     catch(InvalidArgumentException $ex)
     {
@@ -84,71 +84,71 @@ class PhutilTest extends PHPUnit_Framework_TestCase
 
   public function testIFilterWithEmptyValueFiltered()
   {
-    $list = array(
-      'a' => array('h' => 'o', 'i' => 'p', 'j' => 'q',),
-      'b' => array('h' => 'o', 'i' => '', 'j' => 'q',),
-      'c' => array('h' => 'o', 'i' => 'p', 'j' => 'q',),
-      'd' => array('h' => 'o', 'i' => 0, 'j' => 'q',),
-      'e' => array('h' => 'o', 'i' => null, 'j' => 'q',),
-      'f' => array('h' => 'o', 'i' => false, 'j' => 'q',),
-    );
+    $list = [
+      'a' => ['h' => 'o', 'i' => 'p', 'j' => 'q',],
+      'b' => ['h' => 'o', 'i' => '', 'j' => 'q',],
+      'c' => ['h' => 'o', 'i' => 'p', 'j' => 'q',],
+      'd' => ['h' => 'o', 'i' => 0, 'j' => 'q',],
+      'e' => ['h' => 'o', 'i' => null, 'j' => 'q',],
+      'f' => ['h' => 'o', 'i' => false, 'j' => 'q',],
+    ];
 
-    $actual   = ifilter($list, 'i');
-    $expected = array(
-      'a' => array('h' => 'o', 'i' => 'p', 'j' => 'q',),
-      'c' => array('h' => 'o', 'i' => 'p', 'j' => 'q',),
-    );
+    $actual = ifilter($list, 'i');
+    $expected = [
+      'a' => ['h' => 'o', 'i' => 'p', 'j' => 'q',],
+      'c' => ['h' => 'o', 'i' => 'p', 'j' => 'q',],
+    ];
 
     $this->assertEquals($expected, $actual);
   }
 
   public function testIFilterIndexNotExistsAllFiltered()
   {
-    $list = array(
-      'a' => array('h' => 'o', 'i' => 'p', 'j' => 'q',),
-      'b' => array('h' => 'o', 'i' => '', 'j' => 'q',),
-    );
+    $list = [
+      'a' => ['h' => 'o', 'i' => 'p', 'j' => 'q',],
+      'b' => ['h' => 'o', 'i' => '', 'j' => 'q',],
+    ];
 
-    $actual   = ifilter($list, 'NoneExisting');
-    $expected = array();
+    $actual = ifilter($list, 'NoneExisting');
+    $expected = [];
 
     $this->assertEquals($expected, $actual);
   }
 
   public function testIFilterWithEmptyValueNegateFiltered()
   {
-    $list = array(
-      'a' => array('h' => 'o', 'i' => 'p', 'j' => 'q',),
-      'b' => array('h' => 'o', 'i' => '', 'j' => 'q',),
-      'c' => array('h' => 'o', 'i' => 'p', 'j' => 'q',),
-      'd' => array('h' => 'o', 'i' => 0, 'j' => 'q',),
-      'e' => array('h' => 'o', 'i' => null, 'j' => 'q',),
-      'f' => array('h' => 'o', 'i' => false, 'j' => 'q',),
-    );
+    $list = [
+      'a' => ['h' => 'o', 'i' => 'p', 'j' => 'q',],
+      'b' => ['h' => 'o', 'i' => '', 'j' => 'q',],
+      'c' => ['h' => 'o', 'i' => 'p', 'j' => 'q',],
+      'd' => ['h' => 'o', 'i' => 0, 'j' => 'q',],
+      'e' => ['h' => 'o', 'i' => null, 'j' => 'q',],
+      'f' => ['h' => 'o', 'i' => false, 'j' => 'q',],
+    ];
 
-    $actual   = ifilter($list, 'i', true);
-    $expected = array(
-      'b' => array('h' => 'o', 'i' => '', 'j' => 'q',),
-      'd' => array('h' => 'o', 'i' => 0, 'j' => 'q',),
-      'e' => array('h' => 'o', 'i' => null, 'j' => 'q',),
-      'f' => array('h' => 'o', 'i' => false, 'j' => 'q',),
-    );
+    $actual = ifilter($list, 'i', true);
+    $expected = [
+      'b' => ['h' => 'o', 'i' => '', 'j' => 'q',],
+      'd' => ['h' => 'o', 'i' => 0, 'j' => 'q',],
+      'e' => ['h' => 'o', 'i' => null, 'j' => 'q',],
+      'f' => ['h' => 'o', 'i' => false, 'j' => 'q',],
+    ];
 
     $this->assertEquals($expected, $actual);
   }
 
   public function testIFilterIndexNotExistsNotFiltered()
   {
-    $list = array(
-      'a' => array('h' => 'o', 'i' => 'p', 'j' => 'q',),
-      'b' => array('h' => 'o', 'i' => '', 'j' => 'q',),
-    );
+    $list = [
+      'a' => ['h' => 'o', 'i' => 'p', 'j' => 'q',],
+      'b' => ['h' => 'o', 'i' => '', 'j' => 'q',],
+    ];
 
-    $actual   = ifilter($list, 'NoneExisting', true);
-    $expected = array(
-      'a' => array('h' => 'o', 'i' => 'p', 'j' => 'q',),
-      'b' => array('h' => 'o', 'i' => '', 'j' => 'q',),
-    );
+    $actual = ifilter($list, 'NoneExisting', true);
+    $expected = [
+      'a' => ['h' => 'o', 'i' => 'p', 'j' => 'q',],
+      'b' => ['h' => 'o', 'i' => '', 'j' => 'q',],
+    ];
 
     $this->assertEquals($expected, $actual);
   }
@@ -156,33 +156,33 @@ class PhutilTest extends PHPUnit_Framework_TestCase
   public function testmergevMergingBasicallyWorksCorrectly()
   {
     $this->assertEquals(
-      array(),
+      [],
       array_mergev(
-        array( // <empty>
-        )
+        [ // <empty>
+        ]
       )
     );
 
     $this->assertEquals(
-      array(),
+      [],
       array_mergev(
-        array(
-             array(),
-             array(),
-             array(),
-        )
+        [
+          [],
+          [],
+          [],
+        ]
       )
     );
 
     $this->assertEquals(
-      array(1, 2, 3, 4, 5),
+      [1, 2, 3, 4, 5],
       array_mergev(
-        array(
-             array(1, 2),
-             array(3),
-             array(),
-             array(4, 5),
-        )
+        [
+          [1, 2],
+          [3],
+          [],
+          [4, 5],
+        ]
       )
     );
   }
@@ -191,7 +191,7 @@ class PhutilTest extends PHPUnit_Framework_TestCase
   {
     $this->assertEquals(
       'zebra',
-      nonempty(false, null, 0, '', array(), 'zebra')
+      nonempty(false, null, 0, '', [], 'zebra')
     );
 
     $this->assertEquals(
@@ -235,13 +235,13 @@ class PhutilTest extends PHPUnit_Framework_TestCase
       );
     }
 
-    $labels    = array_keys($inputs);
-    $inputs    = array_values($inputs);
+    $labels = array_keys($inputs);
+    $inputs = array_values($inputs);
     $expecting = array_values($expect);
     foreach($inputs as $idx => $input)
     {
       $expect = $expecting[$idx];
-      $label  = $labels[$idx];
+      $label = $labels[$idx];
 
       $caught = null;
       try
@@ -275,13 +275,13 @@ class PhutilTest extends PHPUnit_Framework_TestCase
         if($expect && isset($ex) && $ex instanceof Exception)
         {
           $message = "Test case '{$label}' was expected to succeed, but it " .
-          "raised an exception of class " . get_class($ex) . " with " .
-          "message: " . $ex->getMessage();
+            "raised an exception of class " . get_class($ex) . " with " .
+            "message: " . $ex->getMessage();
         }
         else
         {
           $message = "Test case '{$label}' was expected to raise an " .
-          "exception, but it did not throw anything.";
+            "exception, but it did not throw anything.";
         }
       }
 
@@ -292,25 +292,25 @@ class PhutilTest extends PHPUnit_Framework_TestCase
   public function testAssertInstancesOf()
   {
     $object = new stdClass();
-    $inputs = array(
-      'empty'               => array(),
-      'stdClass'            => array($object, $object),
-      'PhutilUtilsTestCase' => array($object, $this),
-      'array'               => array(array(), array()),
-      'integer'             => array($object, 1),
-    );
+    $inputs = [
+      'empty'               => [],
+      'stdClass'            => [$object, $object],
+      'PhutilUtilsTestCase' => [$object, $this],
+      'array'               => [[], []],
+      'integer'             => [$object, 1],
+    ];
 
     $this->_tryTestCases(
       $inputs,
-      array(true, true, false, false, false),
-      array($this, '_tryAssertInstancesOfStdClass'),
+      [true, true, false, false, false],
+      [$this, '_tryAssertInstancesOfStdClass'],
       'InvalidArgumentException'
     );
 
     $this->_tryTestCases(
       $inputs,
-      array(true, false, false, true, false),
-      array($this, '_tryAssertInstancesOfArray'),
+      [true, false, false, true, false],
+      [$this, '_tryAssertInstancesOfArray'],
       'InvalidArgumentException'
     );
   }
@@ -325,7 +325,7 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     assert_stringlike(true);
     assert_stringlike(new Exception('.'));
 
-    $obj    = (object)array();
+    $obj = (object)[];
     $caught = null;
     try
     {
@@ -337,10 +337,10 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     }
     $this->assertInstanceOf("InvalidArgumentException", $caught);
 
-    $array  = array(
+    $array = [
       "foo" => "bar",
       "bar" => "foo",
-    );
+    ];
     $caught = null;
     try
     {
@@ -392,14 +392,14 @@ class PhutilTest extends PHPUnit_Framework_TestCase
   {
     $this->assertEquals(
       'a',
-      head_key(array('a' => 0, 'b' => 1))
+      head_key(['a' => 0, 'b' => 1])
     );
     $this->assertEquals(
       'b',
-      last_key(array('a' => 0, 'b' => 1))
+      last_key(['a' => 0, 'b' => 1])
     );
-    $this->assertEquals(null, head_key(array()));
-    $this->assertEquals(null, last_key(array()));
+    $this->assertEquals(null, head_key([]));
+    $this->assertEquals(null, last_key([]));
   }
 
   public function testID()
@@ -410,10 +410,10 @@ class PhutilTest extends PHPUnit_Framework_TestCase
 
   public function testIdx()
   {
-    $array = array(
+    $array = [
       'present' => true,
       'null'    => null,
-    );
+    ];
     $this->assertEquals(true, idx($array, 'present'));
     $this->assertEquals(true, idx($array, 'present', false));
     $this->assertEquals(null, idx($array, 'null'));
@@ -424,17 +424,17 @@ class PhutilTest extends PHPUnit_Framework_TestCase
 
   public function testSplitLines()
   {
-    $retain_cases = array(
-      ""              => array(""),
-      "x"             => array("x"),
-      "x\n"           => array("x\n"),
-      "\n"            => array("\n"),
-      "\n\n\n"        => array("\n", "\n", "\n"),
-      "\r\n"          => array("\r\n"),
-      "x\r\ny\n"      => array("x\r\n", "y\n"),
-      "x\ry\nz\r\n"   => array("x\ry\n", "z\r\n"),
-      "x\ry\nz\r\n\n" => array("x\ry\n", "z\r\n", "\n"),
-    );
+    $retain_cases = [
+      ""              => [""],
+      "x"             => ["x"],
+      "x\n"           => ["x\n"],
+      "\n"            => ["\n"],
+      "\n\n\n"        => ["\n", "\n", "\n"],
+      "\r\n"          => ["\r\n"],
+      "x\r\ny\n"      => ["x\r\n", "y\n"],
+      "x\ry\nz\r\n"   => ["x\ry\n", "z\r\n"],
+      "x\ry\nz\r\n\n" => ["x\ry\n", "z\r\n", "\n"],
+    ];
 
     foreach($retain_cases as $input => $expect)
     {
@@ -445,17 +445,17 @@ class PhutilTest extends PHPUnit_Framework_TestCase
       );
     }
 
-    $discard_cases = array(
-      ""              => array(""),
-      "x"             => array("x"),
-      "x\n"           => array("x"),
-      "\n"            => array(""),
-      "\n\n\n"        => array("", "", ""),
-      "\r\n"          => array(""),
-      "x\r\ny\n"      => array("x", "y"),
-      "x\ry\nz\r\n"   => array("x\ry", "z"),
-      "x\ry\nz\r\n\n" => array("x\ry", "z", ""),
-    );
+    $discard_cases = [
+      ""              => [""],
+      "x"             => ["x"],
+      "x\n"           => ["x"],
+      "\n"            => [""],
+      "\n\n\n"        => ["", "", ""],
+      "\r\n"          => [""],
+      "x\r\ny\n"      => ["x", "y"],
+      "x\ry\nz\r\n"   => ["x\ry", "z"],
+      "x\ry\nz\r\n\n" => ["x\ry", "z", ""],
+    ];
 
     foreach($discard_cases as $input => $expect)
     {
@@ -469,52 +469,52 @@ class PhutilTest extends PHPUnit_Framework_TestCase
 
   public function testArrayFuse()
   {
-    $this->assertEquals(array(), array_fuse(array()));
-    $this->assertEquals(array('x' => 'x'), array_fuse(array('x')));
+    $this->assertEquals([], array_fuse([]));
+    $this->assertEquals(['x' => 'x'], array_fuse(['x']));
   }
 
   public function testArrayInterleave()
   {
-    $this->assertEquals(array(), array_interleave('x', array()));
-    $this->assertEquals(array('y'), array_interleave('x', array('y')));
+    $this->assertEquals([], array_interleave('x', []));
+    $this->assertEquals(['y'], array_interleave('x', ['y']));
 
     $this->assertEquals(
-      array('y', 'x', 'z'),
-      array_interleave('x', array('y', 'z'))
+      ['y', 'x', 'z'],
+      array_interleave('x', ['y', 'z'])
     );
 
     $this->assertEquals(
-      array('y', 'x', 'z'),
+      ['y', 'x', 'z'],
       array_interleave(
         'x',
-        array(
-             'kangaroo' => 'y',
-             'marmoset' => 'z',
-        )
+        [
+          'kangaroo' => 'y',
+          'marmoset' => 'z',
+        ]
       )
     );
 
-    $obj1 = (object)array();
-    $obj2 = (object)array();
+    $obj1 = (object)[];
+    $obj2 = (object)[];
 
     $this->assertEquals(
-      array($obj1, $obj2, $obj1, $obj2, $obj1),
+      [$obj1, $obj2, $obj1, $obj2, $obj1],
       array_interleave(
         $obj2,
-        array(
-             $obj1,
-             $obj1,
-             $obj1,
-        )
+        [
+          $obj1,
+          $obj1,
+          $obj1,
+        ]
       )
     );
 
-    $implode_tests = array(
-      ''  => array(1, 2, 3),
-      'x' => array(1, 2, 3),
-      'y' => array(),
-      'z' => array(1),
-    );
+    $implode_tests = [
+      ''  => [1, 2, 3],
+      'x' => [1, 2, 3],
+      'y' => [],
+      'z' => [1],
+    ];
 
     foreach($implode_tests as $x => $y)
     {
@@ -527,103 +527,103 @@ class PhutilTest extends PHPUnit_Framework_TestCase
 
   public function testMpull()
   {
-    $a    = new MFilterTestHelper('1', 'a', 'q');
-    $b    = new MFilterTestHelper('2', 'b', 'q');
-    $c    = new MFilterTestHelper('3', 'c', 'q');
-    $list = array($a, $b, $c);
+    $a = new MFilterTestHelper('1', 'a', 'q');
+    $b = new MFilterTestHelper('2', 'b', 'q');
+    $c = new MFilterTestHelper('3', 'c', 'q');
+    $list = [$a, $b, $c];
 
-    $expected = array(1, 2, 3);
+    $expected = [1, 2, 3];
     $this->assertEquals($expected, mpull($list, 'getH'));
 
-    $expected = array('a' => 1, 'b' => 2, 'c' => 3);
+    $expected = ['a' => 1, 'b' => 2, 'c' => 3];
     $this->assertEquals($expected, mpull($list, 'getH', 'getI'));
 
-    $expected = array('a' => $a, 'b' => $b, 'c' => $c);
+    $expected = ['a' => $a, 'b' => $b, 'c' => $c];
     $this->assertEquals($expected, mpull($list, null, 'getI'));
   }
 
   public function testPpull()
   {
-    $a        = new stdClass();
-    $a->name  = "a";
+    $a = new stdClass();
+    $a->name = "a";
     $a->value = 1;
-    $b        = new stdClass();
-    $b->name  = "b";
+    $b = new stdClass();
+    $b->name = "b";
     $b->value = 2;
-    $c        = new stdClass();
-    $c->name  = "c";
+    $c = new stdClass();
+    $c->name = "c";
     $c->value = 3;
-    $list     = array($a, $b, $c);
+    $list = [$a, $b, $c];
 
-    $expected = array("a", "b", "c");
+    $expected = ["a", "b", "c"];
     $this->assertEquals($expected, ppull($list, 'name'));
 
-    $expected = array('a' => 1, 'b' => 2, 'c' => 3);
+    $expected = ['a' => 1, 'b' => 2, 'c' => 3];
     $this->assertEquals($expected, ppull($list, 'value', 'name'));
 
-    $expected = array('a' => $a, 'b' => $b, 'c' => $c);
+    $expected = ['a' => $a, 'b' => $b, 'c' => $c];
     $this->assertEquals($expected, ppull($list, null, 'name'));
   }
 
   public function testIpull()
   {
-    $list = array(
-      array('name' => 'a', 'value' => 1),
-      array('name' => 'b', 'value' => 2),
-      array('name' => 'c', 'value' => 3),
-    );
+    $list = [
+      ['name' => 'a', 'value' => 1],
+      ['name' => 'b', 'value' => 2],
+      ['name' => 'c', 'value' => 3],
+    ];
 
-    $expected = array("a", "b", "c");
+    $expected = ["a", "b", "c"];
     $this->assertEquals($expected, ipull($list, 'name'));
 
-    $expected = array('a' => 1, 'b' => 2, 'c' => 3);
+    $expected = ['a' => 1, 'b' => 2, 'c' => 3];
     $this->assertEquals($expected, ipull($list, 'value', 'name'));
 
-    $expected = array(
-      'a' => array('name' => 'a', 'value' => 1),
-      'b' => array('name' => 'b', 'value' => 2),
-      'c' => array('name' => 'c', 'value' => 3),
-    );
+    $expected = [
+      'a' => ['name' => 'a', 'value' => 1],
+      'b' => ['name' => 'b', 'value' => 2],
+      'c' => ['name' => 'c', 'value' => 3],
+    ];
     $this->assertEquals($expected, ipull($list, null, 'name'));
   }
 
   public function testMsort()
   {
-    $a    = new MFilterTestHelper('1', 'a', 'q');
-    $b    = new MFilterTestHelper('2', 'b', 'q');
-    $c    = new MFilterTestHelper('3', 'c', 'q');
-    $list = array("b" => $b, "a" => $a, "c" => $c);
+    $a = new MFilterTestHelper('1', 'a', 'q');
+    $b = new MFilterTestHelper('2', 'b', 'q');
+    $c = new MFilterTestHelper('3', 'c', 'q');
+    $list = ["b" => $b, "a" => $a, "c" => $c];
 
-    $expected = array("a" => $a, "b" => $b, "c" => $c);
+    $expected = ["a" => $a, "b" => $b, "c" => $c];
     $this->assertEquals($expected, msort($list, 'getI'));
   }
 
   public function testIsort()
   {
-    $list = array(
-      'b' => array('name' => 'b', 'value' => 2),
-      'a' => array('name' => 'a', 'value' => 1),
-      'c' => array('name' => 'c', 'value' => 3),
-    );
+    $list = [
+      'b' => ['name' => 'b', 'value' => 2],
+      'a' => ['name' => 'a', 'value' => 1],
+      'c' => ['name' => 'c', 'value' => 3],
+    ];
 
-    $expected = array(
-      'a' => array('name' => 'a', 'value' => 1),
-      'b' => array('name' => 'b', 'value' => 2),
-      'c' => array('name' => 'c', 'value' => 3),
-    );
+    $expected = [
+      'a' => ['name' => 'a', 'value' => 1],
+      'b' => ['name' => 'b', 'value' => 2],
+      'c' => ['name' => 'c', 'value' => 3],
+    ];
     $this->assertEquals($expected, isort($list, 'name'));
   }
 
   public function testArraySelectKeys()
   {
-    $list = array(
+    $list = [
       'a' => 1,
       'b' => 2,
       'c' => 3
-    );
+    ];
 
-    $expect = array('a' => 1, 'b' => 2);
-    $this->assertEquals($expect, array_select_keys($list, array('a', 'b')));
+    $expect = ['a' => 1, 'b' => 2];
+    $this->assertEquals($expect, array_select_keys($list, ['a', 'b']));
   }
 
   public function testNewv()
@@ -631,104 +631,145 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     $expect = new Pancake('Blueberry', "Maple Syrup");
     $this->assertEquals(
       $expect,
-      newv('Pancake', array('Blueberry', "Maple Syrup"))
+      newv('Pancake', ['Blueberry', "Maple Syrup"])
     );
     $expect = new Pancake();
     $this->assertEquals(
       $expect,
-      newv('Pancake', array())
+      newv('Pancake', [])
     );
   }
 
   public function testIGroup()
   {
-    $apple  = array(
+    $apple = [
       'name'   => 'Apple',
       'type'   => 'fruit',
       'colour' => 'green',
       'group'  => 'food'
-    );
-    $bear   = array(
+    ];
+    $bear = [
       'name'   => 'Bear',
       'type'   => 'animal',
       'colour' => 'brown',
       'group'  => 'creature'
-    );
-    $carrot = array(
+    ];
+    $carrot = [
       'name'   => 'Carrot',
       'type'   => 'vegetable',
       'colour' => 'brown',
       'group'  => 'food'
-    );
+    ];
 
-    $list = array('a' => $apple, 'b' => $bear, 'c' => $carrot);
+    $list = ['a' => $apple, 'b' => $bear, 'c' => $carrot];
 
-    $expect = array(
-      'fruit'     => array('a' => $apple),
-      'animal'    => array('b' => $bear),
-      'vegetable' => array('c' => $carrot),
-    );
+    $expect = [
+      'fruit'     => ['a' => $apple],
+      'animal'    => ['b' => $bear],
+      'vegetable' => ['c' => $carrot],
+    ];
     $this->assertEquals($expect, igroup($list, 'type'));
 
-    $expect = array(
-      'food'     => array(
-        'fruit'     => array('a' => $apple),
-        'vegetable' => array('c' => $carrot)
-      ),
-      'creature' => array(
-        'animal' => array('b' => $bear)
-      ),
-    );
+    $expect = [
+      'food'     => [
+        'fruit'     => ['a' => $apple],
+        'vegetable' => ['c' => $carrot]
+      ],
+      'creature' => [
+        'animal' => ['b' => $bear]
+      ],
+    ];
     $this->assertEquals($expect, igroup($list, 'group', 'type'));
 
-    $expect = array(
-      'food'     => array(
+    $expect = [
+      'food'     => [
         'a' => $apple,
         'c' => $carrot
-      ),
-      'creature' => array(
+      ],
+      'creature' => [
         'b' => $bear
-      ),
-    );
+      ],
+    ];
     $this->assertEquals($expect, igroup($list, 'group'));
   }
 
   public function testMGroup()
   {
-    $apple  = new Thing('Apple', 'fruit', 'green', 'food');
-    $bear   = new Thing('Bear', 'animal', 'brown', 'creature');
+    $apple = new Thing('Apple', 'fruit', 'green', 'food');
+    $bear = new Thing('Bear', 'animal', 'brown', 'creature');
     $carrot = new Thing('Carrot', 'vegetable', 'brown', 'food');
 
-    $list = array('a' => $apple, 'b' => $bear, 'c' => $carrot);
+    $list = ['a' => $apple, 'b' => $bear, 'c' => $carrot];
 
-    $expect = array(
-      'fruit'     => array('a' => $apple),
-      'animal'    => array('b' => $bear),
-      'vegetable' => array('c' => $carrot),
-    );
+    $expect = [
+      'fruit'     => ['a' => $apple],
+      'animal'    => ['b' => $bear],
+      'vegetable' => ['c' => $carrot],
+    ];
     $this->assertEquals($expect, mgroup($list, 'type'));
 
-    $expect = array(
-      'food'     => array(
-        'fruit'     => array('a' => $apple),
-        'vegetable' => array('c' => $carrot)
-      ),
-      'creature' => array(
-        'animal' => array('b' => $bear)
-      ),
-    );
+    $expect = [
+      'food'     => [
+        'fruit'     => ['a' => $apple],
+        'vegetable' => ['c' => $carrot]
+      ],
+      'creature' => [
+        'animal' => ['b' => $bear]
+      ],
+    ];
     $this->assertEquals($expect, mgroup($list, 'group', 'type'));
 
-    $expect = array(
-      'food'     => array(
+    $expect = [
+      'food'     => [
         'a' => $apple,
         'c' => $carrot
-      ),
-      'creature' => array(
+      ],
+      'creature' => [
         'b' => $bear
-      ),
-    );
+      ],
+    ];
     $this->assertEquals($expect, mgroup($list, 'group'));
+  }
+
+  public function testPGroup()
+  {
+    $apple = new Thing('Apple', 'fruit', 'green', 'food');
+    $bear = new Thing('Bear', 'animal', 'brown', 'creature');
+    $carrot = new Thing('Carrot', 'vegetable', 'brown', 'food');
+
+    $list = ['a' => $apple, 'b' => $bear, 'c' => $carrot];
+
+    $expect = [
+      'fruit'     => ['a' => $apple],
+      'animal'    => ['b' => $bear],
+      'vegetable' => ['c' => $carrot],
+    ];
+    $this->assertEquals($expect, pgroup($list, 'typeProperty'));
+
+    $expect = [
+      'food'     => [
+        'fruit'     => ['a' => $apple],
+        'vegetable' => ['c' => $carrot]
+      ],
+      'creature' => [
+        'animal' => ['b' => $bear]
+      ],
+    ];
+    $this->assertEquals(
+      $expect,
+      pgroup($list, 'groupProperty', 'typeProperty')
+    );
+
+    $expect = [
+      'food'     => [
+        'a' => $apple,
+        'c' => $carrot
+      ],
+      'creature' => [
+        'b' => $bear
+      ],
+    ];
+    $this->assertEquals($expect, pgroup($list, 'groupProperty'));
   }
 }
 
@@ -736,11 +777,16 @@ final class Thing
 {
   public function __construct($name, $type, $colour, $group)
   {
-    $this->_name   = $name;
-    $this->_type   = $type;
-    $this->_colour = $colour;
-    $this->_group  = $group;
+    $this->_name = $this->nameProperty = $name;
+    $this->_type = $this->typeProperty = $type;
+    $this->_colour = $this->colourProperty = $colour;
+    $this->_group = $this->groupProperty = $group;
   }
+
+  public $nameProperty;
+  public $typeProperty;
+  public $colourProperty;
+  public $groupProperty;
 
   public function type()
   {
