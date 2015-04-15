@@ -546,13 +546,15 @@ if(!function_exists("get_public_properties"))
    * will return protected and private properties,
    * this function fixes this instance
    *
-   * @param object $object Source object
+   * @param object $object     Source object
+   * @param bool   $returnKeys Return Property keys
    *
    * @return mixed
    */
-  function get_public_properties($object)
+  function get_public_properties($object, $returnKeys = false)
   {
-    return get_object_vars($object);
+    $properties = get_object_vars($object);
+    return $returnKeys ? array_keys($properties) : $properties;
   }
 }
 
@@ -708,6 +710,7 @@ if(!function_exists('hydrate'))
       throw new Exception("hydrate() must be given objects");
     }
 
+    $properties = array_filter($properties);
     foreach($properties as $property)
     {
       $newVal = idp($source, $property);

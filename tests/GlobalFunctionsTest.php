@@ -300,6 +300,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $this->assertEquals($expect, $class->publicVars());
     $this->assertEquals($expect, get_object_vars($class));
     $this->assertEquals($expect, get_public_properties($class));
+    $this->assertEquals(['name', 'age'], get_public_properties($class, true));
   }
 
   public function testStringFrom()
@@ -379,6 +380,9 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $source->name = 'Test';
     $source->age = 19;
     $source->nullify = null;
+
+    hydrate($dest, $source, [null]);
+    $this->assertEquals('Please', $dest->nullify);
 
     hydrate($dest, $source, ['nullify'], false);
     $this->assertEquals('Please', $dest->nullify);
