@@ -104,7 +104,7 @@ class Strings
     {
       $string = static::stringToUnderScore($string);
     }
-    $string       = preg_replace('/_id$/', "", $string);
+    $string = preg_replace('/_id$/', "", $string);
     $replacements = [
       "-" => ' ',
       "_" => ' ',
@@ -294,7 +294,7 @@ class Strings
     }
 
     $string = mb_substr($string, 0, $length);
-    $pos    = mb_strrpos($string, " ");
+    $pos = mb_strrpos($string, " ");
     //Ensure we do not cut the string too early on
     if(!$forceOnSpace && $length - $pos > 5)
     {
@@ -351,5 +351,16 @@ class Strings
       return $start . $final . $end;
     }
     return $final;
+  }
+
+  public static function uniqid2microtime($uniqid, $hasEntropy = false)
+  {
+    if($hasEntropy)
+    {
+      $uniqid = substr($uniqid, 0, -10);
+    }
+    $microtime = (int)hexdec(substr($uniqid, -5));
+    $timestamp = (int)hexdec(substr($uniqid, -13, -5));
+    return $timestamp . '.' . $microtime;
   }
 }

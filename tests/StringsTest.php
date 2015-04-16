@@ -275,8 +275,36 @@ class StringsTest extends PHPUnit_Framework_TestCase
     }
   }
 
+  /**
+   * @param $microtime
+   * @param $uniqid
+   * @param $hasEntropy
+   *
+   * @dataProvider uniqidProvider
+   */
+  public function testUniqid2microtime($microtime, $uniqid, $hasEntropy)
+  {
+    $time = \Packaged\Helpers\Strings::uniqid2microtime($uniqid, $hasEntropy);
+    $this->assertEquals($microtime, $time, '', 0.001);
+  }
+
+  public function uniqidProvider()
+  {
+    return [
+      [microtime(true), uniqid(), false],
+      [microtime(true), uniqid('PRE'), false],
+      [microtime(true), uniqid('', true), true],
+      [microtime(true), uniqid('PRE', true), true],
+    ];
+  }
 
   /**
+   * @param        $length
+   * @param        $expect
+   * @param string $append
+   * @param null   $string
+   * @param bool   $forceOnSpace
+   *
    * @dataProvider excerptProvider
    */
   public function testExcerpt(

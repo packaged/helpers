@@ -17,16 +17,16 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
 
   public function testVarDumpJson()
   {
-    $this->expectOutputString(
-      '{
-    "x": "y"
-}string(16) "{
-    "x": "y"
-}"
-'
-    );
+    ob_start();
     var_dump_json(["x" => "y"], true);
+    $this->assertContains("{\n    \"x\": \"y\"\n}", ob_get_clean());
+
+    ob_start();
     var_dump_json(["x" => "y"], false);
+    $this->assertContains(
+      "string(16) \"{\n    \"x\": \"y\"\n}\"",
+      ob_get_clean()
+    );
   }
 
   public function testJsonPretty()
