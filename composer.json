@@ -1,24 +1,20 @@
 {
-  "name":        "packaged/helpers",
+  "name": "packaged/helpers",
   "description": "Generic PHP Helper Classes & Functions",
-  "license":     "MIT",
-  "authors":     [
+  "license": "MIT",
+  "authors": [
     {
-      "name":  "Brooke Bryan",
+      "name": "Brooke Bryan",
       "email": "brooke@bajb.net"
     }
   ],
-  "require":     {
+  "require": {
     "php": ">=5.4.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.6"
   },
-  "autoload":    {
-    "files": [
-      "inc/GlobalFunctions.php",
-      "inc/Phutil.php"
-    ],
+  "autoload": {
     "psr-4": {
       "Packaged\\Helpers\\": "src"
     }
