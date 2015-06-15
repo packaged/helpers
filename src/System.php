@@ -36,18 +36,6 @@ class System
   }
 
   /**
-   * @alias isHHVM
-   *
-   * Detect if the script is running under HHVM
-   *
-   * @return bool
-   */
-  public static function isHipHop()
-  {
-    return self::isHHVM();
-  }
-
-  /**
    * Detect if the script is running on App Engine
    *
    * @param string $server $_SERVER['SERVER_SOFTWARE']
@@ -104,8 +92,8 @@ class System
   {
     if(!isset(self::$commandCache[$cmd]))
     {
-      $path      = false;
-      $retval    = -1;
+      $path = false;
+      $retval = -1;
       $searchCmd = System::isWindows() ? 'where "%s" 2>nul' : 'which "%s"';
       exec(sprintf($searchCmd, $cmd), $output, $retval);
       if($retval === 0 && isset($output[0]))
@@ -135,7 +123,7 @@ class System
       {
         $enabledFunctions = ini_get('google_app_engine.enable_functions');
       }
-      $aeDisabled        = array_diff(
+      $aeDisabled = array_diff(
         [
           'gc_collect_cycles',
           'gc_enable',
