@@ -374,4 +374,81 @@ class Strings
   {
     return \htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
   }
+
+  /**
+   * Assert that passed data can be converted to string.
+   *
+   * @param  string $parameter Assert that this data is valid.
+   *
+   * @return void
+   *
+   * @throws \InvalidArgumentException
+   */
+  public static function stringable($parameter)
+  {
+    switch(gettype($parameter))
+    {
+      case 'string':
+      case 'NULL':
+      case 'boolean':
+      case 'double':
+      case 'integer':
+        return;
+      case 'object':
+        if(method_exists($parameter, '__toString'))
+        {
+          return;
+        }
+        break;
+      case 'array':
+      case 'resource':
+      case 'unknown type':
+      default:
+        break;
+    }
+
+    throw new \InvalidArgumentException(
+      "Argument must be scalar or object which implements __toString()!"
+    );
+  }
+
+  /**
+   * Split a corpus of text into lines. This function splits on "\n", "\r\n",
+   * or
+   * a mixture of any of them.
+   *
+   * NOTE: This function does not treat "\r" on its own as a newline because
+   * none of SVN, Git or Mercurial do on any OS.
+   *
+   * @param $corpus        string Block of text to be split into lines.
+   * @param $retainEndings bool If true, retain line endings in result strings.
+   *
+   * @return array List of lines.
+   */
+  public static function splitLines($corpus, $retainEndings = true)
+  {
+    if(!strlen($corpus))
+    {
+      return [''];
+    }
+
+    // Split on "\r\n" or "\n".
+    if($retainEndings)
+    {
+      $lines = preg_split('/(?<=\n)/', $corpus);
+    }
+    else
+    {
+      $lines = preg_split('/\r?\n/', $corpus);
+    }
+
+    // If the text ends with "\n" or similar, we'll end up with an empty string
+    // at the end; discard it.
+    if(end($lines) == '')
+    {
+      array_pop($lines);
+    }
+
+    return $lines;
+  }
 }

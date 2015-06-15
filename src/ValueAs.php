@@ -209,4 +209,53 @@ class ValueAs
 
     return $default;
   }
+
+  /**
+   * Returns the first argument which is not strictly null, or ##null## if there
+   * are no such arguments. Identical to the MySQL function of the same name.
+   *
+   * @param  ...         Zero or more arguments of any type.
+   *
+   * @return mixed       First non-##null## arg, or null if no such arg exists.
+   */
+  public static function coalesce( /* ... */)
+  {
+    $args = func_get_args();
+    foreach($args as $arg)
+    {
+      if($arg !== null)
+      {
+        return $arg;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Similar to @{function:coalesce}, but less strict: returns the first
+   * non-##empty()## argument, instead of the first argument that is strictly
+   * non-##null##. If no argument is nonempty, it returns the last argument.
+   * This is useful idiomatically for setting defaults:
+   *
+   *   $display_name = nonempty($user_name, $full_name, "Anonymous");
+   *
+   * @param  ...         Zero or more arguments of any type.
+   *
+   * @return mixed       First non-##empty()## arg, or last arg if no such arg
+   *                     exists, or null if you passed in zero args.
+   */
+  public static function nonempty( /* ... */)
+  {
+    $args = func_get_args();
+    $result = null;
+    foreach($args as $arg)
+    {
+      $result = $arg;
+      if($arg)
+      {
+        break;
+      }
+    }
+    return $result;
+  }
 }
