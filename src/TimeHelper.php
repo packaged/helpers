@@ -7,7 +7,15 @@ class TimeHelper
   const SQL_DATE = 'Y-m-d';
   const SQL_TIME = 'H:i:s';
 
-  public static function uniqidToMicrotime($uniqid, $hasEntropy = false)
+  /**
+   * Convert a unique ID to a microtime
+   *
+   * @param      $uniqid
+   * @param bool $hasEntropy
+   *
+   * @return string
+   */
+  public static function uniqidToMicroseconds($uniqid, $hasEntropy = false)
   {
     if($hasEntropy)
     {
@@ -15,11 +23,16 @@ class TimeHelper
     }
     $microtime = (int)hexdec(substr($uniqid, -5));
     $timestamp = (int)hexdec(substr($uniqid, -13, -5));
-    return $timestamp . '.' . $microtime;
+    return (int)(($timestamp . '.' . $microtime) * 1000);
   }
 
-  public static function microtime()
+  /**
+   * Retrieve the microtime as an integer
+   *
+   * @return int
+   */
+  public static function microseconds()
   {
-    return floor(microtime(true) * 1000);
+    return (int)floor(microtime(true) * 1000);
   }
 }
