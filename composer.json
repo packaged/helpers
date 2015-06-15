@@ -1,6 +1,6 @@
 {
   "name": "packaged/helpers",
-  "description": "Generic PHP Helper Classes & Functions",
+  "description": "Generic PHP Helper Classes",
   "license": "MIT",
   "authors": [
     {
