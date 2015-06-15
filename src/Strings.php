@@ -451,4 +451,216 @@ class Strings
 
     return $lines;
   }
+
+  /**
+   * Explode a string, filling the remainder with provided defaults.
+   *
+   * @param string      $delimiter The boundary string
+   * @param string      $string    The input string.
+   * @param array|mixed $defaults  Array to return, with replacements made,
+   *                               or a padding value
+   * @param int|null    $limit     Passed through to the initial explode
+   *
+   * @return array
+   *
+   */
+  public static function explode(
+    $delimiter, $string, $defaults = null, $limit = null
+  )
+  {
+    if($limit === null)
+    {
+      $parts = explode($delimiter, $string);
+    }
+    else
+    {
+      $parts = explode($delimiter, $string, $limit);
+    }
+
+    if(is_array($defaults))
+    {
+      return array_replace($defaults, $parts);
+    }
+
+    return array_pad($parts, $limit, $defaults);
+  }
+
+  /**
+   * Retrieve the final part of a string, after the first instance of the
+   * needle has been located
+   *
+   * @param $haystack
+   * @param $needle
+   *
+   * @return string
+   */
+  public static function offset($haystack, $needle)
+  {
+    if(stristr($haystack, $needle))
+    {
+      $haystack = substr(
+        $haystack,
+        strpos($haystack, $needle) + strlen($needle)
+      );
+    }
+    return $haystack;
+  }
+
+  /**
+   * Strip off a specific string from the start of another, if an exact match
+   * is not found, the original string (haystack) will be returned
+   *
+   * @param $haystack
+   * @param $needle
+   *
+   * @return string
+   */
+  public static function ltrim($haystack, $needle)
+  {
+    if(starts_with($haystack, $needle))
+    {
+      $haystack = substr($haystack, strlen($needle));
+    }
+    return $haystack;
+  }
+
+  /**
+   * Check a string contains another string
+   *
+   * @param       $haystack
+   * @param array $needle
+   * @param bool  $case
+   *
+   * @return bool
+   */
+  public static function contains($haystack, $needle, $case = true)
+  {
+    if($case)
+    {
+      return strstr($haystack, $needle) !== false;
+    }
+    else
+    {
+      return stristr($haystack, $needle) !== false;
+    }
+  }
+
+  /**
+   * Check a string contains one of the provided needles
+   *
+   * @param       $haystack
+   * @param array $needles
+   * @param bool  $case
+   *
+   * @return bool
+   */
+  public static function containsAny($haystack, array $needles, $case = true)
+  {
+    foreach($needles as $needle)
+    {
+      if(static::contains($haystack, $needle, $case))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Check a string ends with one of the provided needles
+   *
+   * @param       $haystack
+   * @param array $needles
+   * @param bool  $case
+   *
+   * @return bool
+   */
+  public static function endsWithAny($haystack, array $needles, $case = true)
+  {
+    foreach($needles as $needle)
+    {
+      if(static::endsWith($haystack, $needle, $case))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Check a string ends with a specific string
+   *
+   * @param      $haystack
+   * @param      $needle
+   * @param bool $case
+   *
+   * @return bool
+   */
+  public static function endsWith($haystack, $needle, $case = true)
+  {
+    if(is_array($needle))
+    {
+      return static::endsWithAny($haystack, $needle, $case);
+    }
+    return static::startsWith(strrev($haystack), strrev($needle), $case);
+  }
+
+  /**
+   * Check a string starts with one of the needles provided
+   *
+   * @param       $haystack
+   * @param array $needles
+   * @param bool  $case
+   *
+   * @return bool
+   */
+  public static function startsWithAny($haystack, array $needles, $case = true)
+  {
+    foreach($needles as $needle)
+    {
+      if(static::startsWith($haystack, $needle, $case))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Check a string starts with a specific string
+   *
+   * @param      $haystack
+   * @param      $needle
+   * @param bool $case
+   *
+   * @return bool
+   */
+  public static function startsWith($haystack, $needle, $case = true)
+  {
+    if(is_array($needle))
+    {
+      return static::startsWithAny($haystack, $needle, $case);
+    }
+
+    if(!$case)
+    {
+      return strncasecmp($haystack, $needle, strlen($needle)) == 0;
+    }
+    else
+    {
+      return strncmp($haystack, $needle, strlen($needle)) == 0;
+    }
+  }
+
+  /**
+   * Short cut for json_encode with JSON_PRETTY_PRINT
+   *
+   * @param $object
+   *
+   * @return string json encoded string
+   */
+  public static function jsonPretty($object)
+  {
+    return json_encode($object, JSON_PRETTY_PRINT);
+  }
 }

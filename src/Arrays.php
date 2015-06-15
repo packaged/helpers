@@ -698,6 +698,29 @@ class Arrays
   }
 
   /**
+   * Returns an array of objects ordered by the property param
+   *
+   * @param array $list
+   * @param       $property
+   *
+   * @return array objects ordered by the property param
+   */
+  public static function psort(array $list, $property)
+  {
+    $surrogate = static::ppull($list, $property);
+
+    asort($surrogate);
+
+    $result = [];
+    foreach($surrogate as $key => $value)
+    {
+      $result[$key] = $list[$key];
+    }
+
+    return $result;
+  }
+
+  /**
    * Filter a list of objects by executing a method across all the objects and
    * filter out the ones wth empty() results. this function works just like
    * @{function:ifilter}, except that it operates on a list of objects instead
@@ -798,5 +821,131 @@ class Arrays
     }
 
     return $result;
+  }
+
+  /**
+   * return the first non-empty value of an array from
+   * a specified list of keys
+   *
+   * @param array $array
+   * @param array $properties
+   * @param null  $default
+   *
+   * @return mixed
+   */
+  public static function inonempty(
+    array $array, array $properties, $default = null
+  )
+  {
+    foreach($properties as $prop)
+    {
+      if(isset($array[$prop]) && !empty($array[$prop]))
+      {
+        return $array[$prop];
+      }
+    }
+    return $default;
+  }
+
+  /**
+   * A case-insensitive in_array function
+   * Checks to see if a value exists in an array
+   *
+   * @param mixed[] $haystack
+   * @param mixed   $needle
+   *
+   * @return bool
+   */
+  public static function contains(array $haystack, $needle)
+  {
+    return in_array(
+      strtolower($needle),
+      array_map('strtolower', $haystack)
+    );
+  }
+
+  /**
+   * Add a new value to an array, by name or pushed onto the end
+   *
+   * When null is provided as the name, it will simply add your item onto the
+   * end of the array
+   *
+   * @param array $array
+   * @param bool  $value
+   * @param null  $name
+   *
+   * @return array
+   */
+  public static function addValue(array $array, $value = true, $name = null)
+  {
+    if($name === null)
+    {
+      $array[] = $value;
+    }
+    else
+    {
+      $array[$name] = $value;
+    }
+    return $array;
+  }
+
+  /**
+   * Similar to the standard implode method, but allowing the last item to be
+   * stuck with a separate glue e.g. apple , pear & grape
+   *
+   * @param array  $pieces
+   * @param string $glue
+   * @param string $finalGlue
+   *
+   * @return string
+   */
+  public static function toList(
+    array $pieces = [], $glue = ' , ', $finalGlue = ' & '
+  )
+  {
+    if(count($pieces) > 1)
+    {
+      $final = array_pop($pieces);
+      return implode($finalGlue, [implode($glue, $pieces), $final]);
+    }
+    else
+    {
+      return implode($glue, $pieces);
+    }
+  }
+
+  /**
+   * Shuffles an array maintaining key association
+   *
+   * @param array $array
+   *
+   * @return array
+   */
+  public static function shuffleAssoc($array)
+  {
+    if(!is_array($array))
+    {
+      return $array;
+    }
+    $keys = array_keys($array);
+    shuffle($keys);
+    $return = [];
+    foreach($keys as $key)
+    {
+      $return[$key] = $array[$key];
+    }
+    return $return;
+  }
+
+  /**
+   * Check to see if an array is associative
+   *
+   * @param array $array
+   *
+   * @return bool
+   */
+  public static function isAssoc(array $array)
+  {
+    return ($array !== array_values($array));
   }
 }

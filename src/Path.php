@@ -1,7 +1,7 @@
 <?php
 namespace Packaged\Helpers;
 
-class PathBuilder
+class Path
 {
   /**
    * Concatenate any number of path sections and correctly
@@ -9,9 +9,9 @@ class PathBuilder
    *
    * @return string
    */
-  public static function path( /* string... */)
+  public static function build( /* string... */)
   {
-    return static::custom(DIRECTORY_SEPARATOR, func_get_args());
+    return static::buildCustom(DIRECTORY_SEPARATOR, func_get_args());
   }
 
   /**
@@ -19,9 +19,9 @@ class PathBuilder
    *
    * @return string
    */
-  public static function windows( /* string... */)
+  public static function buildWindows( /* string... */)
   {
-    return static::custom('\\', func_get_args());
+    return static::buildCustom('\\', func_get_args());
   }
 
   /**
@@ -29,9 +29,9 @@ class PathBuilder
    *
    * @return string
    */
-  public static function unix( /* string... */)
+  public static function buildUnix( /* string... */)
   {
-    return static::custom('/', func_get_args());
+    return static::buildCustom('/', func_get_args());
   }
 
   /**
@@ -42,7 +42,7 @@ class PathBuilder
    *
    * @return string
    */
-  public static function custom($directorySeparator, array $pathComponents)
+  public static function buildCustom($directorySeparator, array $pathComponents)
   {
     $fullPath = "";
     foreach($pathComponents as $section)
@@ -62,5 +62,25 @@ class PathBuilder
     }
 
     return $fullPath;
+  }
+
+  /**
+   * Match all files within a directory to a pattern recursive
+   *
+   * @param     $baseDir
+   * @param     $pattern
+   * @param int $flags
+   *
+   * @return array
+   */
+  public static function globRecursive($baseDir, $pattern = '*', $flags = 0)
+  {
+    $files = glob($baseDir . DS . $pattern, $flags);
+
+    foreach(glob($baseDir . DS . '*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir)
+    {
+      $files = array_merge($files, glob_recursive($dir, $pattern, $flags));
+    }
+    return $files;
   }
 }

@@ -148,4 +148,14 @@ class System
     }
     return in_array($function, $disabledFunctions);
   }
+
+  /**
+   * Sleep for X milliseconds
+   *
+   * @param $milliseconds
+   */
+  public static function msleep($milliseconds)
+  {
+    usleep($milliseconds * 1000);
+  }
 }

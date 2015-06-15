@@ -50,4 +50,149 @@ class Objects
       return $reflector->newInstance();
     }
   }
+
+  /**
+   * return the first non-empty property of an object from
+   * a specified list of properties
+   *
+   * @param object $object
+   * @param array  $properties
+   * @param null   $default
+   *
+   * @return mixed
+   */
+  public static function pnonempty($object, array $properties, $default = null)
+  {
+    foreach($properties as $prop)
+    {
+      if(isset($object->$prop) && !empty($object->$prop))
+      {
+        return $object->$prop;
+      }
+    }
+    return $default;
+  }
+
+  /**
+   * Hydrate properties from the source object, into the destination
+   *
+   * @param object $destination object to write data to
+   * @param object $source      object to read data from
+   * @param array  $properties  properties to read
+   * @param bool   $copyNull    Copy null values from source to destination
+   *
+   * @return void
+   *
+   * @throws \Exception
+   */
+  public static function hydrate(
+    $destination, $source, array $properties = null, $copyNull = true
+  )
+  {
+    if(!is_object($destination) || !is_object($source))
+    {
+      throw new \Exception("hydrate() must be given objects");
+    }
+
+    if($properties === null)
+    {
+      $properties = static::properties($properties, true);
+    }
+
+    $properties = array_filter($properties);
+    foreach($properties as $property)
+    {
+      $newVal = static::property($source, $property);
+      if($newVal !== null || $copyNull)
+      {
+        $destination->$property = $newVal;
+      }
+    }
+  }
+
+  /**
+   * Return an array with only the public properties
+   *
+   * If calling get_object_vars withing a class,
+   * will return protected and private properties,
+   * this function fixes this instance
+   *
+   * @param object $object Source object
+   *
+   * @return mixed
+   */
+  public static function properties($object)
+  {
+    return array_keys(get_object_vars($object));
+  }
+
+  /**
+   * Return an array with only the public properties and their values.
+   *
+   * If calling get_object_vars withing a class,
+   * will return protected and private properties,
+   * this function fixes this instance
+   *
+   * @param object $object Source object
+   *
+   * @return mixed
+   */
+  public static function propertyValues($object)
+  {
+    return get_object_vars($object);
+  }
+
+  /**
+   * Access an object property, retrieving the value stored there
+   * if it exists or a default if it does not.
+   *
+   * @param object $object   Source object
+   * @param string $property Property name to pull from the object
+   * @param mixed  $default  Default value if the property does not exist
+   *
+   * @return mixed
+   */
+  public static function property($object, $property, $default = null)
+  {
+    return isset($object->$property) ? $object->$property : $default;
+  }
+
+  /**
+   * This will return the namespace of the passed object/class
+   *
+   * @param object|string $source
+   *
+   * @return string
+   */
+  public static function getNamespace($source)
+  {
+    if($source === null)
+    {
+      return '';
+    }
+    $source = is_object($source) ? get_class($source) : $source;
+    $source = explode('\\', $source);
+    array_pop($source);
+    if(count($source) < 1)
+    {
+      return '';
+    }
+    else
+    {
+      return '\\' . ltrim(implode('\\', $source), '\\');
+    }
+  }
+
+  /**
+   * Return a class name without the namespace prefix
+   *
+   * @param $class
+   *
+   * @return string Short class name
+   */
+  public static function classShortname($class)
+  {
+    $class = is_object($class) ? get_class($class) : $class;
+    return basename(str_replace('\\', '/', $class));
+  }
 }
