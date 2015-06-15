@@ -75,11 +75,15 @@ class Path
    */
   public static function globRecursive($baseDir, $pattern = '*', $flags = 0)
   {
-    $files = glob($baseDir . DS . $pattern, $flags);
+    $ds = DIRECTORY_SEPARATOR;
+    $files = glob($baseDir . $ds . $pattern, $flags);
 
-    foreach(glob($baseDir . DS . '*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir)
+    foreach(glob($baseDir . $ds . '*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir)
     {
-      $files = array_merge($files, glob_recursive($dir, $pattern, $flags));
+      $files = array_merge(
+        $files,
+        static::globRecursive($dir, $pattern, $flags)
+      );
     }
     return $files;
   }

@@ -517,7 +517,7 @@ class Strings
    */
   public static function ltrim($haystack, $needle)
   {
-    if(starts_with($haystack, $needle))
+    if(static::startsWith($haystack, $needle))
     {
       $haystack = substr($haystack, strlen($needle));
     }
