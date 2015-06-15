@@ -1,4 +1,5 @@
 <?php
+use Packaged\Helpers\ValueAs;
 
 class ValueAsTest extends PHPUnit_Framework_TestCase
 {
@@ -26,7 +27,7 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
 
   public function exactProvider()
   {
-    $objectTest       = new stdClass();
+    $objectTest = new stdClass();
     $objectTest->item = 'value';
 
     return [
@@ -68,12 +69,58 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
 
   public function matchProvider()
   {
-    $objectTest       = new stdClass();
+    $objectTest = new stdClass();
     $objectTest->item = 'value';
 
     return [
       ['obj', ['item' => 'value'], null, $objectTest],
       ['obj', 'invalid', $objectTest, $objectTest],
     ];
+  }
+
+  public function testNonempty()
+  {
+    $this->assertEquals(
+      'zebra',
+      ValueAs::nonempty(false, null, 0, '', [], 'zebra')
+    );
+
+    $this->assertEquals(
+      null,
+      ValueAs::nonempty()
+    );
+
+    $this->assertEquals(
+      false,
+      ValueAs::nonempty(null, false)
+    );
+
+    $this->assertEquals(
+      null,
+      ValueAs::nonempty(false, null)
+    );
+  }
+
+  public function testCoalesce()
+  {
+    $this->assertEquals(
+      'zebra',
+      ValueAs::coalesce(null, 'zebra')
+    );
+
+    $this->assertEquals(
+      null,
+      ValueAs::coalesce()
+    );
+
+    $this->assertEquals(
+      false,
+      ValueAs::coalesce(false, null)
+    );
+
+    $this->assertEquals(
+      false,
+      ValueAs::coalesce(null, false)
+    );
   }
 }

@@ -1,4 +1,5 @@
 <?php
+use Packaged\Helpers\Strings;
 
 /**
  * @author  brooke.bryan
@@ -276,29 +277,6 @@ class StringsTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @param $microtime
-   * @param $uniqid
-   * @param $hasEntropy
-   *
-   * @dataProvider uniqidProvider
-   */
-  public function testUniqid2microtime($microtime, $uniqid, $hasEntropy)
-  {
-    $time = \Packaged\Helpers\Strings::uniqid2microtime($uniqid, $hasEntropy);
-    $this->assertEquals($microtime, $time, '', 0.001);
-  }
-
-  public function uniqidProvider()
-  {
-    return [
-      [microtime(true), uniqid(), false],
-      [microtime(true), uniqid('PRE'), false],
-      [microtime(true), uniqid('', true), true],
-      [microtime(true), uniqid('PRE', true), true],
-    ];
-  }
-
-  /**
    * @param        $length
    * @param        $expect
    * @param string $append
@@ -392,5 +370,232 @@ class StringsTest extends PHPUnit_Framework_TestCase
       ["abcdef", "z", null, true, false],
       ["abcdef", "b", 'z', true, false],
     ];
+  }
+
+  public function testAssertStringLike()
+  {
+    Strings::stringable(null);
+    Strings::stringable("");
+    Strings::stringable("Hello World");
+    Strings::stringable(1);
+    Strings::stringable(9.9999);
+    Strings::stringable(true);
+    Strings::stringable(new Exception('.'));
+
+    $obj = (object)[];
+    $caught = null;
+    try
+    {
+      Strings::stringable($obj);
+    }
+    catch(InvalidArgumentException $ex)
+    {
+      $caught = $ex;
+    }
+    $this->assertInstanceOf("InvalidArgumentException", $caught);
+
+    $array = [
+      "foo" => "bar",
+      "bar" => "foo",
+    ];
+    $caught = null;
+    try
+    {
+      Strings::stringable($array);
+    }
+    catch(InvalidArgumentException $ex)
+    {
+      $caught = $ex;
+    }
+    $this->assertInstanceOf("InvalidArgumentException", $caught);
+  }
+
+  public function testSplitLines()
+  {
+    $retain_cases = [
+      ""              => [""],
+      "x"             => ["x"],
+      "x\n"           => ["x\n"],
+      "\n"            => ["\n"],
+      "\n\n\n"        => ["\n", "\n", "\n"],
+      "\r\n"          => ["\r\n"],
+      "x\r\ny\n"      => ["x\r\n", "y\n"],
+      "x\ry\nz\r\n"   => ["x\ry\n", "z\r\n"],
+      "x\ry\nz\r\n\n" => ["x\ry\n", "z\r\n", "\n"],
+    ];
+
+    foreach($retain_cases as $input => $expect)
+    {
+      $this->assertEquals(
+        $expect,
+        Strings::splitLines($input, $retainEndings = true),
+        ("(Retained) " . addcslashes($input, "\r\n\\"))
+      );
+    }
+
+    $discard_cases = [
+      ""              => [""],
+      "x"             => ["x"],
+      "x\n"           => ["x"],
+      "\n"            => [""],
+      "\n\n\n"        => ["", "", ""],
+      "\r\n"          => [""],
+      "x\r\ny\n"      => ["x", "y"],
+      "x\ry\nz\r\n"   => ["x\ry", "z"],
+      "x\ry\nz\r\n\n" => ["x\ry", "z", ""],
+    ];
+
+    foreach($discard_cases as $input => $expect)
+    {
+      $this->assertEquals(
+        $expect,
+        Strings::splitLines($input, $retainEndings = false),
+        ("(Discarded) " . addcslashes($input, "\r\n\\"))
+      );
+    }
+  }
+
+  public function testJsonPretty()
+  {
+    $this->assertEquals(
+      '{
+    "x": "y"
+}',
+      Strings::jsonPretty(["x" => "y"])
+    );
+  }
+
+  public function testEscape()
+  {
+    $expectations = [
+      ['Strings', "Strings"],
+      ['Stri"ngs', "Stri&quot;ngs"],
+      ['Stri\'ngs', "Stri&#039;ngs"],
+    ];
+    foreach($expectations as $expect)
+    {
+      $this->assertEquals($expect[1], Strings::escape($expect[0]));
+    }
+  }
+
+  public function testStringFrom()
+  {
+    $this->assertEquals(
+      'Views\Dyn',
+      Strings::offset('X\Y\Z\Com\Views\Dyn', 'Com\\')
+    );
+    $this->assertEquals(
+      'X\Y\Z\Com\Views\Dyn',
+      Strings::offset('X\Y\Z\Com\Views\Dyn', 'Mi\\')
+    );
+  }
+
+  public function testStrContains()
+  {
+    $this->assertTrue(Strings::contains('abcdef', 'bcd'));
+    $this->assertTrue(Strings::contains('abcdef', 'bcd', false));
+    $this->assertFalse(Strings::contains('abCdef', 'bcd'));
+    $this->assertTrue(Strings::contains('aBcDeF', 'aBcDeF'));
+    $this->assertTrue(Strings::contains('aBcDeF', 'BcD'));
+    $this->assertTrue(Strings::contains('aBcDeF', 'bcd', false));
+  }
+
+  public function testContainsAny()
+  {
+    $this->assertTrue(Strings::containsAny('abcdef', ['x', 'y', 'bc']));
+    $this->assertFalse(Strings::containsAny('abcdef', ['x', 'y', 'z']));
+    $this->assertTrue(Strings::containsAny('aBCdef', ['x', 'y', 'bc'], false));
+    $this->assertFalse(Strings::containsAny('aBCdef', ['x', 'y', 'bc']));
+    $this->assertFalse(Strings::containsAny('abcdef', ['x', 'y', 'z']));
+  }
+
+  public function testExploded()
+  {
+    $defaults = ["a", "b", "c", "d"];
+    $this->assertEquals(
+      [1, 2, 3, 4],
+      Strings::explode(",", "1,2,3,4", $defaults, 4)
+    );
+    $this->assertEquals(
+      [1, 2, "3,4", "d"],
+      Strings::explode(",", "1,2,3,4", $defaults, 3)
+    );
+    $this->assertEquals(
+      [1, 2, "c", "d"],
+      Strings::explode(",", "1,2", $defaults, 3)
+    );
+    $this->assertEquals(
+      [1, 2, "c", "d"],
+      Strings::explode(",", "1,2", $defaults)
+    );
+    $this->assertEquals(
+      [1, 2, 3, 4, 5],
+      Strings::explode(",", "1,2,3,4,5", $defaults)
+    );
+    $this->assertEquals(
+      [1, 2, 3, '-', '-'],
+      Strings::explode(",", "1,2,3", '-', 5)
+    );
+  }
+
+  public function testConcat()
+  {
+    $this->assertEquals("ab", Strings::concat("a", "b"));
+    $this->assertEquals("a-b", Strings::concat("a", "-", "b"));
+  }
+
+  public function testStartsWith()
+  {
+    $this->assertTrue(Strings::startsWith("abcdef", "ab", true));
+    $this->assertTrue(Strings::startsWith("aBcdef", "aB", true));
+    $this->assertTrue(Strings::startsWith("abcdef", "aB", false));
+    $this->assertTrue(Strings::startsWith("aBcdef", ["cd", 'aB'], true));
+
+    $this->assertFalse(Strings::startsWith("aBcdef", "ab", true));
+    $this->assertFalse(Strings::startsWith("aBcdef", "cd", false));
+    $this->assertFalse(Strings::startsWith("aBcdef", "cd", true));
+  }
+
+  public function testStartsWithAny()
+  {
+    $this->assertTrue(Strings::startsWithAny("abcdef", ["c", "ab"], true));
+    $this->assertTrue(Strings::startsWithAny("aBcdef", ["c", "aB"], true));
+    $this->assertFalse(Strings::startsWithAny("abcdef", ["c", "ef"], true));
+    $this->assertTrue(Strings::startsWithAny("aBcdef", ["c", "aB"], false));
+    $this->assertFalse(Strings::startsWithAny("aBcdef", ["c", "ef"], false));
+  }
+
+  public function testEndsWith()
+  {
+    $this->assertTrue(Strings::endsWith("abcdef", "f", true));
+    $this->assertTrue(Strings::endsWith("aBcdeF", "eF", true));
+    $this->assertTrue(Strings::endsWith("aBcdeF", "ef", false));
+    $this->assertTrue(Strings::endsWith("aBcdeF", ["de", "ef"], false));
+
+    $this->assertFalse(Strings::endsWith("aBcdef", "de", false));
+    $this->assertFalse(Strings::endsWith("aBcdef", "eF", true));
+  }
+
+  public function testEndsWithAny()
+  {
+    $this->assertTrue(Strings::endsWithAny("abcdef", ["f", "yx"], true));
+    $this->assertTrue(Strings::endsWithAny("aBcdeF", ["x", "eF"], true));
+    $this->assertTrue(Strings::endsWithAny("aBcdef", ["c", "eF"], false));
+
+    $this->assertFalse(Strings::endsWithAny("abcdef", ["c", "eF"], true));
+    $this->assertFalse(Strings::endsWithAny("aBcdef", ["c", "ab"], false));
+  }
+
+  public function testStripStart()
+  {
+    $expectations = [
+      ['Strings', "Strings", ""],
+      ['Strings', "Stri", "ngs"],
+      ['Apple', "Pear", "Apple"],
+    ];
+    foreach($expectations as $expect)
+    {
+      $this->assertEquals($expect[2], Strings::ltrim($expect[0], $expect[1]));
+    }
   }
 }

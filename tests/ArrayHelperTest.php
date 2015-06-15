@@ -11,11 +11,13 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 
     $arr = \Packaged\Helpers\ArrayHelper::create(
       [
-        'name' => 'Array',
-        'test' => 'Two'
+        'name'    => 'Array',
+        'test'    => 'Two',
+        'nullify' => null,
       ]
     );
     $this->assertEquals('Array', $arr->getValue('name'));
+    $this->assertNull($arr->getValue('nullify'));
     $this->assertEquals('Two', $arr->getValue('test'));
     $this->assertEquals('default2', $arr->getValue('missing', 'default2'));
 
@@ -56,11 +58,11 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 
   public function testArrayAccess()
   {
-    $testClass         = new stdClass();
+    $testClass = new stdClass();
     $testClass->value1 = 'value one';
     $testClass->value2 = 'value two';
-    $testClass->array  = ['test' => 'test1', 'test'];
-    $array             = \Packaged\Helpers\ArrayHelper::create($testClass);
+    $testClass->array = ['test' => 'test1', 'test'];
+    $array = \Packaged\Helpers\ArrayHelper::create($testClass);
     $this->assertEquals('value one', $array['value1']);
     $this->assertTrue(isset($array['value2']));
     unset($array['value2']);
@@ -72,12 +74,12 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 
   public function testToArray()
   {
-    $testClass                 = new stdClass();
-    $testClass->value1         = 'value one';
-    $testClass->array          = ['test' => 'test1', 'test'];
-    $testClass->nested         = new stdClass();
+    $testClass = new stdClass();
+    $testClass->value1 = 'value one';
+    $testClass->array = ['test' => 'test1', 'test'];
+    $testClass->nested = new stdClass();
     $testClass->nested->value1 = 'value one';
-    $testClass->nested->array  = ['test' => 'test1', 'test'];
+    $testClass->nested->array = ['test' => 'test1', 'test'];
 
     $this->assertEquals(
       [

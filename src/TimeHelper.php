@@ -22,6 +22,7 @@ class TimeHelper
       $uniqid = substr($uniqid, 0, -10);
     }
     $microtime = (int)hexdec(substr($uniqid, -5));
+    $microtime = str_pad($microtime, 6, '0', STR_PAD_LEFT);
     $timestamp = (int)hexdec(substr($uniqid, -13, -5));
     return (int)(($timestamp . '.' . $microtime) * 1000);
   }
@@ -36,3 +37,4 @@ class TimeHelper
     return (int)floor(microtime(true) * 1000);
   }
 }
+

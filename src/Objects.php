@@ -96,7 +96,7 @@ class Objects
 
     if($properties === null)
     {
-      $properties = static::properties($properties, true);
+      $properties = static::properties($source, true);
     }
 
     $properties = array_filter($properties);
