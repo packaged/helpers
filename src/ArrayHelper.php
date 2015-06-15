@@ -48,7 +48,19 @@ class ArrayHelper implements \ArrayAccess
    */
   public function getValue($key, $default = null)
   {
-    return isset($this->_data[$key]) ? $this->_data[$key] : $default;
+    // isset() is a micro-optimization - it is fast but fails for null values.
+    if(isset($this->_data[$key]))
+    {
+      return $this->_data[$key];
+    }
+
+    // Comparing $default is also a micro-optimization.
+    if($default === null || array_key_exists($key, $this->_data))
+    {
+      return null;
+    }
+
+    return $default;
   }
 
   /**
