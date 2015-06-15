@@ -15,7 +15,7 @@ class TimeHelperTest extends PHPUnit_Framework_TestCase
   public function testUniqid2microtime($microtime, $uniqid, $hasEntropy)
   {
     $time = TimeHelper::uniqidToMicroseconds($uniqid, $hasEntropy);
-    $this->assertEquals($microtime, $time, '', 1);
+    $this->assertEquals($microtime, $time, '', 10);
   }
 
   public function uniqidProvider()
