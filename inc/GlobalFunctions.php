@@ -64,21 +64,6 @@ if(!function_exists("class_shortname"))
   }
 }
 
-if(!function_exists("esc"))
-{
-  /**
-   * Escape HTML String
-   *
-   * @param $string
-   *
-   * @return string
-   */
-  function esc($string)
-  {
-    return \htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
-  }
-}
-
 if(!function_exists("psort"))
 {
   /**

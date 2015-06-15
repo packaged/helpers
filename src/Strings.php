@@ -353,8 +353,25 @@ class Strings
     return $final;
   }
 
+  /**
+   * Concatinate multiple values to a single string
+   *
+   * @return string
+   */
   public static function concat(/* string... */)
   {
     return implode('', func_get_args());
+  }
+
+  /**
+   * Escape HTML String
+   *
+   * @param $string
+   *
+   * @return string
+   */
+  public static function escape($string)
+  {
+    return \htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
   }
 }
