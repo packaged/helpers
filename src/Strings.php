@@ -352,15 +352,4 @@ class Strings
     }
     return $final;
   }
-
-  public static function uniqid2microtime($uniqid, $hasEntropy = false)
-  {
-    if($hasEntropy)
-    {
-      $uniqid = substr($uniqid, 0, -10);
-    }
-    $microtime = (int)hexdec(substr($uniqid, -5));
-    $timestamp = (int)hexdec(substr($uniqid, -13, -5));
-    return $timestamp . '.' . $microtime;
-  }
 }
