@@ -4,62 +4,6 @@ use Packaged\Helpers\Arrays;
 
 class ArraysTest extends PHPUnit_Framework_TestCase
 {
-  public function testMFilterNullMethodThrowException()
-  {
-    $caught = null;
-    try
-    {
-      Arrays::mfilter([], null);
-    }
-    catch(InvalidArgumentException $ex)
-    {
-      $caught = $ex;
-    }
-
-    $this->assertEquals(true, ($caught instanceof InvalidArgumentException));
-  }
-
-  public function testMFilterWithEmptyValueFiltered()
-  {
-    $a = new MFilterTestHelper('o', 'p', 'q');
-    $b = new MFilterTestHelper('o', '', 'q');
-    $c = new MFilterTestHelper('o', 'p', 'q');
-
-    $list = [
-      'a' => $a,
-      'b' => $b,
-      'c' => $c,
-    ];
-
-    $actual = Arrays::mfilter($list, 'getI');
-    $expected = [
-      'a' => $a,
-      'c' => $c,
-    ];
-
-    $this->assertEquals($expected, $actual);
-  }
-
-  public function testMFilterWithEmptyValueNegateFiltered()
-  {
-    $a = new MFilterTestHelper('o', 'p', 'q');
-    $b = new MFilterTestHelper('o', '', 'q');
-    $c = new MFilterTestHelper('o', 'p', 'q');
-
-    $list = [
-      'a' => $a,
-      'b' => $b,
-      'c' => $c,
-    ];
-
-    $actual = Arrays::mfilter($list, 'getI', true);
-    $expected = [
-      'b' => $b,
-    ];
-
-    $this->assertEquals($expected, $actual);
-  }
-
   public function testIFilterInvalidIndexThrowException()
   {
     $caught = null;
@@ -386,46 +330,6 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testMpull()
-  {
-    $a = new MFilterTestHelper('1', 'a', 'q');
-    $b = new MFilterTestHelper('2', 'b', 'q');
-    $c = new MFilterTestHelper('3', 'c', 'q');
-    $list = [$a, $b, $c];
-
-    $expected = [1, 2, 3];
-    $this->assertEquals($expected, Arrays::mpull($list, 'getH'));
-
-    $expected = ['a' => 1, 'b' => 2, 'c' => 3];
-    $this->assertEquals($expected, Arrays::mpull($list, 'getH', 'getI'));
-
-    $expected = ['a' => $a, 'b' => $b, 'c' => $c];
-    $this->assertEquals($expected, Arrays::mpull($list, null, 'getI'));
-  }
-
-  public function testPpull()
-  {
-    $a = new stdClass();
-    $a->name = "a";
-    $a->value = 1;
-    $b = new stdClass();
-    $b->name = "b";
-    $b->value = 2;
-    $c = new stdClass();
-    $c->name = "c";
-    $c->value = 3;
-    $list = [$a, $b, $c];
-
-    $expected = ["a", "b", "c"];
-    $this->assertEquals($expected, Arrays::ppull($list, 'name'));
-
-    $expected = ['a' => 1, 'b' => 2, 'c' => 3];
-    $this->assertEquals($expected, Arrays::ppull($list, 'value', 'name'));
-
-    $expected = ['a' => $a, 'b' => $b, 'c' => $c];
-    $this->assertEquals($expected, Arrays::ppull($list, null, 'name'));
-  }
-
   public function testIpull()
   {
     $list = [
@@ -446,17 +350,6 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       'c' => ['name' => 'c', 'value' => 3],
     ];
     $this->assertEquals($expected, Arrays::ipull($list, null, 'name'));
-  }
-
-  public function testMsort()
-  {
-    $a = new MFilterTestHelper('1', 'a', 'q');
-    $b = new MFilterTestHelper('2', 'b', 'q');
-    $c = new MFilterTestHelper('3', 'c', 'q');
-    $list = ["b" => $b, "a" => $a, "c" => $c];
-
-    $expected = ["a" => $a, "b" => $b, "c" => $c];
-    $this->assertEquals($expected, Arrays::msort($list, 'getI'));
   }
 
   public function testIsort()
@@ -540,85 +433,6 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     $this->assertEquals($expect, Arrays::igroup($list, 'group'));
   }
 
-  public function testMGroup()
-  {
-    $apple = new Thing('Apple', 'fruit', 'green', 'food');
-    $bear = new Thing('Bear', 'animal', 'brown', 'creature');
-    $carrot = new Thing('Carrot', 'vegetable', 'brown', 'food');
-
-    $list = ['a' => $apple, 'b' => $bear, 'c' => $carrot];
-
-    $expect = [
-      'fruit'     => ['a' => $apple],
-      'animal'    => ['b' => $bear],
-      'vegetable' => ['c' => $carrot],
-    ];
-    $this->assertEquals($expect, Arrays::mgroup($list, 'type'));
-
-    $expect = [
-      'food'     => [
-        'fruit'     => ['a' => $apple],
-        'vegetable' => ['c' => $carrot]
-      ],
-      'creature' => [
-        'animal' => ['b' => $bear]
-      ],
-    ];
-    $this->assertEquals($expect, Arrays::mgroup($list, 'group', 'type'));
-
-    $expect = [
-      'food'     => [
-        'a' => $apple,
-        'c' => $carrot
-      ],
-      'creature' => [
-        'b' => $bear
-      ],
-    ];
-    $this->assertEquals($expect, Arrays::mgroup($list, 'group'));
-  }
-
-  public function testPGroup()
-  {
-    $apple = new Thing('Apple', 'fruit', 'green', 'food');
-    $bear = new Thing('Bear', 'animal', 'brown', 'creature');
-    $carrot = new Thing('Carrot', 'vegetable', 'brown', 'food');
-
-    $list = ['a' => $apple, 'b' => $bear, 'c' => $carrot];
-
-    $expect = [
-      'fruit'     => ['a' => $apple],
-      'animal'    => ['b' => $bear],
-      'vegetable' => ['c' => $carrot],
-    ];
-    $this->assertEquals($expect, Arrays::pgroup($list, 'typeProperty'));
-
-    $expect = [
-      'food'     => [
-        'fruit'     => ['a' => $apple],
-        'vegetable' => ['c' => $carrot]
-      ],
-      'creature' => [
-        'animal' => ['b' => $bear]
-      ],
-    ];
-    $this->assertEquals(
-      $expect,
-      Arrays::pgroup($list, 'groupProperty', 'typeProperty')
-    );
-
-    $expect = [
-      'food'     => [
-        'a' => $apple,
-        'c' => $carrot
-      ],
-      'creature' => [
-        'b' => $bear
-      ],
-    ];
-    $this->assertEquals($expect, Arrays::pgroup($list, 'groupProperty'));
-  }
-
   public function testArrayNonEmpty()
   {
     $array = ['name' => 't_name', 'age' => 't_age'];
@@ -693,28 +507,6 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     $expected = ['z' => 'z', 'y' => 'y', 'x' => 'x'];
     $shuffled = Arrays::shuffleAssoc($expected);
     $this->assertEquals(json_encode($expected), json_encode($shuffled));
-  }
-
-  public function testPsort()
-  {
-    $apple = new stdClass();
-    $apple->name = "apple";
-    $pear = new stdClass();
-    $pear->name = "pear";
-    $grape = new stdClass();
-    $grape->name = "grape";
-
-    $expectations = [
-      [
-        ["apple" => $apple, "pear" => $pear, "grape" => $grape],
-        "name",
-        ["apple" => $apple, "grape" => $grape, "pear" => $pear],
-      ]
-    ];
-    foreach($expectations as $expect)
-    {
-      $this->assertEquals($expect[2], Arrays::psort($expect[0], $expect[1]));
-    }
   }
 }
 

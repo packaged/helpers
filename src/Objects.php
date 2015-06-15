@@ -96,7 +96,7 @@ class Objects
 
     if($properties === null)
     {
-      $properties = static::properties($source, true);
+      $properties = static::properties($source);
     }
 
     $properties = array_filter($properties);
@@ -194,5 +194,392 @@ class Objects
   {
     $class = is_object($class) ? get_class($class) : $class;
     return basename(str_replace('\\', '/', $class));
+  }
+
+  /**
+   * Call a method on a list of objects. Short for "method pull", this function
+   * works just like @{function:ipull}, except that it operates on a list of
+   * objects instead of a list of arrays. This function simplifies a common
+   * type
+   * of mapping operation:
+   *
+   *    COUNTEREXAMPLE
+   *    $names = array();
+   *    foreach ($objects as $key => $object) {
+   *      $names[$key] = $object->getName();
+   *    }
+   *
+   * You can express this more concisely with mpull():
+   *
+   *    $names = mpull($objects, 'getName');
+   *
+   * mpull() takes a third argument, which allows you to do the same but for
+   * the array's keys:
+   *
+   *    COUNTEREXAMPLE
+   *    $names = array();
+   *    foreach ($objects as $object) {
+   *      $names[$object->getID()] = $object->getName();
+   *    }
+   *
+   * This is the mpull version():
+   *
+   *    $names = mpull($objects, 'getName', 'getID');
+   *
+   * If you pass ##null## as the second argument, the objects will be
+   * preserved:
+   *
+   *    COUNTEREXAMPLE
+   *    $id_map = array();
+   *    foreach ($objects as $object) {
+   *      $id_map[$object->getID()] = $object;
+   *    }
+   *
+   * With mpull():
+   *
+   *    $id_map = mpull($objects, null, 'getID');
+   *
+   * See also @{function:ipull}, which works similarly but accesses array
+   * indexes instead of calling methods.
+   *
+   * @param   $list         array          Some list of objects.
+   * @param   $method       string|null   Determines which **values**
+   *                        will appear in the result array. Use a string like
+   *                        'getName' to store the value of calling the named
+   *                        method in each value, or
+   *                        ##null## to preserve the original objects.
+   * @param   $keyMethod    string|null   Determines how **keys** will be
+   *                        assigned in the result array. Use a string like
+   *                        'getID' to use the result of calling the named
+   *                        method as each object's key, or ##null## to
+   *                        preserve the original keys.
+   *
+   * @return  array          A dictionary with keys and values derived
+   *                         according
+   *                        to whatever you passed as $method and $key_method.
+   */
+  public static function mpull(array $list, $method, $keyMethod = null)
+  {
+    $result = [];
+    foreach($list as $key => $object)
+    {
+      if($keyMethod !== null)
+      {
+        $key = $object->$keyMethod();
+      }
+      if($method !== null)
+      {
+        $value = $object->$method();
+      }
+      else
+      {
+        $value = $object;
+      }
+      $result[$key] = $value;
+    }
+    return $result;
+  }
+
+  /**
+   * Access a property on a list of objects. Short for "property pull", this
+   * function works just like @{function:mpull}, except that it accesses object
+   * properties instead of methods. This function simplifies a common type of
+   * mapping operation:
+   *
+   *    COUNTEREXAMPLE
+   *    $names = array();
+   *    foreach ($objects as $key => $object) {
+   *      $names[$key] = $object->name;
+   *    }
+   *
+   * You can express this more concisely with ppull():
+   *
+   *    $names = ppull($objects, 'name');
+   *
+   * ppull() takes a third argument, which allows you to do the same but for
+   * the array's keys:
+   *
+   *    COUNTEREXAMPLE
+   *    $names = array();
+   *    foreach ($objects as $object) {
+   *      $names[$object->id] = $object->name;
+   *    }
+   *
+   * This is the ppull version():
+   *
+   *    $names = ppull($objects, 'name', 'id');
+   *
+   * If you pass ##null## as the second argument, the objects will be
+   * preserved:
+   *
+   *    COUNTEREXAMPLE
+   *    $id_map = array();
+   *    foreach ($objects as $object) {
+   *      $id_map[$object->id] = $object;
+   *    }
+   *
+   * With ppull():
+   *
+   *    $id_map = ppull($objects, null, 'id');
+   *
+   * See also @{function:mpull}, which works similarly but calls object methods
+   * instead of accessing object properties.
+   *
+   * @param   $list         array Some list of objects.
+   * @param   $property     string|null   Determines which **values** will
+   *                        appear in the result array. Use a string like
+   *                        'name' to store the value of accessing the named
+   *                        property in each value, or
+   *                        ##null## to preserve the original objects.
+   * @param   $keyProperty  string|null   Determines how **keys** will be
+   *                        assigned in the result array. Use a string like
+   *                        'id' to use the result of accessing the named
+   *                        property as each object's key, or
+   *                        ##null## to preserve the original keys.
+   *
+   * @return  array          A dictionary with keys and values derived
+   *                         according
+   *                        to whatever you passed as $property and
+   *                        $key_property.
+   */
+  public static function ppull(array $list, $property, $keyProperty = null)
+  {
+    $result = [];
+    foreach($list as $key => $object)
+    {
+      if($keyProperty !== null)
+      {
+        $key = $object->$keyProperty;
+      }
+      if($property !== null)
+      {
+        $value = $object->$property;
+      }
+      else
+      {
+        $value = $object;
+      }
+      $result[$key] = $value;
+    }
+    return $result;
+  }
+
+  /**
+   * Group a list of objects by the result of some method, similar to how
+   * GROUP BY works in an SQL query. This function simplifies grouping objects
+   * by some property:
+   *
+   *    COUNTEREXAMPLE
+   *    $animals_by_species = array();
+   *    foreach ($animals as $animal) {
+   *      $animals_by_species[$animal->getSpecies()][] = $animal;
+   *    }
+   *
+   * This can be expressed more tersely with mgroup():
+   *
+   *    $animals_by_species = mgroup($animals, 'getSpecies');
+   *
+   * In either case, the result is a dictionary which maps species (e.g., like
+   * "dog") to lists of animals with that property, so all the dogs are grouped
+   * together and all the cats are grouped together, or whatever super
+   * businessesey thing is actually happening in your problem domain.
+   *
+   * See also @{function:igroup}, which works the same way but operates on
+   * array indexes.
+   *
+   * @param   $list   array    List of objects to group by some property.
+   * @param   $by     string  Name of a method, like 'getType', to call on
+   *                  each object in order to determine which group it should be
+   *                  placed into.
+   * @param   ...     Zero or more additional method names, to subgroup the
+   *                  groups.
+   *
+   * @return  array    Dictionary mapping distinct method returns to lists of
+   *                  all objects which returned that value.
+   */
+  public static function mgroup(array $list, $by /* , ... */)
+  {
+    $map = static::mpull($list, $by);
+
+    $groups = [];
+    foreach($map as $group)
+    {
+      // Can't array_fill_keys() here because 'false' gets encoded wrong.
+      $groups[$group] = [];
+    }
+
+    foreach($map as $key => $group)
+    {
+      $groups[$group][$key] = $list[$key];
+    }
+
+    $args = func_get_args();
+    $args = array_slice($args, 2);
+    if($args)
+    {
+      array_unshift($args, null);
+      foreach($groups as $groupKey => $grouped)
+      {
+        $args[0] = $grouped;
+        $groups[$groupKey] = call_user_func_array(
+          '\Packaged\Helpers\Objects::mgroup',
+          $args
+        );
+      }
+    }
+
+    return $groups;
+  }
+
+  /**
+   * Group a list of arrays by the value of some property. This function is the
+   * same as @{function:mgroup}, except it operates on the values of object
+   * properties rather than the return values of method calls.
+   *
+   * @param   $list    array List of objects to group by some property value.
+   * @param   $by      string  Name of a property to select from each object in
+   *                   order to determine which group it should be placed into.
+   * @param   ...     Zero or more additional property names, to subgroup the
+   *                   groups.
+   *
+   * @return  array    Dictionary mapping distinct index values to lists of
+   *                  all objects which had that value at the index.
+   */
+  public static function pgroup(array $list, $by /* , ... */)
+  {
+    $map = static::ppull($list, $by);
+
+    $groups = [];
+    foreach($map as $group)
+    {
+      $groups[$group] = [];
+    }
+
+    foreach($map as $key => $group)
+    {
+      $groups[$group][$key] = $list[$key];
+    }
+
+    $args = func_get_args();
+    $args = array_slice($args, 2);
+    if($args)
+    {
+      array_unshift($args, null);
+      foreach($groups as $groupKey => $grouped)
+      {
+        $args[0] = $grouped;
+        $groups[$groupKey] = call_user_func_array(
+          '\Packaged\Helpers\Objects::pgroup',
+          $args
+        );
+      }
+    }
+
+    return $groups;
+  }
+
+  /**
+   * Sort a list of objects by the return value of some method. In PHP, this is
+   * often vastly more efficient than ##usort()## and similar.
+   *
+   *    // Sort a list of Duck objects by name.
+   *    $sorted = msort($ducks, 'getName');
+   *
+   * It is usually significantly more efficient to define an ordering method
+   * on objects and call ##msort()## than to write a comparator. It is often
+   * more convenient, as well.
+   *
+   * NOTE: This method does not take the list by reference; it returns a new
+   * list.
+   *
+   * @param   $list   array    List of objects to sort by some property.
+   * @param   $method string  Name of a method to call on each object; the
+   *                  return values will be used to sort the list.
+   *
+   * @return  array    Objects ordered by the return values of the method
+   *                   calls.
+   */
+  public static function msort(array $list, $method)
+  {
+    $surrogate = static::mpull($list, $method);
+
+    asort($surrogate);
+
+    $result = [];
+    foreach($surrogate as $key => $value)
+    {
+      $result[$key] = $list[$key];
+    }
+
+    return $result;
+  }
+
+  /**
+   * Returns an array of objects ordered by the property param
+   *
+   * @param array $list
+   * @param       $property
+   *
+   * @return array objects ordered by the property param
+   */
+  public static function psort(array $list, $property)
+  {
+    $surrogate = static::ppull($list, $property);
+
+    asort($surrogate);
+
+    $result = [];
+    foreach($surrogate as $key => $value)
+    {
+      $result[$key] = $list[$key];
+    }
+
+    return $result;
+  }
+
+  /**
+   * Filter a list of objects by executing a method across all the objects and
+   * filter out the ones wth empty() results. this function works just like
+   * @{function:ifilter}, except that it operates on a list of objects instead
+   * of a list of arrays.
+   *
+   * For example, to remove all objects with no children from a list, where
+   * 'hasChildren' is a method name, do this:
+   *
+   *   mfilter($list, 'hasChildren');
+   *
+   * The optional third parameter allows you to negate the operation and filter
+   * out nonempty objects. To remove all objects that DO have children, do this:
+   *
+   *   mfilter($list, 'hasChildren', true);
+   *
+   * @param  $list        array        List of objects to filter.
+   * @param  $method      string       A method name.
+   * @param  $negate      bool         Optionally, pass true to drop objects
+   *                      which pass the filter instead of keeping them.
+   *
+   * @return array   List of objects which pass the filter.
+   * @throws \InvalidArgumentException
+   */
+
+  public static function mfilter(array $list, $method, $negate = false)
+  {
+    if(!is_string($method))
+    {
+      throw new \InvalidArgumentException('Argument method is not a string.');
+    }
+
+    $result = [];
+    foreach($list as $key => $object)
+    {
+      $value = $object->$method();
+
+      if((!$negate && !empty($value)) || ($negate && empty($value)))
+      {
+        $result[$key] = $object;
+      }
+    }
+
+    return $result;
   }
 }

@@ -4,6 +4,62 @@ use Packaged\Helpers\Objects;
 
 class ObjectsTest extends PHPUnit_Framework_TestCase
 {
+  public function testMFilterNullMethodThrowException()
+  {
+    $caught = null;
+    try
+    {
+      Objects::mfilter([], null);
+    }
+    catch(InvalidArgumentException $ex)
+    {
+      $caught = $ex;
+    }
+
+    $this->assertEquals(true, ($caught instanceof InvalidArgumentException));
+  }
+
+  public function testMFilterWithEmptyValueFiltered()
+  {
+    $a = new MFilterTestHelper('o', 'p', 'q');
+    $b = new MFilterTestHelper('o', '', 'q');
+    $c = new MFilterTestHelper('o', 'p', 'q');
+
+    $list = [
+      'a' => $a,
+      'b' => $b,
+      'c' => $c,
+    ];
+
+    $actual = Objects::mfilter($list, 'getI');
+    $expected = [
+      'a' => $a,
+      'c' => $c,
+    ];
+
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testMFilterWithEmptyValueNegateFiltered()
+  {
+    $a = new MFilterTestHelper('o', 'p', 'q');
+    $b = new MFilterTestHelper('o', '', 'q');
+    $c = new MFilterTestHelper('o', 'p', 'q');
+
+    $list = [
+      'a' => $a,
+      'b' => $b,
+      'c' => $c,
+    ];
+
+    $actual = Objects::mfilter($list, 'getI', true);
+    $expected = [
+      'b' => $b,
+    ];
+
+    $this->assertEquals($expected, $actual);
+  }
+
   public function testNewv()
   {
     $expect = new Pancake('Blueberry', "Maple Syrup");
@@ -123,6 +179,158 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     foreach($expectations as $expect)
     {
       $this->assertEquals($expect[1], Objects::getNamespace($expect[0]));
+    }
+  }
+
+  public function testMpull()
+  {
+    $a = new MFilterTestHelper('1', 'a', 'q');
+    $b = new MFilterTestHelper('2', 'b', 'q');
+    $c = new MFilterTestHelper('3', 'c', 'q');
+    $list = [$a, $b, $c];
+
+    $expected = [1, 2, 3];
+    $this->assertEquals($expected, Objects::mpull($list, 'getH'));
+
+    $expected = ['a' => 1, 'b' => 2, 'c' => 3];
+    $this->assertEquals($expected, Objects::mpull($list, 'getH', 'getI'));
+
+    $expected = ['a' => $a, 'b' => $b, 'c' => $c];
+    $this->assertEquals($expected, Objects::mpull($list, null, 'getI'));
+  }
+
+  public function testPpull()
+  {
+    $a = new stdClass();
+    $a->name = "a";
+    $a->value = 1;
+    $b = new stdClass();
+    $b->name = "b";
+    $b->value = 2;
+    $c = new stdClass();
+    $c->name = "c";
+    $c->value = 3;
+    $list = [$a, $b, $c];
+
+    $expected = ["a", "b", "c"];
+    $this->assertEquals($expected, Objects::ppull($list, 'name'));
+
+    $expected = ['a' => 1, 'b' => 2, 'c' => 3];
+    $this->assertEquals($expected, Objects::ppull($list, 'value', 'name'));
+
+    $expected = ['a' => $a, 'b' => $b, 'c' => $c];
+    $this->assertEquals($expected, Objects::ppull($list, null, 'name'));
+  }
+
+  public function testMsort()
+  {
+    $a = new MFilterTestHelper('1', 'a', 'q');
+    $b = new MFilterTestHelper('2', 'b', 'q');
+    $c = new MFilterTestHelper('3', 'c', 'q');
+    $list = ["b" => $b, "a" => $a, "c" => $c];
+
+    $expected = ["a" => $a, "b" => $b, "c" => $c];
+    $this->assertEquals($expected, Objects::msort($list, 'getI'));
+  }
+
+  public function testMGroup()
+  {
+    $apple = new Thing('Apple', 'fruit', 'green', 'food');
+    $bear = new Thing('Bear', 'animal', 'brown', 'creature');
+    $carrot = new Thing('Carrot', 'vegetable', 'brown', 'food');
+
+    $list = ['a' => $apple, 'b' => $bear, 'c' => $carrot];
+
+    $expect = [
+      'fruit'     => ['a' => $apple],
+      'animal'    => ['b' => $bear],
+      'vegetable' => ['c' => $carrot],
+    ];
+    $this->assertEquals($expect, Objects::mgroup($list, 'type'));
+
+    $expect = [
+      'food'     => [
+        'fruit'     => ['a' => $apple],
+        'vegetable' => ['c' => $carrot]
+      ],
+      'creature' => [
+        'animal' => ['b' => $bear]
+      ],
+    ];
+    $this->assertEquals($expect, Objects::mgroup($list, 'group', 'type'));
+
+    $expect = [
+      'food'     => [
+        'a' => $apple,
+        'c' => $carrot
+      ],
+      'creature' => [
+        'b' => $bear
+      ],
+    ];
+    $this->assertEquals($expect, Objects::mgroup($list, 'group'));
+  }
+
+  public function testPGroup()
+  {
+    $apple = new Thing('Apple', 'fruit', 'green', 'food');
+    $bear = new Thing('Bear', 'animal', 'brown', 'creature');
+    $carrot = new Thing('Carrot', 'vegetable', 'brown', 'food');
+
+    $list = ['a' => $apple, 'b' => $bear, 'c' => $carrot];
+
+    $expect = [
+      'fruit'     => ['a' => $apple],
+      'animal'    => ['b' => $bear],
+      'vegetable' => ['c' => $carrot],
+    ];
+    $this->assertEquals($expect, Objects::pgroup($list, 'typeProperty'));
+
+    $expect = [
+      'food'     => [
+        'fruit'     => ['a' => $apple],
+        'vegetable' => ['c' => $carrot]
+      ],
+      'creature' => [
+        'animal' => ['b' => $bear]
+      ],
+    ];
+    $this->assertEquals(
+      $expect,
+      Objects::pgroup($list, 'groupProperty', 'typeProperty')
+    );
+
+    $expect = [
+      'food'     => [
+        'a' => $apple,
+        'c' => $carrot
+      ],
+      'creature' => [
+        'b' => $bear
+      ],
+    ];
+    $this->assertEquals($expect, Objects::pgroup($list, 'groupProperty'));
+  }
+
+  public function testPsort()
+  {
+    $apple = new stdClass();
+    $apple->name = "apple";
+    $pear = new stdClass();
+    $pear->name = "pear";
+    $grape = new stdClass();
+    $grape->name = "grape";
+
+    $expectations = [
+      [
+        ["apple" => $apple, "pear" => $pear, "grape" => $grape],
+        "name",
+        ["apple" => $apple, "grape" => $grape, "pear" => $pear],
+      ]
+    ];
+    foreach($expectations as $expect)
+    {
+      $this->assertEquals($expect[2], Objects::psort($expect[0], $expect[1]));
     }
   }
 }
