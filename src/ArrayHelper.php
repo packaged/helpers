@@ -1,9 +1,11 @@
 <?php
 namespace Packaged\Helpers;
 
+use Packaged\Helpers\Traits\ArrayAccessTrait;
+
 class ArrayHelper implements \ArrayAccess
 {
-  protected $_data;
+  use ArrayAccessTrait;
 
   /**
    * @param $resource
@@ -37,7 +39,7 @@ class ArrayHelper implements \ArrayAccess
    */
   public function __construct(array $data)
   {
-    $this->_data = $data;
+    $this->_arrayAccessData = $data;
   }
 
   /**
@@ -49,13 +51,13 @@ class ArrayHelper implements \ArrayAccess
   public function getValue($key, $default = null)
   {
     // isset() is a micro-optimization - it is fast but fails for null values.
-    if(isset($this->_data[$key]))
+    if(isset($this->_arrayAccessData[$key]))
     {
-      return $this->_data[$key];
+      return $this->_arrayAccessData[$key];
     }
 
     // Comparing $default is also a micro-optimization.
-    if($default === null || array_key_exists($key, $this->_data))
+    if($default === null || array_key_exists($key, $this->_arrayAccessData))
     {
       return null;
     }
@@ -73,7 +75,7 @@ class ArrayHelper implements \ArrayAccess
    */
   public function setValue($key, $value)
   {
-    $this->_data[$key] = $value;
+    $this->_arrayAccessData[$key] = $value;
     return $this;
   }
 
@@ -84,7 +86,7 @@ class ArrayHelper implements \ArrayAccess
    */
   public function getValues()
   {
-    return $this->_data;
+    return $this->_arrayAccessData;
   }
 
   /**
@@ -97,79 +99,5 @@ class ArrayHelper implements \ArrayAccess
   public static function toArray($object)
   {
     return json_decode(json_encode($object), true);
-  }
-
-  /**
-   * (PHP 5 &gt;= 5.0.0)<br/>
-   * Whether a offset exists
-   * @link http://php.net/manual/en/arrayaccess.offsetexists.php
-   *
-   * @param mixed $offset <p>
-   *                      An offset to check for.
-   *                      </p>
-   *
-   * @return boolean true on success or false on failure.
-   * </p>
-   * <p>
-   * The return value will be casted to boolean if non-boolean was returned.
-   */
-  public function offsetExists($offset)
-  {
-    return isset($this->_data[$offset]);
-  }
-
-  /**
-   * (PHP 5 &gt;= 5.0.0)<br/>
-   * Offset to retrieve
-   * @link http://php.net/manual/en/arrayaccess.offsetget.php
-   *
-   * @param mixed $offset <p>
-   *                      The offset to retrieve.
-   *                      </p>
-   *
-   * @return mixed Can return all value types.
-   */
-  public function offsetGet($offset)
-  {
-    if(isset($this->_data[$offset]))
-    {
-      return $this->_data[$offset];
-    }
-    return null;
-  }
-
-  /**
-   * (PHP 5 &gt;= 5.0.0)<br/>
-   * Offset to set
-   * @link http://php.net/manual/en/arrayaccess.offsetset.php
-   *
-   * @param mixed $offset <p>
-   *                      The offset to assign the value to.
-   *                      </p>
-   * @param mixed $value  <p>
-   *                      The value to set.
-   *                      </p>
-   *
-   * @return void
-   */
-  public function offsetSet($offset, $value)
-  {
-    $this->_data[$offset] = $value;
-  }
-
-  /**
-   * (PHP 5 &gt;= 5.0.0)<br/>
-   * Offset to unset
-   * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-   *
-   * @param mixed $offset <p>
-   *                      The offset to unset.
-   *                      </p>
-   *
-   * @return void
-   */
-  public function offsetUnset($offset)
-  {
-    unset($this->_data[$offset]);
   }
 }
