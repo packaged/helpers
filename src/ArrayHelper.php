@@ -18,17 +18,17 @@ class ArrayHelper implements \ArrayAccess
   {
     if(is_object($resource))
     {
-      return new self((array)$resource);
+      return new static((array)$resource);
     }
 
     if(is_array($resource))
     {
-      return new self($resource);
+      return new static($resource);
     }
 
     if(is_string($resource))
     {
-      return new self(ValueAs::arr($resource));
+      return new static(ValueAs::arr($resource));
     }
 
     throw new \Exception(gettype($resource) . " is not currently supported");
