@@ -352,4 +352,9 @@ class Strings
     }
     return $final;
   }
+
+  public static function concat(/* string... */)
+  {
+    return implode('', func_get_args());
+  }
 }
