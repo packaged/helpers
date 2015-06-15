@@ -10,6 +10,12 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     \Packaged\Helpers\PackagedHelpers::includeGlobalFunctions();
   }
 
+  public function testDoubleInclude()
+  {
+    \Packaged\Helpers\PackagedHelpers::includeGlobalFunctions();
+    $this->assertTrue(function_exists('idp'));
+  }
+
   public function testJsonPretty()
   {
     $this->assertEquals(
