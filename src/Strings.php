@@ -266,12 +266,12 @@ class Strings
         . microtime(true) . uniqid(mt_rand(), true);
     }
 
-    $hashed = hash('sha512', $randomData);
-    while(strlen($hashed) < $length)
+    $hash = preg_replace('/[^a-z0-9]/i', '', $randomData);
+    while(strlen($hash) < $length)
     {
-      $hashed = $hashed . hash('sha512', $hashed);
+      $hash .= static::randomString($length - strlen($hash), $forceMethod);
     }
-    return substr($hashed, 0, $length);
+    return substr($hash, 0, $length);
   }
 
   /**
