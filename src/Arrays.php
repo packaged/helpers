@@ -513,7 +513,7 @@ class Arrays
    * @return string
    */
   public static function toList(
-    array $pieces = [], $glue = ' , ', $finalGlue = ' & '
+    array $pieces = [], $glue = ', ', $finalGlue = ' & '
   )
   {
     if(count($pieces) > 1)
