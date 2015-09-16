@@ -553,6 +553,24 @@ if(!function_exists("nformat"))
   }
 }
 
+if(!function_exists("nhumanize"))
+{
+  /**
+   * Number format with suffix, for making large numbers human readable
+   *
+   * @param float $number
+   * @param bool  $digital Use digital units of measurement
+   *
+   * @return string A formatted version of number.
+   *
+   * @deprecated
+   */
+  function nhumanize($number, $digital = false)
+  {
+    return \Packaged\Helpers\Numbers::humanize($number, $digital);
+  }
+}
+
 if(!function_exists('glob_recursive'))
 {
   /**

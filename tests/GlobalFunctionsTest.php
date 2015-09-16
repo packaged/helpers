@@ -309,6 +309,19 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('10,000', nformat('10000'));
   }
 
+  public function testNFormats()
+  {
+    $this->assertEquals('1k', nhumanize(1000));
+    $this->assertEquals('1m', nhumanize(1000000));
+    $this->assertEquals('1b', nhumanize(1000000000));
+    $this->assertEquals('1t', nhumanize(1000000000000));
+
+    $this->assertEquals('1k', nhumanize(1000, true));
+    $this->assertEquals('1m', nhumanize(1000000, true));
+    $this->assertEquals('1g', nhumanize(1000000000, true));
+    $this->assertEquals('1t', nhumanize(1000000000000, true));
+  }
+
   public function testStrContains()
   {
     $this->assertTrue(str_contains('abcdef', 'bcd'));

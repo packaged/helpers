@@ -51,4 +51,38 @@ class Numbers
       return $forceInt ? (int)$number : $number;
     }
   }
+
+  /**
+   * Number format with suffix, for making large numbers human readable
+   *
+   * @param float $number
+   * @param bool  $digital Use digital units of measurement
+   *
+   * @return string A formatted version of number.
+   */
+  public static function humanize($number, $digital = false)
+  {
+    if($digital)
+    {
+      $suffixes = ['', 'k', 'm', 'g', 't'];
+    }
+    else
+    {
+      $suffixes = ['', 'k', 'm', 'b', 't'];
+    }
+    $suffixIndex = 0;
+
+    while(abs($number) >= 1000 && $suffixIndex < sizeof($suffixes))
+    {
+      $suffixIndex++;
+      $number /= 1000;
+    }
+
+    return (
+    $number > 0
+      // precision of 1 decimal places
+      ? floor($number * 10) / 10
+      : ceil($number * 10) / 10
+    ) . $suffixes[$suffixIndex];
+  }
 }
