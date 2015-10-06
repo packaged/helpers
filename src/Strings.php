@@ -314,6 +314,25 @@ class Strings
     return $return;
   }
 
+  public static function verifyPattern($template, $pattern)
+  {
+    $regexPattern = str_replace(
+      ['X', 'x', '0', '5', '?', '!', '*'],
+      [
+        '[A-Z]',
+        '[a-z]',
+        '[0-9]',
+        '[0-5]',
+        '[a-z0-9]',
+        '[A-Z0-9]',
+        '[a-zA-Z0-9]'
+      ],
+      $template
+    );
+
+    return preg_match("/$regexPattern/", $pattern) === 1;
+  }
+
   /**
    * Take a short extract from a string.
    *

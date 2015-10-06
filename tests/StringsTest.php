@@ -606,24 +606,11 @@ class StringsTest extends PHPUnit_Framework_TestCase
    */
   public function testPattern($pattern)
   {
-    $regexPattern = str_replace(
-      ['X', 'x', '0', '5', '?', '!', '*'],
-      [
-        '[A-Z]',
-        '[a-z]',
-        '[0-9]',
-        '[0-5]',
-        '[a-z0-9]',
-        '[A-Z0-9]',
-        '[a-zA-Z0-9]'
-      ],
-      $pattern
-    );
-
     for($i = 0; $i < 100; $i++)
     {
-      $generated = Strings::pattern($pattern);
-      $this->assertRegExp("/$regexPattern/", $generated);
+      $this->assertTrue(
+        Strings::verifyPattern($pattern, Strings::pattern($pattern))
+      );
     }
   }
 
