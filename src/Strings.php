@@ -274,6 +274,33 @@ class Strings
     return substr($hash, 0, $length);
   }
 
+  public static function pattern($pattern = 'XX00-XX00-00XX-00XX-XXXX')
+  {
+    $return = '';
+    foreach(str_split($pattern) as $character)
+    {
+      switch($character)
+      {
+        case 'X':
+          $return .= chr(rand(65, 90));
+          break;
+        case 'x':
+          $return .= chr(rand(97, 122));
+          break;
+        case '0':
+          $return .= rand(0, 9);
+          break;
+        case is_numeric($character):
+          $return .= rand(0, $character);
+          break;
+        case '-':
+          $return .= '-';
+          break;
+      }
+    }
+    return $return;
+  }
+
   /**
    * Take a short extract from a string.
    *

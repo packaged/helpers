@@ -598,4 +598,28 @@ class StringsTest extends PHPUnit_Framework_TestCase
       $this->assertEquals($expect[2], Strings::ltrim($expect[0], $expect[1]));
     }
   }
+
+  /**
+   * @param $pattern
+   *
+   * @dataProvider patternProvider
+   */
+  public function testPattern($pattern)
+  {
+    $regexPattern = str_replace(
+      ['X', 'x', '0', '5'],
+      ['[A-Z]', '[a-z]', '[0-9]', '[0-5]'],
+      $pattern
+    );
+    $generated = Strings::pattern($pattern);
+    $this->assertRegExp("/$regexPattern/", $generated);
+  }
+
+  public function patternProvider()
+  {
+    return [
+      ['XX00-XX00-00XX-00XX-XXXX'],
+      ['XX00-XX00-00XX-55XX-xxx5'],
+    ];
+  }
 }
