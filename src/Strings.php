@@ -279,13 +279,17 @@ class Strings
     $return = '';
     foreach(str_split($pattern) as $character)
     {
-      if($character == '?')
+      if($character == '!')
       {
         $character = ['X', '0'][rand(0, 1)];
       }
-      else if($character == '!')
+      else if($character == '?')
       {
         $character = ['x', '0'][rand(0, 1)];
+      }
+      else if($character == '*')
+      {
+        $character = ['x', '0', 'X'][rand(0, 2)];
       }
 
       switch($character)
@@ -302,8 +306,8 @@ class Strings
         case is_numeric($character):
           $return .= rand(0, $character);
           break;
-        case '-':
-          $return .= '-';
+        default:
+          $return .= $character;
           break;
       }
     }

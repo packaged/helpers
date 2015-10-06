@@ -607,8 +607,16 @@ class StringsTest extends PHPUnit_Framework_TestCase
   public function testPattern($pattern)
   {
     $regexPattern = str_replace(
-      ['X', 'x', '0', '5', '?', '!'],
-      ['[A-Z]', '[a-z]', '[0-9]', '[0-5]', '[A-Z0-9]', '[a-z0-9]'],
+      ['X', 'x', '0', '5', '?', '!', '*'],
+      [
+        '[A-Z]',
+        '[a-z]',
+        '[0-9]',
+        '[0-5]',
+        '[a-z0-9]',
+        '[A-Z0-9]',
+        '[a-zA-Z0-9]'
+      ],
       $pattern
     );
 
@@ -625,6 +633,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
       ['XX00-XX00-00XX-00XX-XXXX'],
       ['XX00-XX00-00XX-55XX-xxx5'],
       ['XX00-XX00-00XX-55XX-??!!'],
+      ['XX00-XX00-00XX-55XX-?**!'],
     ];
   }
 }
