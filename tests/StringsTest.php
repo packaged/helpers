@@ -607,12 +607,16 @@ class StringsTest extends PHPUnit_Framework_TestCase
   public function testPattern($pattern)
   {
     $regexPattern = str_replace(
-      ['X', 'x', '0', '5'],
-      ['[A-Z]', '[a-z]', '[0-9]', '[0-5]'],
+      ['X', 'x', '0', '5', '?', '!'],
+      ['[A-Z]', '[a-z]', '[0-9]', '[0-5]', '[A-Z0-9]', '[a-z0-9]'],
       $pattern
     );
-    $generated = Strings::pattern($pattern);
-    $this->assertRegExp("/$regexPattern/", $generated);
+
+    for($i = 0; $i < 100; $i++)
+    {
+      $generated = Strings::pattern($pattern);
+      $this->assertRegExp("/$regexPattern/", $generated);
+    }
   }
 
   public function patternProvider()
@@ -620,6 +624,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     return [
       ['XX00-XX00-00XX-00XX-XXXX'],
       ['XX00-XX00-00XX-55XX-xxx5'],
+      ['XX00-XX00-00XX-55XX-??!!'],
     ];
   }
 }

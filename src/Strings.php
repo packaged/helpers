@@ -279,6 +279,15 @@ class Strings
     $return = '';
     foreach(str_split($pattern) as $character)
     {
+      if($character == '?')
+      {
+        $character = ['X', '0'][rand(0, 1)];
+      }
+      else if($character == '!')
+      {
+        $character = ['x', '0'][rand(0, 1)];
+      }
+
       switch($character)
       {
         case 'X':
