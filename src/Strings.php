@@ -281,15 +281,18 @@ class Strings
     {
       if($character == '!')
       {
-        $character = ['X', '0'][rand(0, 1)];
+        $match = ['X', '0'];
+        $character = $match[rand(0, 1)];
       }
       else if($character == '?')
       {
-        $character = ['x', '0'][rand(0, 1)];
+        $match = ['x', '0'];
+        $character = $match[rand(0, 1)];
       }
       else if($character == '*')
       {
-        $character = ['x', '0', 'X'][rand(0, 2)];
+        $match = ['x', '0', 'X'];
+        $character = $match[rand(0, 2)];
       }
 
       switch($character)
