@@ -262,8 +262,14 @@ class Strings
     }
     else
     {
-      $randomData = mt_rand() . mt_rand() . mt_rand() . mt_rand()
-        . microtime(true) . uniqid(mt_rand(), true);
+      $prefix = substr(
+        str_shuffle(
+          "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        ),
+        0,
+        $length / 2
+      );
+      $randomData = str_shuffle($prefix . md5(mt_rand(1, 9999)) . $prefix);
     }
 
     $hash = preg_replace('/[^a-z0-9]/i', '', $randomData);
