@@ -267,7 +267,7 @@ class Strings
           "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         ),
         0,
-        $length / 2
+        ceil($length / 2)
       );
       $randomData = str_shuffle($prefix . md5(mt_rand(1, 9999)) . $prefix);
     }
