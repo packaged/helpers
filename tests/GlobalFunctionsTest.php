@@ -66,7 +66,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
         ["apple" => $apple, "pear" => $pear, "grape" => $grape],
         "name",
         ["apple" => $apple, "grape" => $grape, "pear" => $pear],
-      ]
+      ],
     ];
     foreach($expectations as $expect)
     {
@@ -423,9 +423,9 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     }
 
     $checkBit = 4;
-    for($i = 0; $i < 10000; $i++)
+    for($i = 0; $i < 32; $i++)
     {
-      $checkBit = bcmul($checkBit, 2);
+      $checkBit *= 2;
       $this->assertTrue(is_single_bit($checkBit));
       $this->assertFalse(is_single_bit(bcsub($checkBit, 3)));
     }

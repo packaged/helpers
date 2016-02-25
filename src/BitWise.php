@@ -12,57 +12,119 @@ class BitWise
    */
   public static function isSingleBit($bit)
   {
-    if($bit == 1)
+    if(extension_loaded('gmp'))
     {
-      return true;
-    }
-    return $bit > 0 && bcmod($bit, 2) == 0 && ($bit & ($bit - 1)) == 0;
-  }
-
-  public static function remove($mask, $bit)
-  {
-    return ($mask & $bit) ? ($mask ^ $bit) : $mask;
-  }
-
-  public static function add($mask, $bit)
-  {
-    return $mask | $bit;
-  }
-
-  public static function toggle($mask, $bit)
-  {
-    if($mask & $bit)
-    {
-      return $mask ^ $bit;
+      return BitWiseGmp::isSingleBit($bit);
     }
     else
     {
-      return $mask | $bit;
+      return BitWiseInt::isSingleBit($bit);
     }
   }
 
+  /**
+   * @param $mask
+   * @param $bit
+   *
+   * @return string
+   */
+  public static function remove($mask, $bit)
+  {
+    if(extension_loaded('gmp'))
+    {
+      return BitWiseGmp::remove($mask, $bit);
+    }
+    else
+    {
+      return BitWiseInt::remove($mask, $bit);
+    }
+  }
+
+  /**
+   * @param $mask
+   * @param $bit
+   *
+   * @return string
+   */
+  public static function add($mask, $bit)
+  {
+    if(extension_loaded('gmp'))
+    {
+      return BitWiseGmp::add($mask, $bit);
+    }
+    else
+    {
+      return BitWiseInt::add($mask, $bit);
+    }
+  }
+
+  /**
+   * @param $mask
+   * @param $bit
+   *
+   * @return string
+   */
+  public static function toggle($mask, $bit)
+  {
+    if(extension_loaded('gmp'))
+    {
+      return BitWiseGmp::toggle($mask, $bit);
+    }
+    else
+    {
+      return BitWiseInt::toggle($mask, $bit);
+    }
+  }
+
+  /**
+   * @param $mask
+   * @param $bit
+   *
+   * @return bool
+   */
   public static function has($mask, $bit)
   {
-    return ($mask & $bit) === $bit;
+    if(extension_loaded('gmp'))
+    {
+      return BitWiseGmp::has($mask, $bit);
+    }
+    else
+    {
+      return BitWiseInt::has($mask, $bit);
+    }
   }
 
+  /**
+   * @param $mask
+   *
+   * @return string
+   */
   public static function getBits($mask)
   {
-    $bits = [];
-    for($i = 1; $i <= $mask; $i = $i * 2)
+    if(extension_loaded('gmp'))
     {
-      if($i & $mask)
-      {
-        $bits[] = $i;
-      }
+      return BitWiseGmp::getBits($mask);
     }
-
-    return $bits;
+    else
+    {
+      return BitWiseInt::getBits($mask);
+    }
   }
 
+  /**
+   * @param $mask
+   *
+   * @return string
+   */
   public static function highest($mask)
   {
-    $bits = static::getBits($mask);
-    return end($bits);
+    if(extension_loaded('gmp'))
+    {
+      return BitWiseGmp::highest($mask);
+    }
+    else
+    {
+      return BitWiseInt::highest($mask);
+    }
   }
 }
