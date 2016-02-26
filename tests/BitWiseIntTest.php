@@ -76,4 +76,15 @@ class BitWiseIntTest extends PHPUnit_Framework_TestCase
       BitWiseInt::getBits($state)
     );
   }
+
+  public function testHas()
+  {
+    $state = 0;
+    $state = BitWiseInt::add($state, static::TWO);
+    $state = BitWiseInt::add($state, static::FIVE);
+
+    $mask = static::TWO | static::THREE;
+    $this->assertFalse(BitWiseInt::has($state, $mask));
+    $this->assertTrue(BitWiseInt::hasAny($state, $mask));
+  }
 }

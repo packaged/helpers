@@ -1,79 +1,90 @@
 <?php
 namespace Packaged\Helpers;
 
-class BitWiseGmp
+class BitWiseGmp implements BitWiseInterface
 {
   /**
    * Check to see if an integer is a single bit, or a combination
    *
-   * @param mixed $bit Bit to check
+   * @param mixed $value Bit to check
    *
    * @return bool
    */
-  public static function isSingleBit($bit)
+  public static function isSingleBit($value)
   {
     return
-      (gmp_cmp($bit, 1) === 0)
-      || ($bit > 0
-        && gmp_cmp(gmp_mod($bit, 2), 0) === 0
-        && gmp_cmp(gmp_and($bit, gmp_sub($bit, 1)), 0) === 0);
+      (gmp_cmp($value, 1) === 0)
+      || ($value > 0
+        && gmp_cmp(gmp_mod($value, 2), 0) === 0
+        && gmp_cmp(gmp_and($value, gmp_sub($value, 1)), 0) === 0);
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
    *
    * @return string
    */
-  public static function remove($mask, $bit)
+  public static function remove($value, $mask)
   {
-    return gmp_strval(gmp_and($mask, gmp_com($bit)));
+    return gmp_strval(gmp_and($value, gmp_com($mask)));
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
    *
    * @return string
    */
-  public static function add($mask, $bit)
+  public static function add($value, $mask)
   {
-    return gmp_strval(gmp_or($mask, $bit));
+    return gmp_strval(gmp_or($value, $mask));
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
    *
    * @return string
    */
-  public static function toggle($mask, $bit)
+  public static function toggle($value, $mask)
   {
-    return gmp_strval(gmp_xor($mask, $bit));
+    return gmp_strval(gmp_xor($value, $mask));
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
    *
    * @return bool
    */
-  public static function has($mask, $bit)
+  public static function has($value, $mask)
   {
-    return gmp_cmp(gmp_and($mask, $bit), $bit) === 0;
+    return gmp_cmp(gmp_and($value, $mask), $mask) === 0;
   }
 
   /**
+   * @param $value
    * @param $mask
+   *
+   * @return bool
+   */
+  public static function hasAny($value, $mask)
+  {
+    return gmp_cmp(gmp_and($value, $mask), 0) !== 0;
+  }
+
+  /**
+   * @param $value
    *
    * @return string
    */
-  public static function getBits($mask)
+  public static function getBits($value)
   {
     $bits = [];
-    for($i = gmp_init(1); gmp_cmp($mask, $i) >= 0; $i = gmp_mul($i, 2))
+    for($i = gmp_init(1); gmp_cmp($value, $i) >= 0; $i = gmp_mul($i, 2))
     {
-      if(static::has($mask, $i))
+      if(static::has($value, $i))
       {
         $bits[] = gmp_strval($i);
       }

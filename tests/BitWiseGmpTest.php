@@ -84,4 +84,15 @@ class BitWiseGmpTest extends PHPUnit_Framework_TestCase
       BitWiseGmp::getBits($state)
     );
   }
+
+  public function testHas()
+  {
+    $state = 0;
+    $state = BitWiseGmp::add($state, static::TWO);
+    $state = BitWiseGmp::add($state, static::FIVE);
+
+    $mask = static::TWO | static::THREE;
+    $this->assertFalse(BitWiseGmp::has($state, $mask));
+    $this->assertTrue(BitWiseGmp::hasAny($state, $mask));
+  }
 }

@@ -1,113 +1,133 @@
 <?php
 namespace Packaged\Helpers;
 
-class BitWise
+class BitWise implements BitWiseInterface
 {
   /**
    * Check to see if an integer is a single bit, or a combination
    *
-   * @param int $bit Bit to check
+   * @param int $value Bit to check
    *
    * @return bool
    */
-  public static function isSingleBit($bit)
+  public static function isSingleBit($value)
   {
     if(extension_loaded('gmp'))
     {
-      return BitWiseGmp::isSingleBit($bit);
+      return BitWiseGmp::isSingleBit($value);
     }
     else
     {
-      return BitWiseInt::isSingleBit($bit);
+      return BitWiseInt::isSingleBit($value);
     }
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
    *
    * @return string
    */
-  public static function remove($mask, $bit)
+  public static function remove($value, $mask)
   {
     if(extension_loaded('gmp'))
     {
-      return BitWiseGmp::remove($mask, $bit);
+      return BitWiseGmp::remove($value, $mask);
     }
     else
     {
-      return BitWiseInt::remove($mask, $bit);
+      return BitWiseInt::remove($value, $mask);
     }
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
    *
    * @return string
    */
-  public static function add($mask, $bit)
+  public static function add($value, $mask)
   {
     if(extension_loaded('gmp'))
     {
-      return BitWiseGmp::add($mask, $bit);
+      return BitWiseGmp::add($value, $mask);
     }
     else
     {
-      return BitWiseInt::add($mask, $bit);
+      return BitWiseInt::add($value, $mask);
     }
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
    *
    * @return string
    */
-  public static function toggle($mask, $bit)
+  public static function toggle($value, $mask)
   {
     if(extension_loaded('gmp'))
     {
-      return BitWiseGmp::toggle($mask, $bit);
+      return BitWiseGmp::toggle($value, $mask);
     }
     else
     {
-      return BitWiseInt::toggle($mask, $bit);
+      return BitWiseInt::toggle($value, $mask);
     }
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
+   *
+   * @return bool
+   * @internal param bool $strict
+   *
+   */
+  public static function has($value, $mask)
+  {
+    if(extension_loaded('gmp'))
+    {
+      return BitWiseGmp::has($value, $mask);
+    }
+    else
+    {
+      return BitWiseInt::has($value, $mask);
+    }
+  }
+
+  /**
+   * @param      $value
+   * @param      $mask
    *
    * @return bool
    */
-  public static function has($mask, $bit)
+  public static function hasAny($value, $mask)
   {
     if(extension_loaded('gmp'))
     {
-      return BitWiseGmp::has($mask, $bit);
+      return BitWiseGmp::hasAny($value, $mask);
     }
     else
     {
-      return BitWiseInt::has($mask, $bit);
+      return BitWiseInt::hasAny($value, $mask);
     }
   }
 
   /**
-   * @param $mask
+   * @param $value
    *
    * @return string
    */
-  public static function getBits($mask)
+  public static function getBits($value)
   {
     if(extension_loaded('gmp'))
     {
-      return BitWiseGmp::getBits($mask);
+      return BitWiseGmp::getBits($value);
     }
     else
     {
-      return BitWiseInt::getBits($mask);
+      return BitWiseInt::getBits($value);
     }
   }
 

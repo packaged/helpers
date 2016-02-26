@@ -1,78 +1,89 @@
 <?php
 namespace Packaged\Helpers;
 
-class BitWiseInt
+class BitWiseInt implements BitWiseInterface
 {
   /**
    * Check to see if an integer is a single bit, or a combination
    *
-   * @param int $bit Bit to check
+   * @param int $value Bit to check
    *
    * @return bool
    */
-  public static function isSingleBit($bit)
+  public static function isSingleBit($value)
   {
-    $bit = (int)$bit;
+    $value = (int)$value;
     return
-      ($bit === 1)
-      || ($bit > 0 && (($bit % 2) == 0) && (($bit & ($bit - 1)) == 0));
+      ($value === 1)
+      || ($value > 0 && (($value % 2) == 0) && (($value & ($value - 1)) == 0));
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
    *
    * @return string
    */
-  public static function remove($mask, $bit)
+  public static function remove($value, $mask)
   {
-    return (int)$mask & (~(int)$bit);
+    return (int)$value & (~(int)$mask);
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
    *
    * @return string
    */
-  public static function add($mask, $bit)
+  public static function add($value, $mask)
   {
-    return (int)$mask | (int)$bit;
+    return (int)$value | (int)$mask;
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
    *
    * @return string
    */
-  public static function toggle($mask, $bit)
+  public static function toggle($value, $mask)
   {
-    return (int)$mask ^ (int)$bit;
+    return (int)$value ^ (int)$mask;
   }
 
   /**
+   * @param $value
    * @param $mask
-   * @param $bit
    *
    * @return bool
    */
-  public static function has($mask, $bit)
+  public static function has($value, $mask)
   {
-    return ((int)$mask & (int)$bit) === (int)$bit;
+    return ((int)$value & (int)$mask) === (int)$mask;
   }
 
   /**
+   * @param $value
    * @param $mask
+   *
+   * @return bool
+   */
+  public static function hasAny($value, $mask)
+  {
+    return ((int)$value & (int)$mask) !== 0;
+  }
+
+  /**
+   * @param $value
    *
    * @return string
    */
-  public static function getBits($mask)
+  public static function getBits($value)
   {
     $bits = [];
-    for($i = 1; $i <= $mask; $i *= 2)
+    for($i = 1; $i <= $value; $i *= 2)
     {
-      if(static::has($mask, $i))
+      if(static::has($value, $i))
       {
         $bits[] = $i;
       }
