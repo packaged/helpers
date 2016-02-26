@@ -14,7 +14,7 @@ class BitWiseGmp implements BitWiseInterface
   {
     return
       (gmp_cmp($value, 1) === 0)
-      || ($value > 0
+      || (gmp_cmp($value, 0) > 0
         && gmp_cmp(gmp_mod($value, 2), 0) === 0
         && gmp_cmp(gmp_and($value, gmp_sub($value, 1)), 0) === 0);
   }
