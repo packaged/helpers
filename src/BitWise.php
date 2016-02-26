@@ -81,8 +81,6 @@ class BitWise implements BitWiseInterface
    * @param $mask
    *
    * @return bool
-   * @internal param bool $strict
-   *
    */
   public static function has($value, $mask)
   {
