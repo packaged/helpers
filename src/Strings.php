@@ -334,7 +334,7 @@ class Strings
         '[0-5]',
         '[a-z0-9]',
         '[A-Z0-9]',
-        '[a-zA-Z0-9]'
+        '[a-zA-Z0-9]',
       ],
       $template
     );
@@ -590,6 +590,19 @@ class Strings
       $haystack = substr($haystack, strlen($needle));
     }
     return $haystack;
+  }
+
+  /**
+   * Trim non null strings
+   *
+   * @param        $string
+   * @param string $charlist
+   *
+   * @return null|string
+   */
+  public static function ntrim($string, $charlist = " \t\n\r\0\x0B")
+  {
+    return $string === null ? null : trim($string, $charlist);
   }
 
   /**
