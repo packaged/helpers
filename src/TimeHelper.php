@@ -13,9 +13,23 @@ class TimeHelper
    * @param      $uniqid
    * @param bool $hasEntropy
    *
+   * @deprecated Misleading name, use uniqidToMilliseconds() instead
    * @return string
    */
   public static function uniqidToMicroseconds($uniqid, $hasEntropy = false)
+  {
+    return static::uniqidToMilliseconds($uniqid, $hasEntropy);
+  }
+
+  /**
+   * Convert a unique ID to a microtime
+   *
+   * @param      $uniqid
+   * @param bool $hasEntropy
+   *
+   * @return string
+   */
+  public static function uniqidToMilliseconds($uniqid, $hasEntropy = false)
   {
     if($hasEntropy)
     {
@@ -30,11 +44,20 @@ class TimeHelper
   /**
    * Retrieve the microtime as an integer
    *
+   * @deprecated Misleading name, use milliseconds() instead
    * @return int
    */
   public static function microseconds()
   {
+    return static::milliseconds();
+  }
+
+  /**
+   * Get the current time in milliseconds since the UNIX epoch
+   * @return int
+   */
+  public static function milliseconds()
+  {
     return (int)floor(microtime(true) * 1000);
   }
 }
-
