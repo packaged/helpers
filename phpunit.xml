@@ -3,7 +3,6 @@
          bootstrap="vendor/autoload.php"
          colors="true"
          verbose="true"
-         strict="true"
          timeoutForSmallTests="5"
          timeoutForMediumTests="10"
          timeoutForLargeTests="15"
@@ -13,7 +12,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-  >
+>
   <testsuites>
     <testsuite>
       <directory>tests</directory>
