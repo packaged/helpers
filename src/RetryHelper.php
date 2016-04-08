@@ -7,9 +7,10 @@ class RetryHelper
    * Execute [$callFunction] a maximum of [$retries] times.
    *
    * If an exception is thrown, pass it to [$catchFunction]
-   * - Return false or throw an exception to exit immediately.
-   * - Return true to retry OR throw the original exception.
-   * - Return an exception to retry OR throw the returned exception.
+   * - Throw [\Exception] to exit retries and throw this exception.
+   * - Return [false] to exit retries and throw the original exception.
+   * - Return [true] to retry OR throw the original exception.
+   * - Return [\Exception] to retry OR throw the returned exception.
    *
    * @param int           $retries
    * @param callable      $callFunction
