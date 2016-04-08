@@ -4,6 +4,13 @@ namespace Packaged\Helpers;
 class RetryHelper
 {
   /**
+   * Execute [$callFunction] a maximum of [$retries] times.
+   *
+   * If an exception is thrown, pass it to [$catchFunction]
+   * - Return false or throw an exception to exit immediately.
+   * - Return true to retry OR throw the original exception.
+   * - Return an exception to retry OR throw the returned exception.
+   *
    * @param int           $retries
    * @param callable      $callFunction
    * @param callable|null $catchFunction
@@ -28,7 +35,16 @@ class RetryHelper
       }
       catch(\Exception $e)
       {
-        if($retries <= 0 || ($catchFunction && !$catchFunction($e)))
+        $retryException = true;
+        if($catchFunction)
+        {
+          $retryException = $catchFunction($e);
+          if($retryException instanceof \Exception)
+          {
+            $e = $retryException;
+          }
+        }
+        if((!$retryException) || $retries <= 0)
         {
           throw $e;
         }
