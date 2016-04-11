@@ -35,7 +35,7 @@ class RetryHelper
       }
       catch(\Exception $e)
       {
-        if($retries <= 0 || ($catchFunction && !$catchFunction($e)))
+        if(($catchFunction && !$catchFunction($e)) || $retries <= 0)
         {
           throw $e;
         }
