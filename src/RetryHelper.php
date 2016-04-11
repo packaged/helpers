@@ -8,9 +8,8 @@ class RetryHelper
    *
    * If an exception is thrown, pass it to [$catchFunction]
    * - Throw [\Exception] to exit retries and throw this exception.
-   * - Return [false] to exit retries and throw the original exception.
-   * - Return [true] to retry OR throw the original exception.
-   * - Return [\Exception] to retry OR throw the returned exception.
+   * - Return [false] to exit retries and throw the exception.
+   * - Return [true] to retry OR throw the exception.
    *
    * @param int           $retries
    * @param callable      $callFunction
@@ -36,16 +35,7 @@ class RetryHelper
       }
       catch(\Exception $e)
       {
-        $retryException = true;
-        if($catchFunction)
-        {
-          $retryException = $catchFunction($e);
-          if($retryException instanceof \Exception)
-          {
-            $e = $retryException;
-          }
-        }
-        if((!$retryException) || $retries <= 0)
+        if($retries <= 0 || ($catchFunction && !$catchFunction($e)))
         {
           throw $e;
         }
