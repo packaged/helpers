@@ -54,10 +54,28 @@ class TimeHelper
 
   /**
    * Get the current time in milliseconds since the UNIX epoch
+   *
    * @return int
    */
   public static function milliseconds()
   {
     return (int)floor(microtime(true) * 1000);
+  }
+
+  /**
+   * Convert a millisecond (or finer) timestamp to a UNIX timestamp
+   * This crude method will work until 2037
+   *
+   * @param int $time
+   *
+   * @return int
+   */
+  public static function toSeconds($time)
+  {
+    while($time > 2147483647) // 2^31 - 1
+    {
+      $time = floor($time / 1000);
+    }
+    return (int)$time;
   }
 }

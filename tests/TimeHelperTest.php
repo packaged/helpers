@@ -32,4 +32,9 @@ class TimeHelperTest extends PHPUnit_Framework_TestCase
   {
     $this->assertInternalType('int', TimeHelper::microseconds());
   }
+
+  public function testToSeconds()
+  {
+    $this->assertEquals(TimeHelper::toSeconds(1466159101859), 1466159101);
+  }
 }
