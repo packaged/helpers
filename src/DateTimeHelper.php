@@ -20,7 +20,7 @@ class DateTimeHelper
         $firstDate = implode('-', array_slice($dp, 0, 3));
         $secondDate = null;
         $sdp = array_slice($dp, 3);
-        if(!empty(implode("", $sdp)))
+        if(implode("", $sdp) !== "")
         {
           switch(count($sdp))
           {
