@@ -9,23 +9,6 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
   {
     $extracted = new \Packaged\Helpers\EmailAddress($email);
 
-    error_log(
-      print_r(
-        [
-          'username'   => $extracted->getUsername(),
-          'domain'     => $extracted->getDomain(),
-          'firstName'  => $extracted->getFirstName(),
-          'middleName' => $extracted->getMiddleName(),
-          'lastName'   => $extracted->getLastName(),
-          'fullName'   => $extracted->getFullName(),
-          'lower'      => $extracted->getLower(),
-          'base'       => $extracted->getBase(),
-          'extension'  => $extracted->getExtension(),
-        ],
-        true
-      )
-    );
-
     if(isset($matches['username']))
     {
       $this->assertEquals($matches['username'], $extracted->getUsername());
