@@ -62,6 +62,9 @@ class EmailAddress
         )
       );
 
+      $this->_fullName = preg_replace('([0-9])', ' ', $this->_fullName);
+      $this->_fullName = trim(preg_replace('!\s+!', ' ', $this->_fullName));
+
       $nameParts = explode(' ', $this->_fullName);
       switch(count($nameParts))
       {
