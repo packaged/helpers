@@ -32,6 +32,10 @@ class EmailAddress
 
   public function setName($first = '', $middle = '', $last = '')
   {
+    if($last == $first)
+    {
+      $last = '';
+    }
     $this->_providedName = [$first, $middle, $last];
     return $this;
   }
