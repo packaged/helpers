@@ -5,9 +5,11 @@ class EmailAddress
 {
   protected $_username;
   protected $_domain;
+  protected $_title;
   protected $_firstName;
   protected $_middleName;
   protected $_lastName;
+  protected $_suffix;
   protected $_fullName;
   protected $_lower;
   protected $_base;
@@ -78,13 +80,26 @@ class EmailAddress
       preg_replace('([0-9])', ' ', $this->_fullName)
     );
 
+    $fcheck = preg_replace('([^a-zA-Z])', '', $first);
+    if(strlen($fcheck) == 1)
+    {
+      $titles = ['dr', 'prof'];
+      foreach($titles as $title)
+      {
+        $checkLen = strlen($title) + 1;
+        if(substr($this->_fullName, 0, $checkLen) == $title . $fcheck)
+        {
+          $this->_title = ucfirst($title);
+          $this->_fullName = substr($this->_fullName, strlen($title));
+          $first = '';
+          break;
+        }
+      }
+    }
+
     if(strlen($first) > 0)
     {
-      $this->_fullName = str_replace(
-        $first,
-        $first . ' ',
-        $this->_fullName
-      );
+      $this->_fullName = str_replace($first, $first . ' ', $this->_fullName);
     }
 
     if(strlen($first) > 1 && strlen($this->_fullName) > 1)
@@ -215,6 +230,15 @@ class EmailAddress
   {
     $this->_calculate();
     return $this->_base;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getTitle()
+  {
+    $this->_calculate();
+    return $this->_title;
   }
 
   /**
