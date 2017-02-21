@@ -97,7 +97,29 @@ class EmailAddress
       }
     }
 
-    if(strlen($first) > 0)
+    $lastFound = strrev(
+      Strings::commonPrefix(strrev($this->_fullName), strrev($last))
+    );
+
+    if(strlen($lastFound) > 2 && !stristr($this->_fullName, $last))
+    {
+      $this->_fullName = str_replace(
+        $lastFound,
+        ' ' . $lastFound,
+        $this->_fullName
+      );
+
+      if(empty($middle))
+      {
+        $parts = explode($lastFound, $last, 2);
+        if(count($parts) == 2 && empty($parts[1]))
+        {
+          $middle = trim(str_replace('.', ' ', $parts[0]));
+          $last = $lastFound;
+        }
+      }
+    }
+    else if(strlen($first) > 0)
     {
       $this->_fullName = str_replace($first, $first . ' ', $this->_fullName);
     }
@@ -119,41 +141,53 @@ class EmailAddress
     switch(count($nameParts))
     {
       case 1:
-        $this->_firstName = $nameParts[0];
+        $this->_firstName = trim($nameParts[0]);
         break;
       case 2:
-        $this->_firstName = $nameParts[0];
-        $this->_lastName = $nameParts[1];
+        $this->_firstName = trim($nameParts[0]);
+        $this->_lastName = trim($nameParts[1]);
         break;
       default:
-        $this->_firstName = array_shift($nameParts);
-        $this->_lastName = array_pop($nameParts);
-        $this->_middleName = implode(' ', $nameParts);
+        $this->_firstName = trim(array_shift($nameParts));
+        $this->_lastName = trim(array_pop($nameParts));
+        $this->_middleName = trim(implode(' ', $nameParts));
         break;
     }
 
     if(strlen($first) > strlen($this->_firstName)
-      || (substr($first, 0, 1) != substr($this->_firstName, 0, 1)
+      || (strncasecmp(
+          substr($first, 0, 1),
+          substr($this->_firstName, 0, 1),
+          1
+        ) !== 0
         && !empty($first))
     )
     {
-      $this->_firstName = ucwords(strtolower($first));
+      $this->_firstName = trim(ucwords(strtolower($first)));
     }
 
     if(strlen($last) > strlen($this->_lastName)
-      || (substr($last, 0, 1) != substr($this->_lastName, 0, 1)
+      || (strncasecmp(
+          substr($last, 0, 1),
+          substr($this->_lastName, 0, 1),
+          1
+        ) !== 0
         && !empty($last))
     )
     {
-      $this->_lastName = ucwords(strtolower($last));
+      $this->_lastName = trim(ucwords(strtolower($last)));
     }
 
     if(strlen($middle) > strlen($this->_middleName)
-      || (substr($middle, 0, 1) != substr($this->_middleName, 0, 1)
+      || (strncasecmp(
+          substr($middle, 0, 1),
+          substr($this->_middleName, 0, 1),
+          1
+        ) !== 0
         && !empty($middle))
     )
     {
-      $this->_middleName = ucwords(strtolower($middle));
+      $this->_middleName = trim(ucwords(strtolower($middle)));
     }
   }
 
