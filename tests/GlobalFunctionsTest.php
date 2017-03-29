@@ -92,7 +92,14 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     srand(40);
     $expected = ['z' => 'z', 'y' => 'y', 'x' => 'x'];
     $shuffled = shuffle_assoc($expected);
-    $this->assertEquals(json_encode($expected), json_encode($shuffled));
+    if(PHP_MAJOR_VERSION == 7 && PHP_MINOR_VERSION == 1)
+    {
+      $this->assertEquals('{"z":"z","x":"x","y":"y"}', json_encode($shuffled));
+    }
+    else
+    {
+      $this->assertEquals('{"z":"z","y":"y","x":"x"}', json_encode($shuffled));
+    }
   }
 
   public function testStartsWith()

@@ -373,7 +373,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     $list = [
       'a' => 1,
       'b' => 2,
-      'c' => 3
+      'c' => 3,
     ];
 
     $expect = ['a' => 1, 'b' => 2];
@@ -386,19 +386,19 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       'name'   => 'Apple',
       'type'   => 'fruit',
       'colour' => 'green',
-      'group'  => 'food'
+      'group'  => 'food',
     ];
     $bear = [
       'name'   => 'Bear',
       'type'   => 'animal',
       'colour' => 'brown',
-      'group'  => 'creature'
+      'group'  => 'creature',
     ];
     $carrot = [
       'name'   => 'Carrot',
       'type'   => 'vegetable',
       'colour' => 'brown',
-      'group'  => 'food'
+      'group'  => 'food',
     ];
 
     $list = ['a' => $apple, 'b' => $bear, 'c' => $carrot];
@@ -413,10 +413,10 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     $expect = [
       'food'     => [
         'fruit'     => ['a' => $apple],
-        'vegetable' => ['c' => $carrot]
+        'vegetable' => ['c' => $carrot],
       ],
       'creature' => [
-        'animal' => ['b' => $bear]
+        'animal' => ['b' => $bear],
       ],
     ];
     $this->assertEquals($expect, Arrays::igroup($list, 'group', 'type'));
@@ -424,10 +424,10 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     $expect = [
       'food'     => [
         'a' => $apple,
-        'c' => $carrot
+        'c' => $carrot,
       ],
       'creature' => [
-        'b' => $bear
+        'b' => $bear,
       ],
     ];
     $this->assertEquals($expect, Arrays::igroup($list, 'group'));
@@ -506,7 +506,14 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     srand(40);
     $expected = ['z' => 'z', 'y' => 'y', 'x' => 'x'];
     $shuffled = Arrays::shuffleAssoc($expected);
-    $this->assertEquals(json_encode($expected), json_encode($shuffled));
+    if(PHP_MAJOR_VERSION == 7 && PHP_MINOR_VERSION == 1)
+    {
+      $this->assertEquals('{"z":"z","x":"x","y":"y"}', json_encode($shuffled));
+    }
+    else
+    {
+      $this->assertEquals('{"z":"z","y":"y","x":"x"}', json_encode($shuffled));
+    }
   }
 }
 
