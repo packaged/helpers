@@ -226,6 +226,7 @@ class Strings
     return [$part1, $part2];
   }
 
+  const RANDOM_STRING_RANDOM_BYTES = 'random_bytes';
   const RANDOM_STRING_MCRYPT = 'mcrypt';
   const RANDOM_STRING_OPENSSL = 'openssl';
   const RANDOM_STRING_URANDOM = 'urandom';
@@ -241,7 +242,13 @@ class Strings
    */
   public static function randomString($length = 40, $forceMethod = null)
   {
-    if(($forceMethod == self::RANDOM_STRING_MCRYPT || $forceMethod == null) &&
+    if(($forceMethod == self::RANDOM_STRING_RANDOM_BYTES || $forceMethod == null) &&
+      function_exists('random_bytes')
+    )
+    {
+      $randomData = random_bytes(100);
+    }
+    elseif(($forceMethod == self::RANDOM_STRING_MCRYPT || $forceMethod == null) &&
       function_exists('mcrypt_create_iv')
     )
     {

@@ -261,12 +261,19 @@ class StringsTest extends PHPUnit_Framework_TestCase
     }
 
     $types = [
-      \Packaged\Helpers\Strings::RANDOM_STRING_MCRYPT,
       \Packaged\Helpers\Strings::RANDOM_STRING_OPENSSL,
       \Packaged\Helpers\Strings::RANDOM_STRING_URANDOM,
       \Packaged\Helpers\Strings::RANDOM_STRING_CUSTOM,
-      'invalid'
+      'invalid',
     ];
+    if(PHP_MAJOR_VERSION == 7 && PHP_MINOR_VERSION == 1)
+    {
+      $types[] = \Packaged\Helpers\Strings::RANDOM_STRING_RANDOM_BYTES;
+    }
+    else
+    {
+      $types[] = \Packaged\Helpers\Strings::RANDOM_STRING_MCRYPT;
+    }
     foreach($types as $type)
     {
       $this->assertEquals(
