@@ -617,9 +617,9 @@ class Strings
   /**
    * Check a string contains another string
    *
-   * @param       $haystack
-   * @param array $needle
-   * @param bool  $case
+   * @param        $haystack
+   * @param string $needle
+   * @param bool   $case
    *
    * @return bool
    */
