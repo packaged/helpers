@@ -627,11 +627,11 @@ class Strings
   {
     if($case)
     {
-      return strstr($haystack, $needle) !== false;
+      return strpos($haystack, $needle) !== false;
     }
     else
     {
-      return stristr($haystack, $needle) !== false;
+      return stripos($haystack, $needle) !== false;
     }
   }
 
