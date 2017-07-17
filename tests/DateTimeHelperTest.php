@@ -75,10 +75,10 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
     $compare .= date($format, strtotime('10 days ago'));
     $compare .= '-';
     $compare .= date($format, strtotime('-9 days'));
-    $compare .= ',5 horse-6 horses,8 carrots,-9 horseshoes';
+    $compare .= ',5 horse-6 horses,2017-01-01,2017-01-02,8 carrots,-9 horseshoes';
 
     $dates = \Packaged\Helpers\DateTimeHelper::stringToTimeRange(
-      "-1 day,14 days ago-7 days ago,-7days,10 days ago--9 days,5 horse-6 horses,8 carrots,-9 horseshoes"
+      "-1 day,14 days ago-7 days ago,-7days,10 days ago--9 days,5 horse-6 horses,2017-01-01,2017-01-02,8 carrots,-9 horseshoes"
     );
     $this->assertEquals($compare, $dates);
   }

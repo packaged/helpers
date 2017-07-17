@@ -83,7 +83,11 @@ class DateTimeHelper
           $current = '';
           break;
         case '-':
-          if(strlen($current) == 0)
+          if(strlen($current) == 0
+            || preg_match("/[0-9]{4}-[0-9]{2}-[0-9]{2}/", $current)
+            || preg_match("/[0-9]{4}-[0-9]{2}/", $current)
+            || preg_match("/[0-9]{4}/", $current)
+          )
           {
             $current .= $cchar;
             break;
