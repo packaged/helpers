@@ -69,4 +69,42 @@ class DateTimeHelper
     }
     return $finalDates;
   }
+
+  public static function stringToTimeRange($inputString)
+  {
+    $finalString = $current = '';
+    for($char = 0; $char < strlen($inputString); $char++)
+    {
+      $cchar = $inputString[$char];
+      switch($cchar)
+      {
+        case ',':
+          $finalString .= self::parseTime($current) . ",";
+          $current = '';
+          break;
+        case '-':
+          if(strlen($current) == 0)
+          {
+            $current .= $cchar;
+            break;
+          }
+          else
+          {
+            $finalString .= self::parseTime($current) . "-";
+            $current = '';
+            break;
+          }
+        default:
+          $current .= $cchar;
+      }
+    }
+    $finalString .= self::parseTime($current);
+
+    return $finalString;
+  }
+
+  protected static function parseTime($input)
+  {
+    return strtotime($input) > 0 ? date("Y-m-d", strtotime($input)) : $input;
+  }
 }
