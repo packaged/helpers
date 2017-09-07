@@ -753,4 +753,36 @@ class Strings
   {
     return json_encode($object, JSON_PRETTY_PRINT);
   }
+
+  /**
+   * Replacement for wordwrap() which is safe for UTF-8 strings
+   *
+   * @param string $str
+   * @param int    $width
+   * @param string $break
+   * @param bool   $cut
+   *
+   * @return string
+   */
+  public static function wordWrap(
+    $str, $width = 75, $break = "\n", $cut = false
+  )
+  {
+    $regexp = $cut
+      ? '/^(?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){' . $width . '}/'
+      : '/^(?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){' . $width . ',}\b/U';
+
+    $numSplits = ceil(mb_strlen($str, 'UTF-8') / $width);
+
+    $result = '';
+    for($i = 1; $i < $numSplits; $i++)
+    {
+      $matches = [];
+      preg_match($regexp, $str, $matches);
+      $match = $matches[0];
+      $result .= $match . $break;
+      $str = substr($str, strlen($match));
+    }
+    return $result . $str;
+  }
 }
