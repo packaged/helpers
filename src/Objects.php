@@ -347,11 +347,12 @@ class Objects
     $result = [];
     foreach($list as $key => $object)
     {
-      if($keyProperty !== null)
+      if($keyProperty !== null && is_object($object))
       {
         $key = $object->$keyProperty;
       }
-      if($property !== null)
+
+      if($property !== null && is_object($object))
       {
         $value = $object->$property;
       }
@@ -359,6 +360,7 @@ class Objects
       {
         $value = $object;
       }
+
       $result[$key] = $value;
     }
     return $result;
