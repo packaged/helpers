@@ -97,7 +97,7 @@ class Arrays
    * choke if you pass it some non-referenceable value like the return value of
    * a function.
    *
-   * @param    array Array to retrieve the first element from.
+   * @param    array $arr Array to retrieve the first element from.
    *
    * @return   mixed  The first value of the array.
    */
@@ -111,7 +111,7 @@ class Arrays
    * that it won't warn you if you pass some non-referencable array to
    * it -- e.g., the result of some other array operation.
    *
-   * @param    array Array to retrieve the last element from.
+   * @param    array $arr Array to retrieve the last element from.
    *
    * @return   mixed  The last value of the array.
    */
@@ -123,7 +123,7 @@ class Arrays
   /**
    * Returns the first key of an array.
    *
-   * @param    array       Array to retrieve the first key from.
+   * @param    array $arr Array to retrieve the first key from.
    *
    * @return   int|string  The first key of the array.
    */
@@ -136,7 +136,7 @@ class Arrays
   /**
    * Returns the last key of an array.
    *
-   * @param    array       Array to retrieve the last key from.
+   * @param    array $arr Array to retrieve the last key from.
    *
    * @return   int|string  The last key of the array.
    */
