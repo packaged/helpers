@@ -3,6 +3,8 @@ namespace Packaged\Helpers;
 
 class BitWise implements BitWiseInterface
 {
+  protected static $useGmp = true;
+
   /**
    * Check to see if an integer is a single bit, or a combination
    *
@@ -12,14 +14,11 @@ class BitWise implements BitWiseInterface
    */
   public static function isSingleBit($value)
   {
-    if(extension_loaded('gmp'))
+    if(static::hasGmp())
     {
       return BitWiseGmp::isSingleBit($value);
     }
-    else
-    {
-      return BitWiseInt::isSingleBit($value);
-    }
+    return BitWiseInt::isSingleBit($value);
   }
 
   /**
@@ -30,14 +29,11 @@ class BitWise implements BitWiseInterface
    */
   public static function remove($value, $mask)
   {
-    if(extension_loaded('gmp'))
+    if(static::hasGmp())
     {
       return BitWiseGmp::remove($value, $mask);
     }
-    else
-    {
-      return BitWiseInt::remove($value, $mask);
-    }
+    return BitWiseInt::remove($value, $mask);
   }
 
   /**
@@ -48,14 +44,11 @@ class BitWise implements BitWiseInterface
    */
   public static function add($value, $mask)
   {
-    if(extension_loaded('gmp'))
+    if(static::hasGmp())
     {
       return BitWiseGmp::add($value, $mask);
     }
-    else
-    {
-      return BitWiseInt::add($value, $mask);
-    }
+    return BitWiseInt::add($value, $mask);
   }
 
   /**
@@ -66,14 +59,11 @@ class BitWise implements BitWiseInterface
    */
   public static function toggle($value, $mask)
   {
-    if(extension_loaded('gmp'))
+    if(static::hasGmp())
     {
       return BitWiseGmp::toggle($value, $mask);
     }
-    else
-    {
-      return BitWiseInt::toggle($value, $mask);
-    }
+    return BitWiseInt::toggle($value, $mask);
   }
 
   /**
@@ -84,14 +74,11 @@ class BitWise implements BitWiseInterface
    */
   public static function has($value, $mask)
   {
-    if(extension_loaded('gmp'))
+    if(static::hasGmp())
     {
       return BitWiseGmp::has($value, $mask);
     }
-    else
-    {
-      return BitWiseInt::has($value, $mask);
-    }
+    return BitWiseInt::has($value, $mask);
   }
 
   /**
@@ -102,14 +89,11 @@ class BitWise implements BitWiseInterface
    */
   public static function hasAny($value, $mask)
   {
-    if(extension_loaded('gmp'))
+    if(static::hasGmp())
     {
       return BitWiseGmp::hasAny($value, $mask);
     }
-    else
-    {
-      return BitWiseInt::hasAny($value, $mask);
-    }
+    return BitWiseInt::hasAny($value, $mask);
   }
 
   /**
@@ -119,14 +103,11 @@ class BitWise implements BitWiseInterface
    */
   public static function getBits($value)
   {
-    if(extension_loaded('gmp'))
+    if(static::hasGmp())
     {
       return BitWiseGmp::getBits($value);
     }
-    else
-    {
-      return BitWiseInt::getBits($value);
-    }
+    return BitWiseInt::getBits($value);
   }
 
   /**
@@ -136,13 +117,20 @@ class BitWise implements BitWiseInterface
    */
   public static function highest($mask)
   {
-    if(extension_loaded('gmp'))
+    if(static::hasGmp())
     {
       return BitWiseGmp::highest($mask);
     }
-    else
-    {
-      return BitWiseInt::highest($mask);
-    }
+    return BitWiseInt::highest($mask);
+  }
+
+  public static function hasGmp()
+  {
+    return static::$useGmp && extension_loaded('gmp');
+  }
+
+  public static function preferGmp($value = true)
+  {
+    static::$useGmp = $value;
   }
 }

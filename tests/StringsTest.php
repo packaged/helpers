@@ -415,6 +415,17 @@ class StringsTest extends PHPUnit_Framework_TestCase
       $caught = $ex;
     }
     $this->assertInstanceOf("InvalidArgumentException", $caught);
+
+    $caught = null;
+    try
+    {
+      Strings::stringable(tmpfile());
+    }
+    catch(InvalidArgumentException $ex)
+    {
+      $caught = $ex;
+    }
+    $this->assertInstanceOf("InvalidArgumentException", $caught);
   }
 
   public function testSplitLines()
@@ -630,4 +641,43 @@ class StringsTest extends PHPUnit_Framework_TestCase
       ['XX00-XX00-00XX-55XX-?**!'],
     ];
   }
+
+  public function testNTrim()
+  {
+    $string = null;
+    $this->assertNull(Strings::ntrim($string, "abc"));
+    $string = "abc";
+    $this->assertEquals("", Strings::ntrim($string, "abc"));
+    $string = "cba";
+    $this->assertEquals("", Strings::ntrim($string, "abc"));
+    $string = "abcde";
+    $this->assertEquals("d", Strings::ntrim($string, "abce"));
+  }
+
+  /**
+   * @param $expect
+   * @param $input
+   * @param $width
+   * @param $break
+   * @param $cut
+   *
+   * @dataProvider wordWrapProvider
+   */
+  public function testWordwrap($expect, $input, $width, $break, $cut)
+  {
+    $this->assertEquals(
+      $expect,
+      Strings::wordWrap($input, $width, $break, $cut)
+    );
+  }
+
+  public function wordWrapProvider()
+  {
+    return [
+      ["abc", "abc", "3", "\n", true],
+      ["abc-def", "abcdef", "3", "-", true],
+      ["a-b-c-d-e-f", "abcdef", "1", "-", true],
+    ];
+  }
+
 }

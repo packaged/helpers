@@ -22,6 +22,7 @@ class RetryHelper
     $retries, callable $callFunction, callable $catchFunction = null
   )
   {
+    $return = null;
     if(!is_int($retries) || $retries < 0)
     {
       throw new \Exception('Invalid value for retries');
@@ -31,7 +32,8 @@ class RetryHelper
     {
       try
       {
-        return $callFunction();
+        $return = $callFunction();
+        break;
       }
       catch(\Exception $e)
       {
@@ -42,6 +44,6 @@ class RetryHelper
         $retries--;
       }
     }
-    return null;
+    return $return;
   }
 }

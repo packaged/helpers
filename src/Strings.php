@@ -250,19 +250,19 @@ class Strings
     {
       $randomData = random_bytes(100);
     }
-    elseif(($forceMethod == self::RANDOM_STRING_MCRYPT || $forceMethod == null) &&
+    else if(($forceMethod == self::RANDOM_STRING_MCRYPT || $forceMethod == null) &&
       function_exists('mcrypt_create_iv')
     )
     {
       $randomData = mcrypt_create_iv(100, MCRYPT_DEV_URANDOM);
     }
-    elseif(($forceMethod == self::RANDOM_STRING_OPENSSL || $forceMethod == null)
+    else if(($forceMethod == self::RANDOM_STRING_OPENSSL || $forceMethod == null)
       && function_exists('openssl_random_pseudo_bytes')
     )
     {
       $randomData = openssl_random_pseudo_bytes(100);
     }
-    elseif(($forceMethod == self::RANDOM_STRING_URANDOM || $forceMethod == null)
+    else if(($forceMethod == self::RANDOM_STRING_URANDOM || $forceMethod == null)
       && @file_exists('/dev/urandom')
     )
     {
@@ -479,7 +479,6 @@ class Strings
         break;
       case 'array':
       case 'resource':
-      case 'unknown type':
       default:
         break;
     }
