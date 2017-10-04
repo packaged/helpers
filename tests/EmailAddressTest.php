@@ -245,6 +245,14 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
         ],
         ['T', '', 'K'],
       ],
+      [
+        'tdakay@bob.com',
+        [
+          'firstName' => 'Tda',
+          'lastName'  => 'Kay',
+        ],
+        ['T', '', 'Kay'],
+      ],
     ];
   }
 

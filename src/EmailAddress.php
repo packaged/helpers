@@ -96,11 +96,11 @@ class EmailAddress
       }
     }
 
-    $lastFound = strrev(Strings::commonPrefix(strrev($this->_fullName), strrev($last)));
-    if(strlen($lastFound) > 2 && !stristr($this->_fullName, $last))
+    $lastFound = strrev(Strings::commonPrefix(strrev(strtolower($this->_fullName)), strrev(strtolower($last))));
+    if(strlen($lastFound) > 2)
     {
-      $this->_fullName = str_replace($lastFound, ' ' . $lastFound, $this->_fullName);
-
+      $pos = (strlen($lastFound) * -1);
+      $this->_fullName = substr($this->_fullName, 0, $pos) . ' ' . substr($this->_fullName, $pos - 1);
       if(empty($middle))
       {
         $parts = explode($lastFound, $last, 2);
@@ -113,7 +113,7 @@ class EmailAddress
     }
     else if(strlen($first) > 1)
     {
-      $this->_fullName = str_replace($first, $first . ' ', $this->_fullName);
+      $this->_fullName = str_ireplace($first, $first . ' ', $this->_fullName);
     }
 
     if(strlen($first) > 1 && strlen($this->_fullName) > 1)
