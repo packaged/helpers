@@ -76,13 +76,8 @@ class EmailAddress
     list($first, $middle, $last) = $this->_providedName;
     $first = strtolower($first);
 
-    $this->_fullName = Strings::splitOnCamelCase(
-      Strings::splitOnUnderscores(str_replace('.', ' ', $this->_base))
-    );
-
-    $this->_fullName = strtolower(
-      preg_replace('([0-9])', ' ', $this->_fullName)
-    );
+    $this->_fullName = Strings::splitOnCamelCase(Strings::splitOnUnderscores(str_replace('.', ' ', $this->_base)));
+    $this->_fullName = strtolower(preg_replace('([0-9])', ' ', $this->_fullName));
 
     $fcheck = preg_replace('([^a-zA-Z])', '', $first);
     if(strlen($fcheck) == 1)
@@ -101,17 +96,10 @@ class EmailAddress
       }
     }
 
-    $lastFound = strrev(
-      Strings::commonPrefix(strrev($this->_fullName), strrev($last))
-    );
-
+    $lastFound = strrev(Strings::commonPrefix(strrev($this->_fullName), strrev($last)));
     if(strlen($lastFound) > 2 && !stristr($this->_fullName, $last))
     {
-      $this->_fullName = str_replace(
-        $lastFound,
-        ' ' . $lastFound,
-        $this->_fullName
-      );
+      $this->_fullName = str_replace($lastFound, ' ' . $lastFound, $this->_fullName);
 
       if(empty($middle))
       {
@@ -123,7 +111,7 @@ class EmailAddress
         }
       }
     }
-    else if(strlen($first) > 0)
+    else if(strlen($first) > 1)
     {
       $this->_fullName = str_replace($first, $first . ' ', $this->_fullName);
     }
@@ -132,14 +120,11 @@ class EmailAddress
     {
       if($this->_fullName[0] == $first[0] && $this->_fullName[1] != $first[1])
       {
-        $this->_fullName = substr($this->_fullName, 0, 1)
-          . ' ' . substr($this->_fullName, 1);
+        $this->_fullName = substr($this->_fullName, 0, 1) . ' ' . substr($this->_fullName, 1);
       }
     }
 
-    $this->_fullName = ucwords(
-      trim(preg_replace('!\s+!', ' ', $this->_fullName))
-    );
+    $this->_fullName = ucwords(trim(preg_replace('!\s+!', ' ', $this->_fullName)));
 
     $nameParts = explode(' ', $this->_fullName);
     switch(count($nameParts))
@@ -159,11 +144,7 @@ class EmailAddress
     }
 
     if(strlen($first) > strlen($this->_firstName)
-      || (strncasecmp(
-          substr($first, 0, 1),
-          substr($this->_firstName, 0, 1),
-          1
-        ) !== 0
+      || (strncasecmp(substr($first, 0, 1), substr($this->_firstName, 0, 1), 1) !== 0
         && !empty($first))
     )
     {
@@ -171,11 +152,7 @@ class EmailAddress
     }
 
     if(strlen($last) > strlen($this->_lastName)
-      || (strncasecmp(
-          substr($last, 0, 1),
-          substr($this->_lastName, 0, 1),
-          1
-        ) !== 0
+      || (strncasecmp(substr($last, 0, 1), substr($this->_lastName, 0, 1), 1) !== 0
         && !empty($last))
     )
     {
@@ -183,11 +160,7 @@ class EmailAddress
     }
 
     if(strlen($middle) > strlen($this->_middleName)
-      || (strncasecmp(
-          substr($middle, 0, 1),
-          substr($this->_middleName, 0, 1),
-          1
-        ) !== 0
+      || (strncasecmp(substr($middle, 0, 1), substr($this->_middleName, 0, 1), 1) !== 0
         && !empty($middle))
     )
     {
