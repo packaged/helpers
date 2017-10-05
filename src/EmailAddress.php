@@ -26,7 +26,7 @@ class EmailAddress
   public function setEmail($email)
   {
     $this->_calculated = false;
-    $this->_raw = $email;
+    $this->_raw = trim($email);
     return $this;
   }
 
