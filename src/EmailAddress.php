@@ -3,17 +3,17 @@ namespace Packaged\Helpers;
 
 class EmailAddress
 {
-  protected $_username;
-  protected $_domain;
-  protected $_title;
-  protected $_firstName;
-  protected $_middleName;
-  protected $_lastName;
-  protected $_suffix;
-  protected $_fullName;
-  protected $_lower;
-  protected $_base;
-  protected $_extension;
+  protected $_username = '';
+  protected $_domain = '';
+  protected $_title = '';
+  protected $_firstName = '';
+  protected $_middleName = '';
+  protected $_lastName = '';
+  protected $_suffix = '';
+  protected $_fullName = '';
+  protected $_lower = '';
+  protected $_base = '';
+  protected $_extension = '';
   protected $_providedName = ['', '', ''];
   protected $_calculated = false;
   protected $_raw;
