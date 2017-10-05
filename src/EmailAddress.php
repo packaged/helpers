@@ -36,7 +36,7 @@ class EmailAddress
     {
       $last = '';
     }
-    $this->_providedName = [$first, $middle, $last];
+    $this->_providedName = [trim($first), trim($middle), trim($last)];
     return $this;
   }
 
