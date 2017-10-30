@@ -74,6 +74,23 @@ class EmailAddress
   protected function _calculateName()
   {
     list($first, $middle, $last) = $this->_providedName;
+    if(empty($last) || $first == $last)
+    {
+      $newProvided = explode(' ', Strings::splitOnCamelCase($first));
+      switch(count($newProvided))
+      {
+        case 1:
+          break;
+        case 2:
+          $first = $newProvided[0];
+          $last = $newProvided[1];
+          break;
+        default:
+          $first = array_shift($newProvided);
+          $last = array_pop($newProvided);
+          $middle = implode(' ', $newProvided);
+      }
+    }
     $first = strtolower($first);
 
     $this->_fullName = Strings::splitOnCamelCase(Strings::splitOnUnderscores(str_replace('.', ' ', $this->_base)));
@@ -100,7 +117,7 @@ class EmailAddress
     if(strlen($lastFound) > 2)
     {
       $pos = (strlen($lastFound) * -1);
-      $this->_fullName = substr($this->_fullName, 0, $pos) . ' ' . substr($this->_fullName, $pos - 1);
+      $this->_fullName = substr($this->_fullName, 0, $pos) . ' ' . substr($this->_fullName, $pos);
       if(empty($middle))
       {
         $parts = explode($lastFound, $last, 2);
@@ -124,9 +141,30 @@ class EmailAddress
       }
     }
 
+    $firstCommon = Strings::commonPrefix($first, $this->_fullName);
+    if(strlen($firstCommon) > 2)
+    {
+      $first = $firstCommon;
+    }
     $this->_fullName = ucwords(trim(preg_replace('!\s+!', ' ', $this->_fullName)));
 
     $nameParts = explode(' ', $this->_fullName);
+
+    if(count($nameParts) == 1 && empty($last))
+    {
+      $lastCommon = strrev(Strings::commonPrefix(strrev(strtolower($fcheck)), strrev(strtolower($nameParts[0]))));
+      if($lastCommon != $first)
+      {
+        $fname = ucfirst(str_replace($lastCommon, '', $fcheck));
+        if(!empty($fname))
+        {
+          $last = $lastCommon;
+          $first = $fname;
+          array_unshift($nameParts, $fname);
+        }
+      }
+    }
+
     switch(count($nameParts))
     {
       case 1:
