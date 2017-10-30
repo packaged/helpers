@@ -76,7 +76,7 @@ class EmailAddress
     list($first, $middle, $last) = $this->_providedName;
     if(empty($last) || $first == $last)
     {
-      $newProvided = explode(' ', Strings::splitOnCamelCase($first));
+      $newProvided = explode(' ', Strings::splitOnCamelCase(Strings::splitOnUnderscores($first)));
       switch(count($newProvided))
       {
         case 1:
