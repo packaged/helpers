@@ -89,6 +89,22 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
   public function emailProvider()
   {
     return [
+      /*[
+        'kev1n_sta@abc.com',
+        [
+          'firstName' => 'Kevin',
+          'lastName'  => 'Stack',
+        ],
+        ['Kevin', '', 'Stack'],
+      ],
+      [
+        'davy1640@abc.com',
+        [
+          'firstName' => 'Dave',
+          'lastName'  => 'Roberts',
+        ],
+        ['Dave', '', 'Robers'],
+      ],*/
       [
         'john@exAmPle.cOm',
         [
@@ -292,6 +308,42 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
           'lastName'  => 'Santillo',
         ],
         ['Bill_santillo', '', ''],
+      ],
+      [
+        'davidjlloyd@abc.com',
+        [
+          'firstName'  => 'David',
+          'middleName' => 'J',
+          'lastName'   => 'Lloyd',
+        ],
+        ['David', '', 'Lloyd'],
+      ],
+      [
+        'robert.benson567@abc.com',
+        [
+          'firstName'  => 'Robert',
+          'middleName' => 'A',
+          'lastName'   => 'Benson',
+        ],
+        ['R.a.benson', '', 'R.a.benson'],
+      ],
+      [
+        'metcalf830@abc.com',
+        [
+          'firstName'  => 'Melvin',
+          'middleName' => 'L',
+          'lastName'   => 'Metcalf',
+        ],
+        ['Melvin.l.metcalf', '', ''],
+      ],
+      [
+        'accorrea13@abc.com',
+        [
+          'firstName'  => 'Alex',
+          'middleName' => 'C',
+          'lastName'   => 'Correa',
+        ],
+        ['Alex', '', 'Correa'],
       ],
     ];
   }

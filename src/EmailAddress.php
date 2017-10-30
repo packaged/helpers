@@ -76,7 +76,10 @@ class EmailAddress
     list($first, $middle, $last) = $this->_providedName;
     if(empty($last) || $first == $last)
     {
-      $newProvided = explode(' ', Strings::splitOnCamelCase(Strings::splitOnUnderscores($first)));
+      $newProvided = explode(
+        ' ',
+        Strings::splitOnCamelCase(Strings::splitOnUnderscores(str_replace('.', ' ', $first)))
+      );
       switch(count($newProvided))
       {
         case 1:
@@ -133,6 +136,8 @@ class EmailAddress
       $this->_fullName = str_ireplace($first, $first . ' ', $this->_fullName);
     }
 
+    $this->_fullName = trim($this->_fullName);
+
     if(strlen($first) > 1 && strlen($this->_fullName) > 1)
     {
       if($this->_fullName[0] == $first[0] && $this->_fullName[1] != $first[1])
@@ -140,28 +145,45 @@ class EmailAddress
         $this->_fullName = substr($this->_fullName, 0, 1) . ' ' . substr($this->_fullName, 1);
       }
     }
+    if(strlen($last) > 1 && strlen($this->_fullName) > 1)
+    {
+      $lpos = strlen($last);
+      if(strtolower(substr($this->_fullName, $lpos * -1)) == strtolower($last))
+      {
+        $this->_fullName = substr($this->_fullName, 0, $lpos * -1) . ' ' . substr($this->_fullName, $lpos * -1);
+      }
+    }
 
     $firstCommon = Strings::commonPrefix($first, $this->_fullName);
-    if(strlen($firstCommon) > 2)
+    $comLen = strlen($firstCommon);
+    if($comLen > 2)
     {
       $first = $firstCommon;
+      $this->_fullName = $first . ' ' . substr($this->_fullName, $comLen);
     }
     $this->_fullName = ucwords(trim(preg_replace('!\s+!', ' ', $this->_fullName)));
 
     $nameParts = explode(' ', $this->_fullName);
 
-    if(count($nameParts) == 1 && empty($last))
+    if(count($nameParts) == 1)
     {
-      $lastCommon = strrev(Strings::commonPrefix(strrev(strtolower($fcheck)), strrev(strtolower($nameParts[0]))));
-      if($lastCommon != $first)
+      if(empty($last))
       {
-        $fname = ucfirst(str_replace($lastCommon, '', $fcheck));
-        if(!empty($fname))
+        $lastCommon = strrev(Strings::commonPrefix(strrev(strtolower($fcheck)), strrev(strtolower($nameParts[0]))));
+        if($lastCommon != $first)
         {
-          $last = $lastCommon;
-          $first = $fname;
-          array_unshift($nameParts, $fname);
+          $fname = ucfirst(str_replace($lastCommon, '', $fcheck));
+          if(!empty($fname))
+          {
+            $last = $lastCommon;
+            $first = $fname;
+            array_unshift($nameParts, $fname);
+          }
         }
+      }
+      else if(!empty($first) && strtolower($last) == strtolower($nameParts[0]))
+      {
+        array_unshift($nameParts, ucfirst($first));
       }
     }
 
@@ -169,9 +191,12 @@ class EmailAddress
     {
       case 1:
         $this->_firstName = trim($nameParts[0]);
+        $this->_middleName = ucfirst($middle);
+        $this->_lastName = ucfirst($last);
         break;
       case 2:
         $this->_firstName = trim($nameParts[0]);
+        $this->_middleName = ucfirst($middle);
         $this->_lastName = trim($nameParts[1]);
         break;
       default:
