@@ -214,6 +214,7 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
         [
           'firstName' => 'Laura',
           'title'     => 'Dr',
+          'lastName'  => 'Wallace',
         ],
         ['L', '', 'Wallace'],
       ],
