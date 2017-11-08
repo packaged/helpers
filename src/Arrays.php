@@ -306,6 +306,43 @@ class Arrays
   }
 
   /**
+   * Short for 'array pull'.  Extracts specified items from a list of arrays
+   * and returns them in an array keyed by the original key, or alternatively the
+   * value of another item on the array.
+   *
+   * @param array $list        A list of arrays.
+   * @param array $keys        Array of keys to extract.
+   * @param null  $keyIndex    Determines how **keys** will be
+   *                           assigned in the result array. Use a string like
+   *                           'id' to use the result of accessing the named
+   *                           property as each object's key, or
+   *                           ##null## to preserve the original keys.
+   *
+   * @return array             An array keyed by $keyProperty populated by the
+   *                           properties specified in $properties.
+   */
+  public static function apull(array $list, array $keys, $keyIndex = null)
+  {
+    $result = [];
+    foreach($list as $key => $object)
+    {
+      if($keyIndex !== null)
+      {
+        $key = $object[$keyIndex];
+      }
+
+      $value = [];
+      foreach($keys as $property)
+      {
+        $value[$property] = Arrays::value($object, $property);
+      }
+
+      $result[$key] = $value;
+    }
+    return $result;
+  }
+
+  /**
    * Group a list of arrays by the value of some index. This function is the
    * same as @{function:mgroup}, except it operates on the values of array
    * indexes rather than the return values of method calls.

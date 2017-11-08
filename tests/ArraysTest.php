@@ -352,6 +352,35 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     $this->assertEquals($expected, Arrays::ipull($list, null, 'name'));
   }
 
+  public function testApull()
+  {
+    $a = [
+      'name'   => "a",
+      'value1' => 1,
+      'value2' => 2,
+    ];
+    $b = [
+      'name'   => "b",
+      'value1' => 2,
+      'value2' => 3,
+    ];
+    $c = [
+      'name'   => "c",
+      'value1' => 3,
+      'value2' => 4,
+    ];
+    $list = [$a, $b, $c];
+
+    $this->assertEquals(
+      [
+        'a' => ['value1' => 1, 'value2' => 2],
+        'b' => ['value1' => 2, 'value2' => 3],
+        'c' => ['value1' => 3, 'value2' => 4],
+      ],
+      Arrays::apull($list, ['value1', 'value2'], 'name')
+    );
+  }
+
   public function testIsort()
   {
     $list = [
