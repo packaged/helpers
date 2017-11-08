@@ -314,9 +314,8 @@ class Arrays
    * @param string[]    $keys     Array of keys to extract.
    * @param string|null $keyIndex Determines how **keys** will be
    *                              assigned in the result array. Use a string like
-   *                              'id' to use the result of accessing the named
-   *                              property as each object's key, or
-   *                              ##null## to preserve the original keys.
+   *                              'id' to use the specified index as each item's
+   *                              key, or ##null## to preserve the original keys.
    *
    * @return array                An array keyed by $keyProperty populated by the
    *                              properties specified in $properties.
@@ -324,17 +323,17 @@ class Arrays
   public static function apull(array $list, array $keys, $keyIndex = null)
   {
     $result = [];
-    foreach($list as $key => $object)
+    foreach($list as $key => $data)
     {
       if($keyIndex !== null)
       {
-        $key = $object[$keyIndex];
+        $key = $data[$keyIndex];
       }
 
       $value = [];
-      foreach($keys as $property)
+      foreach($keys as $index)
       {
-        $value[$property] = Arrays::value($object, $property);
+        $value[$index] = Arrays::value($data, $index);
       }
 
       $result[$key] = $value;
