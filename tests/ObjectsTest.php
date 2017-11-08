@@ -137,7 +137,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $expectations = [
       ['Strings', "Strings"],
       ['\Packaged\Helpers\Strings', "Strings"],
-      [new \Packaged\Helpers\Strings, "Strings"],
+      [new \Packaged\Helpers\Strings(), "Strings"],
     ];
     foreach($expectations as $expect)
     {
@@ -174,7 +174,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
       ['', ''],
       ['Strings', ''],
       ['\Packaged\Helpers\Strings', '\Packaged\Helpers'],
-      [new \Packaged\Helpers\Strings, '\Packaged\Helpers'],
+      [new \Packaged\Helpers\Strings(), '\Packaged\Helpers'],
     ];
     foreach($expectations as $expect)
     {
@@ -222,6 +222,32 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $this->assertEquals($expected, Objects::ppull($list, null, 'name'));
   }
 
+  public function testApull()
+  {
+    $a = new stdClass();
+    $a->name = "a";
+    $a->value1 = 1;
+    $a->value2 = 2;
+    $b = new stdClass();
+    $b->name = "b";
+    $b->value1 = 2;
+    $b->value2 = 3;
+    $c = new stdClass();
+    $c->name = "c";
+    $c->value1 = 3;
+    $c->value2 = 4;
+    $list = [$a, $b, $c];
+
+    $this->assertEquals(
+      [
+        'a' => ['value1' => 1, 'value2' => 2],
+        'b' => ['value1' => 2, 'value2' => 3],
+        'c' => ['value1' => 3, 'value2' => 4],
+      ],
+      Objects::apull($list, ['value1', 'value2'], 'name')
+    );
+  }
+
   public function testMsort()
   {
     $a = new MFilterTestHelper('1', 'a', 'q');
@@ -251,10 +277,10 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $expect = [
       'food'     => [
         'fruit'     => ['a' => $apple],
-        'vegetable' => ['c' => $carrot]
+        'vegetable' => ['c' => $carrot],
       ],
       'creature' => [
-        'animal' => ['b' => $bear]
+        'animal' => ['b' => $bear],
       ],
     ];
     $this->assertEquals($expect, Objects::mgroup($list, 'group', 'type'));
@@ -262,10 +288,10 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $expect = [
       'food'     => [
         'a' => $apple,
-        'c' => $carrot
+        'c' => $carrot,
       ],
       'creature' => [
-        'b' => $bear
+        'b' => $bear,
       ],
     ];
     $this->assertEquals($expect, Objects::mgroup($list, 'group'));
@@ -289,10 +315,10 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $expect = [
       'food'     => [
         'fruit'     => ['a' => $apple],
-        'vegetable' => ['c' => $carrot]
+        'vegetable' => ['c' => $carrot],
       ],
       'creature' => [
-        'animal' => ['b' => $bear]
+        'animal' => ['b' => $bear],
       ],
     ];
     $this->assertEquals(
@@ -303,10 +329,10 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $expect = [
       'food'     => [
         'a' => $apple,
-        'c' => $carrot
+        'c' => $carrot,
       ],
       'creature' => [
-        'b' => $bear
+        'b' => $bear,
       ],
     ];
     $this->assertEquals($expect, Objects::pgroup($list, 'groupProperty'));
@@ -326,7 +352,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
         ["apple" => $apple, "pear" => $pear, "grape" => $grape],
         "name",
         ["apple" => $apple, "grape" => $grape, "pear" => $pear],
-      ]
+      ],
     ];
     foreach($expectations as $expect)
     {

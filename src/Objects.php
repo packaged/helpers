@@ -367,6 +367,43 @@ class Objects
   }
 
   /**
+   * Short for 'array pull'.  Extracts specified properties from a list of objects
+   * and returns them in an array keyed by the original key, or alternatively the
+   * value of another property on the object.
+   *
+   * @param array $list        Some list of objects.
+   * @param array $properties  Array of properties to extract.
+   * @param null  $keyProperty Determines how **keys** will be
+   *                           assigned in the result array. Use a string like
+   *                           'id' to use the result of accessing the named
+   *                           property as each object's key, or
+   *                           ##null## to preserve the original keys.
+   *
+   * @return array             An array keyed by $keyProperty populated by the
+   *                           properties specified in $properties.
+   */
+  public static function apull(array $list, array $properties, $keyProperty = null)
+  {
+    $result = [];
+    foreach($list as $key => $object)
+    {
+      if($keyProperty !== null && is_object($object))
+      {
+        $key = $object->$keyProperty;
+      }
+
+      $value = [];
+      foreach($properties as $property)
+      {
+        $value[$property] = Objects::property($object, $property);
+      }
+
+      $result[$key] = $value;
+    }
+    return $result;
+  }
+
+  /**
    * Group a list of objects by the result of some method, similar to how
    * GROUP BY works in an SQL query. This function simplifies grouping objects
    * by some property:
