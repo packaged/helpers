@@ -26,14 +26,20 @@ jobs:
     <<: *defaults
     docker:
       - image: php:5.6-alpine
+        environment:
+          ADD_MODULES: bcmath
   build-php70:
     <<: *defaults
     docker:
       - image: php:7.0-alpine
+        environment:
+          ADD_MODULES: bcmath
   build-php71:
     <<: *defaults
     docker:
       - image: php:7.1-alpine
+        environment:
+          ADD_MODULES: bcmath
 
 workflows:
   version: 2
