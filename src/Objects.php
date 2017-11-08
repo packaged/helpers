@@ -371,16 +371,16 @@ class Objects
    * and returns them in an array keyed by the original key, or alternatively the
    * value of another property on the object.
    *
-   * @param array $list        Some list of objects.
-   * @param array $properties  Array of properties to extract.
-   * @param null  $keyProperty Determines how **keys** will be
-   *                           assigned in the result array. Use a string like
-   *                           'id' to use the result of accessing the named
-   *                           property as each object's key, or
-   *                           ##null## to preserve the original keys.
+   * @param array       $list        Some list of objects.
+   * @param string[]    $properties  Array of properties to extract.
+   * @param string|null $keyProperty Determines how **keys** will be
+   *                                 assigned in the result array. Use a string like
+   *                                 'id' to use the result of accessing the named
+   *                                 property as each object's key, or
+   *                                 ##null## to preserve the original keys.
    *
-   * @return array             An array keyed by $keyProperty populated by the
-   *                           properties specified in $properties.
+   * @return array                   An array keyed by $keyProperty populated by the
+   *                                 properties specified in $properties.
    */
   public static function apull(array $list, array $properties, $keyProperty = null)
   {

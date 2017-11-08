@@ -310,16 +310,16 @@ class Arrays
    * and returns them in an array keyed by the original key, or alternatively the
    * value of another item on the array.
    *
-   * @param array $list        A list of arrays.
-   * @param array $keys        Array of keys to extract.
-   * @param null  $keyIndex    Determines how **keys** will be
-   *                           assigned in the result array. Use a string like
-   *                           'id' to use the result of accessing the named
-   *                           property as each object's key, or
-   *                           ##null## to preserve the original keys.
+   * @param array[]     $list     A list of arrays.
+   * @param string[]    $keys     Array of keys to extract.
+   * @param string|null $keyIndex Determines how **keys** will be
+   *                              assigned in the result array. Use a string like
+   *                              'id' to use the result of accessing the named
+   *                              property as each object's key, or
+   *                              ##null## to preserve the original keys.
    *
-   * @return array             An array keyed by $keyProperty populated by the
-   *                           properties specified in $properties.
+   * @return array                An array keyed by $keyProperty populated by the
+   *                              properties specified in $properties.
    */
   public static function apull(array $list, array $keys, $keyIndex = null)
   {
