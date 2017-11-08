@@ -1,0 +1,50 @@
+defaults: &defaults
+  steps:
+    # common php steps
+    - run: echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+    - run: if [ -n "$ADD_PACKAGES" ]; then apk -U add $ADD_PACKAGES; fi;
+    - run: if [ -n "$ADD_MODULES" ]; then docker-php-ext-install $ADD_MODULES; fi;
+    - run: echo "date.timezone = UTC" >> $(php --ini |grep Scan |awk '{print $NF}')/timezone.ini
+    - run: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+
+    # pre-checkout steps
+
+    # checkout
+    - checkout
+
+    # post-checkout steps
+
+    # run tests
+    - run: composer install -n --prefer-dist
+    - run: php vendor/phpunit/phpunit/phpunit -c phpunit.xml --log-junit /tmp/test-results/phpunit/junit.xml
+    - store_test_results:
+        path: /tmp/test-results
+
+version: 2
+jobs:
+  build-php56:
+    <<: *defaults
+    docker:
+      - image: php:5.6-alpine
+        environment:
+          ADD_MODULES: bcmath
+  build-php70:
+    <<: *defaults
+    docker:
+      - image: php:7.0-alpine
+        environment:
+          ADD_MODULES: bcmath
+  build-php71:
+    <<: *defaults
+    docker:
+      - image: php:7.1-alpine
+        environment:
+          ADD_MODULES: bcmath
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build-php56
+      - build-php70
+      - build-php71
