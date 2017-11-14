@@ -1,4 +1,5 @@
 <?php
+
 use Packaged\Helpers\Strings;
 
 /**
@@ -266,11 +267,11 @@ class StringsTest extends PHPUnit_Framework_TestCase
       \Packaged\Helpers\Strings::RANDOM_STRING_CUSTOM,
       'invalid',
     ];
-    if(PHP_MAJOR_VERSION == 7 && PHP_MINOR_VERSION == 1)
+    if(PHP_MAJOR_VERSION >= 7)
     {
       $types[] = \Packaged\Helpers\Strings::RANDOM_STRING_RANDOM_BYTES;
     }
-    else
+    if(PHP_MAJOR_VERSION < 7 || (PHP_MAJOR_VERSION == 7 && PHP_MINOR_VERSION < 1))
     {
       $types[] = \Packaged\Helpers\Strings::RANDOM_STRING_MCRYPT;
     }
