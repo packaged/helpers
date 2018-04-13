@@ -87,4 +87,20 @@ class Path
     }
     return $files;
   }
+
+  /**
+   * Return the last component from a path. Separates on slash and/or backslash
+   *
+   * @param string $path
+   *
+   * @return string
+   */
+  public static function baseName($path)
+  {
+    if($path == "/")
+    {
+      return $path;
+    }
+    return basename(str_replace('\\', '/', $path));
+  }
 }

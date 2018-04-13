@@ -42,4 +42,30 @@ class PathTest extends PHPUnit_Framework_TestCase
     $this->assertEquals("a|b", Path::buildCustom("|", ["a", "b"]));
     $this->assertEquals("a|b", Path::buildCustom("|", [0 => "a", 1 => "b"]));
   }
+
+  public function baseNameProvider()
+  {
+    return [
+      ['/', '/'],
+      ['C:\\', 'C:'],
+      ['/test/dir/123/file1', 'file1'],
+      ['test/dir/123/file2', 'file2'],
+      ['/file3', 'file3'],
+      ['//test//dir1//file4', 'file4'],
+      ['/test/dir2/dir5/', 'dir5'],
+      ['C:\\Program Files\\Test Dir\\file6', 'file6'],
+      ['C:\\test\\dir2/file7', 'file7'],
+    ];
+  }
+
+  /**
+   * @dataProvider baseNameProvider
+   *
+   * @param string $input
+   * @param string $expected
+   */
+  public function testBaseName($input, $expected)
+  {
+    $this->assertEquals($expected, Path::baseName($input));
+  }
 }
