@@ -98,6 +98,22 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
         ['Melanierichards', '', 'Melanierichards'],
       ],
       [
+        'peadarnewell@bob.com',
+        [
+          'firstName' => 'Peter',
+          'lastName'  => 'Newell',
+        ],
+        ['Peter', '', 'Newell'],
+      ],
+      [
+        'elisia.taylor@bob.com',
+        [
+          'firstName' => 'Etay',
+          'lastName'  => 'Taylor',
+        ],
+        ['Etay', '', 'Etay'],
+      ],
+      [
         'kev1n_sta@abc.com',
         [
           'firstName' => 'Kevin',
@@ -253,7 +269,7 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
         ['Ginny', '', ''],
       ],
       [
-        'dennisnesbitt@telkodsa.net',
+        'dennisnesbitt@sdgsdgsd.net',
         [
           'firstName'  => "Dennis",
           'middleName' => "B",

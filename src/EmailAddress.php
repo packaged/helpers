@@ -159,7 +159,7 @@ class EmailAddress
     $firstCommon = Strings::commonPrefix($first, $this->_fullName);
     $comLen = strlen($firstCommon);
     $matchStart = strtolower(substr($this->_providedName[0], 0, $comLen)) != $firstCommon;
-    if($comLen > 2)
+    if($comLen > 1)
     {
       if($matchStart || strtolower(str_replace(' ', '', $this->_fullName)) == $first)
       {
