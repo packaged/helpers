@@ -89,7 +89,15 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
   public function emailProvider()
   {
     return [
-      /*[
+      [
+        'melanie.richards@bob.com',
+        [
+          'firstName' => 'Melanie',
+          'lastName'  => 'Richards',
+        ],
+        ['Melanierichards', '', 'Melanierichards'],
+      ],
+      [
         'kev1n_sta@abc.com',
         [
           'firstName' => 'Kevin',
@@ -103,8 +111,24 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
           'firstName' => 'Dave',
           'lastName'  => 'Roberts',
         ],
-        ['Dave', '', 'Robers'],
-      ],*/
+        ['Dave', '', 'Roberts'],
+      ],
+      [
+        'richevans24@abc.com',
+        [
+          'firstName' => 'Rich',
+          'lastName'  => 'Evans',
+        ],
+        ['Rich', '', 'Rich'],
+      ],
+      [
+        'wmvanlee23@xtskh.com',
+        [
+          'firstName' => 'WilgardVan',
+          'lastName'  => 'Lee',
+        ],
+        ['WilgardVan', '', 'Lee'],
+      ],
       [
         'john@exAmPle.cOm',
         [
@@ -269,14 +293,6 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
           'lastName'  => 'Kay',
         ],
         ['T', '', 'Kay'],
-      ],
-      [
-        'melanie.richards@bob.com',
-        [
-          'firstName' => 'Melanie',
-          'lastName'  => 'Richards',
-        ],
-        ['Melanierichards', '', 'Melanierichards'],
       ],
       [
         'chilli75@bob.com',
