@@ -117,10 +117,12 @@ class EmailAddress
     }
 
     $lastFound = strrev(Strings::commonPrefix(strrev(strtolower($this->_fullName)), strrev(strtolower($last))));
-    if(strlen($lastFound) > 2)
+    $lastLen = strlen($lastFound);
+    if($lastLen > 2)
     {
       $pos = (strlen($lastFound) * -1);
-      $this->_fullName = substr($this->_fullName, 0, $pos) . ' ' . substr($this->_fullName, $pos);
+      $newLast = substr($this->_fullName, $pos);
+      $this->_fullName = substr($this->_fullName, 0, $pos) . ' ' . $newLast;
       if(empty($middle))
       {
         $parts = explode($lastFound, $last, 2);
@@ -156,9 +158,13 @@ class EmailAddress
 
     $firstCommon = Strings::commonPrefix($first, $this->_fullName);
     $comLen = strlen($firstCommon);
+    $matchStart = strtolower(substr($this->_providedName[0], 0, $comLen)) != $firstCommon;
     if($comLen > 2)
     {
-      $first = $firstCommon;
+      if($matchStart || strtolower(str_replace(' ', '', $this->_fullName)) == $first)
+      {
+        $first = $firstCommon;
+      }
       $this->_fullName = $first . ' ' . substr($this->_fullName, $comLen);
     }
     $this->_fullName = ucwords(trim(preg_replace('!\s+!', ' ', $this->_fullName)));
@@ -206,12 +212,24 @@ class EmailAddress
         break;
     }
 
+    if(Strings::commonPrefix($this->_lastName, $last) == $this->_lastName)
+    {
+      $this->_lastName = $last;
+    }
+
     if(strlen($first) > strlen($this->_firstName)
       || (strncasecmp(substr($first, 0, 1), substr($this->_firstName, 0, 1), 1) !== 0
         && !empty($first))
     )
     {
-      $this->_firstName = trim(ucwords(strtolower($first)));
+      if(strtolower($this->_providedName[0]) != trim(strtolower($first)))
+      {
+        $this->_firstName = trim(ucwords(strtolower($first)));
+      }
+      else
+      {
+        $this->_firstName = $this->_providedName[0];
+      }
     }
 
     if(strlen($last) > strlen($this->_lastName)
@@ -219,7 +237,14 @@ class EmailAddress
         && !empty($last))
     )
     {
-      $this->_lastName = trim(ucwords(strtolower($last)));
+      if(strtolower($this->_providedName[2]) != trim(strtolower($last)))
+      {
+        $this->_lastName = trim(ucwords(strtolower($last)));
+      }
+      else
+      {
+        $this->_lastName = $this->_providedName[2];
+      }
     }
 
     if(strlen($middle) > strlen($this->_middleName)
@@ -227,7 +252,14 @@ class EmailAddress
         && !empty($middle))
     )
     {
-      $this->_middleName = trim(ucwords(strtolower($middle)));
+      if(strtolower($this->_providedName[1]) != trim(strtolower($middle)))
+      {
+        $this->_middleName = trim(ucwords(strtolower($middle)));
+      }
+      else
+      {
+        $this->_middleName = $this->_providedName[1];
+      }
     }
   }
 
