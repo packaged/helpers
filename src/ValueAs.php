@@ -22,14 +22,17 @@ class ValueAs
       return $default;
     }
 
-    if(strcasecmp($value, 'true') === 0)
+    if(is_string($value))
     {
-      return true;
-    }
+      if(strcasecmp($value, 'true') === 0)
+      {
+        return true;
+      }
 
-    if(strcasecmp($value, 'false') === 0)
-    {
-      return false;
+      if(strcasecmp($value, 'false') === 0)
+      {
+        return false;
+      }
     }
 
     return (bool)$value;
