@@ -33,6 +33,16 @@ class ValueAs
       {
         return false;
       }
+
+      if(strcasecmp($value, 'yes') === 0)
+      {
+        return true;
+      }
+
+      if(strcasecmp($value, 'no') === 0)
+      {
+        return false;
+      }
     }
 
     return (bool)$value;
