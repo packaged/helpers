@@ -139,7 +139,7 @@ class Strings
   /**
    * Split a string into an array based on expected human input
    *
-   * Ranged are allowed with hyphens, e.g. 1-3 will produce 1,2,3
+   * Ranged are allowed with hyphens, e.g. 1-3 will produce [1,2,3]
    * Splitting can be done with spaces, commas, semi colons and pipes
    *
    * @param $string

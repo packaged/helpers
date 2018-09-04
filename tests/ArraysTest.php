@@ -529,18 +529,23 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
   {
     $this->assertEquals('string', Arrays::shuffleAssoc('string'));
 
-    $expected = ['x' => 'x', 'y' => 'y', 'z' => 'z'];
-    $shuffled = Arrays::shuffleAssoc($expected);
-    $this->assertFalse((bool)array_diff_assoc($expected, $shuffled));
-    $this->assertFalse((bool)array_diff_assoc($shuffled, $expected));
+    // generate random array
+    $testArray = Strings::stringToRange('1-50');
+    $shuffled = Arrays::shuffleAssoc($testArray);
+    $this->assertFalse((bool)array_diff_assoc($testArray, $shuffled));
+    $this->assertFalse((bool)array_diff_assoc($shuffled, $testArray));
 
-    srand(40);
-    $expected = ['z' => 'z', 'y' => 'y', 'x' => 'x'];
-    $shuffled = Arrays::shuffleAssoc($expected);
-
-    $this->assertEquals('z', array_shift($shuffled));
-    $this->assertEquals('x', array_shift($shuffled));
-    $this->assertEquals('y', array_shift($shuffled));
+    // three times: shuffle and check that it's different
+    $diffCount = 0;
+    for($i = 0; $i < 5; $i++)
+    {
+      $shuffled = Arrays::shuffleAssoc($testArray);
+      if($shuffled !== $testArray)
+      {
+        $diffCount++;
+      }
+    }
+    $this->assertGreaterThan(0, $diffCount);
   }
 }
 
