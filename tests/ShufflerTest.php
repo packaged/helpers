@@ -2,19 +2,36 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\Shuffler;
+use Packaged\Helpers\Strings;
 
 class ShufflerTest extends \PHPUnit_Framework_TestCase
 {
-  public function testShuffle()
+  public function testShuffleOne()
   {
     $shuffler = new Shuffler();
     $this->assertEquals($shuffler, $shuffler->addValue('abc', 1));
     $this->assertEquals('abc', $shuffler->read());
-    $shuffler->addValue('def', 100);
-    $this->assertEquals('def', $shuffler->pop());
-    $this->assertEquals('abc', $shuffler->pop());
-    $this->assertNull($shuffler->read());
-    $this->assertNull($shuffler->pop());
+  }
+
+  public function testShuffle()
+  {
+    $s1 = $this->_getShuffler();
+    $s2 = clone $s1;
+
+    $diffCount = 0;
+    while($check = $s1->pop())
+    {
+      if($check !== $s2->pop())
+      {
+        $diffCount++;
+      }
+    }
+    $this->assertGreaterThan(0, $diffCount);
+    // assert they're both empty
+    $this->assertNull($s1->read());
+    $this->assertNull($s2->read());
+    $this->assertNull($s1->pop());
+    $this->assertNull($s2->pop());
   }
 
   public function testShuffleObj()
@@ -34,5 +51,16 @@ class ShufflerTest extends \PHPUnit_Framework_TestCase
     $this->assertContains($shuffler->pop(), [$ob1, $ob2]);
     $this->assertNull($shuffler->read());
     $this->assertNull($shuffler->pop());
+  }
+
+  private function _getShuffler()
+  {
+    $shuffler = new Shuffler();
+    $items = Strings::stringToRange('1-50');
+    foreach($items as $item)
+    {
+      $shuffler->addValue($item);
+    }
+    return $shuffler;
   }
 }
