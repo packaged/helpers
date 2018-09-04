@@ -1,8 +1,9 @@
 <?php
+namespace Packaged\Tests;
 
 use Packaged\Helpers\TimeHelper;
 
-class TimeHelperTest extends PHPUnit_Framework_TestCase
+class TimeHelperTest extends \PHPUnit_Framework_TestCase
 {
 
   /**

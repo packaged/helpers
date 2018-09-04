@@ -1,8 +1,9 @@
 <?php
+namespace Packaged\Tests;
 
 use Packaged\Helpers\Shuffler;
 
-class ShufflerTest extends PHPUnit_Framework_TestCase
+class ShufflerTest extends \PHPUnit_Framework_TestCase
 {
   public function testShuffle()
   {
@@ -20,11 +21,11 @@ class ShufflerTest extends PHPUnit_Framework_TestCase
   {
     $shuffler = new Shuffler();
 
-    $ob1 = new stdClass();
+    $ob1 = new \stdClass();
     $ob1->kenobi = true;
     $shuffler->addValue($ob1, 10);
 
-    $ob2 = new stdClass();
+    $ob2 = new \stdClass();
     $ob2->random = 'string';
     $shuffler->addValue($ob2, 10);
 

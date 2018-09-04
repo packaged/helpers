@@ -1,6 +1,9 @@
 <?php
+namespace Packaged\Tests;
 
-class EmailAddressTest extends PHPUnit_Framework_TestCase
+use Packaged\Helpers\EmailAddress;
+
+class EmailAddressTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * @param       $email
@@ -11,7 +14,7 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
    */
   public function testEmail($email, $matches, $name = ['', '', ''])
   {
-    $extracted = new \Packaged\Helpers\EmailAddress($email);
+    $extracted = new EmailAddress($email);
     $extracted->setName($name[0], $name[1], $name[2]);
 
     if(isset($matches['username']))
@@ -383,13 +386,13 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
 
   public function testBaseEmail()
   {
-    $email = new \Packaged\Helpers\EmailAddress("john.smith+123@domain.com");
+    $email = new EmailAddress("john.smith+123@domain.com");
     $this->assertEquals("john.smith@domain.com", $email->getBaseEmail());
   }
 
   public function testUsername()
   {
-    $email = new \Packaged\Helpers\EmailAddress("john.smith");
+    $email = new EmailAddress("john.smith");
     $this->assertEquals("john.smith", $email->getUsername());
   }
 }

@@ -1,13 +1,13 @@
 <?php
-/**
- * @author  brooke.bryan
- */
+namespace Packaged\Tests;
 
-class DependencyArrayTest extends PHPUnit_Framework_TestCase
+use Packaged\Helpers\DependencyArray;
+
+class DependencyArrayTest extends \PHPUnit_Framework_TestCase
 {
   public function testDependencies()
   {
-    $darray = new \Packaged\Helpers\DependencyArray();
+    $darray = new DependencyArray();
     $darray->add(1, []);
     $darray->add(2, [1]);
     $darray->add(3, [4]);
@@ -20,7 +20,7 @@ class DependencyArrayTest extends PHPUnit_Framework_TestCase
   public function testImpossibleDependencies()
   {
     $this->setExpectedException("Exception", "Impossible set of dependencies");
-    $darray = new \Packaged\Helpers\DependencyArray();
+    $darray = new DependencyArray();
     $darray->add(1, [2]);
     $darray->add(2, [1]);
     $darray->add(3, [3]);

@@ -1,33 +1,45 @@
 <?php
+namespace Packaged\Tests;
+
 use Packaged\Helpers\ValueAs;
 
-class ValueAsTest extends PHPUnit_Framework_TestCase
+class ValueAsTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * @dataProvider exactProvider
+   *
+   * @param $method
+   * @param $value
+   * @param $default
+   * @param $expect
    */
   public function testExactConversions($method, $value, $default, $expect)
   {
     $this->assertSame(
       $expect,
-      \Packaged\Helpers\ValueAs::$method($value, $default)
+      ValueAs::$method($value, $default)
     );
   }
 
   /**
    * @dataProvider matchProvider
+   *
+   * @param $method
+   * @param $value
+   * @param $default
+   * @param $expect
    */
   public function testEqualConversions($method, $value, $default, $expect)
   {
     $this->assertEquals(
       $expect,
-      \Packaged\Helpers\ValueAs::$method($value, $default)
+      ValueAs::$method($value, $default)
     );
   }
 
   public function exactProvider()
   {
-    $objectTest = new stdClass();
+    $objectTest = new \stdClass();
     $objectTest->item = 'value';
 
     return [
@@ -71,7 +83,7 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
 
   public function matchProvider()
   {
-    $objectTest = new stdClass();
+    $objectTest = new \stdClass();
     $objectTest->item = 'value';
 
     return [

@@ -1,8 +1,9 @@
 <?php
+namespace Packaged\Tests;
 
 use Packaged\Helpers\System;
 
-class SystemTest extends PHPUnit_Framework_TestCase
+class SystemTest extends \PHPUnit_Framework_TestCase
 {
   protected function setUp()
   {
@@ -22,22 +23,22 @@ class SystemTest extends PHPUnit_Framework_TestCase
 
   public function testGlobals()
   {
-    $this->assertInternalType('bool', \Packaged\Helpers\System::isHHVM());
-    $this->assertInternalType('bool', \Packaged\Helpers\System::isMac());
-    $this->assertInternalType('bool', \Packaged\Helpers\System::isWindows());
+    $this->assertInternalType('bool', System::isHHVM());
+    $this->assertInternalType('bool', System::isMac());
+    $this->assertInternalType('bool', System::isWindows());
   }
 
   public function testIsAppEngine()
   {
     $test = $_SERVER['SERVER_SOFTWARE'];
     $_SERVER['SERVER_SOFTWARE'] = 'Google App Engine/1.9.6';
-    $this->assertTrue(\Packaged\Helpers\System::isAppEngine());
+    $this->assertTrue(System::isAppEngine());
     $_SERVER['SERVER_SOFTWARE'] = $test;
     $this->assertTrue(
-      \Packaged\Helpers\System::isAppEngine('Google App Engine/1.9.6')
+      System::isAppEngine('Google App Engine/1.9.6')
     );
     $this->assertFalse(
-      \Packaged\Helpers\System::isAppEngine('PHP 5.5.1 Development Server')
+      System::isAppEngine('PHP 5.5.1 Development Server')
     );
   }
 
@@ -45,13 +46,13 @@ class SystemTest extends PHPUnit_Framework_TestCase
   {
     $test = $_SERVER['SERVER_SOFTWARE'];
     $_SERVER['SERVER_SOFTWARE'] = 'PHP 5.5.1 Development Server';
-    $this->assertTrue(\Packaged\Helpers\System::isBuiltInDevServer());
+    $this->assertTrue(System::isBuiltInDevServer());
     $_SERVER['SERVER_SOFTWARE'] = $test;
     $this->assertFalse(
-      \Packaged\Helpers\System::isBuiltInDevServer('Google App Engine/1.9.6')
+      System::isBuiltInDevServer('Google App Engine/1.9.6')
     );
     $this->assertTrue(
-      \Packaged\Helpers\System::isBuiltInDevServer(
+      System::isBuiltInDevServer(
         'PHP 5.5.1 Development Server'
       )
     );
@@ -61,22 +62,22 @@ class SystemTest extends PHPUnit_Framework_TestCase
   {
     $this->assertInternalType(
       'bool',
-      \Packaged\Helpers\System::commandExists('whois')
+      System::commandExists('whois')
     );
-    if(\Packaged\Helpers\System::isWindows())
+    if(System::isWindows())
     {
       $this->assertTrue(
-        \Packaged\Helpers\System::commandExists('explorer')
+        System::commandExists('explorer')
       );
     }
     else
     {
       $this->assertTrue(
-        \Packaged\Helpers\System::commandExists('echo')
+        System::commandExists('echo')
       );
     }
     $this->assertFalse(
-      \Packaged\Helpers\System::commandExists('madeupcommand2')
+      System::commandExists('madeupcommand2')
     );
   }
 
@@ -91,20 +92,20 @@ class SystemTest extends PHPUnit_Framework_TestCase
 
     foreach($verify as $check)
     {
-      $this->assertTrue(\Packaged\Helpers\System::isFunctionDisabled($check));
+      $this->assertTrue(System::isFunctionDisabled($check));
     }
 
-    $this->assertFalse(\Packaged\Helpers\System::isFunctionDisabled('echo'));
+    $this->assertFalse(System::isFunctionDisabled('echo'));
   }
 
   public function testAppEngineDisabledFunctions()
   {
     $test = $_SERVER['SERVER_SOFTWARE'];
     $_SERVER['SERVER_SOFTWARE'] = 'Google App Engine/1.9.6';
-    $this->assertTrue(\Packaged\Helpers\System::isAppEngine());
-    $this->assertTrue(\Packaged\Helpers\System::isFunctionDisabled('phpinfo'));
+    $this->assertTrue(System::isAppEngine());
+    $this->assertTrue(System::isFunctionDisabled('phpinfo'));
     $this->assertFalse(
-      \Packaged\Helpers\System::isFunctionDisabled(
+      System::isFunctionDisabled(
         'phpinfo',
         'phpinfo,parse_str'
       )

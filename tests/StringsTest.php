@@ -1,11 +1,12 @@
 <?php
+namespace Packaged\Tests;
 
 use Packaged\Helpers\Strings;
 
 /**
  * @author  brooke.bryan
  */
-class StringsTest extends PHPUnit_Framework_TestCase
+class StringsTest extends \PHPUnit_Framework_TestCase
 {
   public function testSplitOnCamelCase()
   {
@@ -20,7 +21,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::splitOnCamelCase($expect[0])
+        Strings::splitOnCamelCase($expect[0])
       );
     }
   }
@@ -34,7 +35,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::splitOnUnderscores($expect[0])
+        Strings::splitOnUnderscores($expect[0])
       );
     }
   }
@@ -48,7 +49,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::stringToUnderScore($expect[0])
+        Strings::stringToUnderScore($expect[0])
       );
     }
   }
@@ -63,7 +64,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::stringToCamelCase($expect[0])
+        Strings::stringToCamelCase($expect[0])
       );
     }
   }
@@ -79,7 +80,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::stringToPascalCase($expect[0])
+        Strings::stringToPascalCase($expect[0])
       );
     }
   }
@@ -95,7 +96,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::titleize($expect[0], false)
+        Strings::titleize($expect[0], false)
       );
     }
   }
@@ -111,7 +112,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::titleize($expect[0], true)
+        Strings::titleize($expect[0], true)
       );
     }
   }
@@ -127,7 +128,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::humanize($expect[0], false)
+        Strings::humanize($expect[0], false)
       );
     }
   }
@@ -143,7 +144,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::humanize($expect[0], true)
+        Strings::humanize($expect[0], true)
       );
     }
   }
@@ -159,7 +160,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::hyphenate($expect[0])
+        Strings::hyphenate($expect[0])
       );
     }
   }
@@ -177,7 +178,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::urlize($expect[0])
+        Strings::urlize($expect[0])
       );
     }
   }
@@ -198,7 +199,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[1],
-        \Packaged\Helpers\Strings::stringToRange($expect[0])
+        Strings::stringToRange($expect[0])
       );
     }
   }
@@ -214,7 +215,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[2],
-        \Packaged\Helpers\Strings::commonPrefix($expect[0], $expect[1])
+        Strings::commonPrefix($expect[0], $expect[1])
       );
     }
   }
@@ -231,7 +232,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[2],
-        \Packaged\Helpers\Strings::commonPrefix($expect[0], $expect[1], false)
+        Strings::commonPrefix($expect[0], $expect[1], false)
       );
     }
   }
@@ -246,7 +247,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $expect[2],
-        \Packaged\Helpers\Strings::splitAt($expect[0], $expect[1])
+        Strings::splitAt($expect[0], $expect[1])
       );
     }
   }
@@ -257,29 +258,29 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $this->assertEquals(
         $length,
-        strlen(\Packaged\Helpers\Strings::randomString($length))
+        strlen(Strings::randomString($length))
       );
     }
 
     $types = [
-      \Packaged\Helpers\Strings::RANDOM_STRING_OPENSSL,
-      \Packaged\Helpers\Strings::RANDOM_STRING_URANDOM,
-      \Packaged\Helpers\Strings::RANDOM_STRING_CUSTOM,
+      Strings::RANDOM_STRING_OPENSSL,
+      Strings::RANDOM_STRING_URANDOM,
+      Strings::RANDOM_STRING_CUSTOM,
       'invalid',
     ];
     if(PHP_MAJOR_VERSION >= 7)
     {
-      $types[] = \Packaged\Helpers\Strings::RANDOM_STRING_RANDOM_BYTES;
+      $types[] = Strings::RANDOM_STRING_RANDOM_BYTES;
     }
     if(PHP_MAJOR_VERSION < 7 || (PHP_MAJOR_VERSION == 7 && PHP_MINOR_VERSION < 1))
     {
-      $types[] = \Packaged\Helpers\Strings::RANDOM_STRING_MCRYPT;
+      $types[] = Strings::RANDOM_STRING_MCRYPT;
     }
     foreach($types as $type)
     {
       $this->assertEquals(
         40,
-        strlen(\Packaged\Helpers\Strings::randomString(40, $type))
+        strlen(Strings::randomString(40, $type))
       );
     }
   }
@@ -319,7 +320,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     }
     $this->assertEquals(
       $expect,
-      \Packaged\Helpers\Strings::excerpt(
+      Strings::excerpt(
         $string,
         $length,
         $append,
@@ -352,15 +353,13 @@ class StringsTest extends PHPUnit_Framework_TestCase
    * @param $expect
    * @param $inclusive
    *
-   * @return array
-   *
    * @dataProvider betweenProvider
    */
   public function testBetween($string, $start, $end, $inclusive, $expect)
   {
     $this->assertEquals(
       $expect,
-      \Packaged\Helpers\Strings::between($string, $start, $end, $inclusive)
+      Strings::between($string, $start, $end, $inclusive)
     );
   }
 
@@ -388,7 +387,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     Strings::stringable(1);
     Strings::stringable(9.9999);
     Strings::stringable(true);
-    Strings::stringable(new Exception('.'));
+    Strings::stringable(new \Exception('.'));
 
     $obj = (object)[];
     $caught = null;
@@ -396,7 +395,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       Strings::stringable($obj);
     }
-    catch(InvalidArgumentException $ex)
+    catch(\InvalidArgumentException $ex)
     {
       $caught = $ex;
     }
@@ -411,7 +410,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       Strings::stringable($array);
     }
-    catch(InvalidArgumentException $ex)
+    catch(\InvalidArgumentException $ex)
     {
       $caught = $ex;
     }
@@ -422,7 +421,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       Strings::stringable(tmpfile());
     }
-    catch(InvalidArgumentException $ex)
+    catch(\InvalidArgumentException $ex)
     {
       $caught = $ex;
     }

@@ -1,15 +1,18 @@
 <?php
+namespace Packaged\Tests;
 
-class ArrayHelperTest extends PHPUnit_Framework_TestCase
+use Packaged\Helpers\ArrayHelper;
+
+class ArrayHelperTest extends \PHPUnit_Framework_TestCase
 {
   public function testConstructors()
   {
-    $arr = \Packaged\Helpers\ArrayHelper::create(new ObjectArrayHelper());
+    $arr = ArrayHelper::create(new ObjectArrayHelper());
     $this->assertEquals('Object', $arr->getValue('name'));
     $this->assertEquals('One', $arr->getValue('test'));
     $this->assertEquals('default', $arr->getValue('missing', 'default'));
 
-    $arr = \Packaged\Helpers\ArrayHelper::create(
+    $arr = ArrayHelper::create(
       [
         'name'    => 'Array',
         'test'    => 'Two',
@@ -21,7 +24,7 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('Two', $arr->getValue('test'));
     $this->assertEquals('default2', $arr->getValue('missing', 'default2'));
 
-    $arr = \Packaged\Helpers\ArrayHelper::create('name=string&test=Three');
+    $arr = ArrayHelper::create('name=string&test=Three');
     $this->assertEquals('string', $arr->getValue('name'));
     $this->assertEquals('Three', $arr->getValue('test'));
     $this->assertEquals('default3', $arr->getValue('missing', 'default3'));
@@ -33,15 +36,15 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
       'Exception',
       'boolean is not currently supported'
     );
-    \Packaged\Helpers\ArrayHelper::create(false);
+    ArrayHelper::create(false);
   }
 
   public function testGetSet()
   {
-    $arr = new \Packaged\Helpers\ArrayHelper(
+    $arr = new ArrayHelper(
       [
         'name' => 'Array',
-        'test' => 'Four'
+        'test' => 'Four',
       ]
     );
     $this->assertEquals('Array', $arr->getValue('name'));
@@ -50,7 +53,7 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
     $this->assertEquals(
       [
         'name' => 'TestGetSet',
-        'test' => 'Four'
+        'test' => 'Four',
       ],
       $arr->getValues()
     );
@@ -58,11 +61,11 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 
   public function testArrayAccess()
   {
-    $testClass = new stdClass();
+    $testClass = new \stdClass();
     $testClass->value1 = 'value one';
     $testClass->value2 = 'value two';
     $testClass->array = ['test' => 'test1', 'test'];
-    $array = \Packaged\Helpers\ArrayHelper::create($testClass);
+    $array = ArrayHelper::create($testClass);
     $this->assertEquals('value one', $array['value1']);
     $this->assertTrue(isset($array['value2']));
     unset($array['value2']);
@@ -74,10 +77,10 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 
   public function testToArray()
   {
-    $testClass = new stdClass();
+    $testClass = new \stdClass();
     $testClass->value1 = 'value one';
     $testClass->array = ['test' => 'test1', 'test'];
-    $testClass->nested = new stdClass();
+    $testClass->nested = new \stdClass();
     $testClass->nested->value1 = 'value one';
     $testClass->nested->array = ['test' => 'test1', 'test'];
 
@@ -87,10 +90,10 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
         'array'  => ['test' => 'test1', 'test'],
         'nested' => [
           'value1' => 'value one',
-          'array'  => ['test' => 'test1', 'test']
-        ]
+          'array'  => ['test' => 'test1', 'test'],
+        ],
       ],
-      \Packaged\Helpers\ArrayHelper::toArray($testClass)
+      ArrayHelper::toArray($testClass)
     );
   }
 }

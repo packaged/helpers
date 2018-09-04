@@ -1,4 +1,5 @@
 <?php
+namespace Packaged\Tests;
 
 /**
  * Tests ported from
@@ -6,7 +7,7 @@
  * __tests__/PhutilUtilsTestCase.php
  * @author  brooke.bryan
  */
-class PhutilTest extends PHPUnit_Framework_TestCase
+class PhutilTest extends \PHPUnit_Framework_TestCase
 {
   public function testMFilterNullMethodThrowException()
   {
@@ -15,12 +16,12 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     {
       mfilter([], null);
     }
-    catch(InvalidArgumentException $ex)
+    catch(\InvalidArgumentException $ex)
     {
       $caught = $ex;
     }
 
-    $this->assertEquals(true, ($caught instanceof InvalidArgumentException));
+    $this->assertEquals(true, ($caught instanceof \InvalidArgumentException));
   }
 
   public function testMFilterWithEmptyValueFiltered()
@@ -71,14 +72,14 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     {
       ifilter([], null);
     }
-    catch(InvalidArgumentException $ex)
+    catch(\InvalidArgumentException $ex)
     {
       $caught = $ex;
     }
 
     $this->assertEquals(
       true,
-      ($caught instanceof InvalidArgumentException)
+      ($caught instanceof \InvalidArgumentException)
     );
   }
 
@@ -248,7 +249,7 @@ class PhutilTest extends PHPUnit_Framework_TestCase
       {
         call_user_func($callable, $input);
       }
-      catch(Exception $ex)
+      catch(\Exception $ex)
       {
         if(!($ex instanceof $exception_class))
         {
@@ -257,7 +258,7 @@ class PhutilTest extends PHPUnit_Framework_TestCase
         $caught = $ex;
       }
 
-      $actual = !($caught instanceof Exception);
+      $actual = !($caught instanceof \Exception);
 
       if($expect === $actual)
       {
@@ -272,7 +273,7 @@ class PhutilTest extends PHPUnit_Framework_TestCase
       }
       else
       {
-        if($expect && isset($ex) && $ex instanceof Exception)
+        if($expect && isset($ex) && $ex instanceof \Exception)
         {
           $message = "Test case '{$label}' was expected to succeed, but it " .
             "raised an exception of class " . get_class($ex) . " with " .
@@ -291,7 +292,7 @@ class PhutilTest extends PHPUnit_Framework_TestCase
 
   public function testAssertInstancesOf()
   {
-    $object = new stdClass();
+    $object = new \stdClass();
     $inputs = [
       'empty'               => [],
       'stdClass'            => [$object, $object],
@@ -323,7 +324,7 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     assert_stringlike(1);
     assert_stringlike(9.9999);
     assert_stringlike(true);
-    assert_stringlike(new Exception('.'));
+    assert_stringlike(new \Exception('.'));
 
     $obj = (object)[];
     $caught = null;
@@ -331,7 +332,7 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     {
       assert_stringlike($obj);
     }
-    catch(InvalidArgumentException $ex)
+    catch(\InvalidArgumentException $ex)
     {
       $caught = $ex;
     }
@@ -346,7 +347,7 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     {
       assert_stringlike($array);
     }
-    catch(InvalidArgumentException $ex)
+    catch(\InvalidArgumentException $ex)
     {
       $caught = $ex;
     }
@@ -538,13 +539,13 @@ class PhutilTest extends PHPUnit_Framework_TestCase
 
   public function testPpull()
   {
-    $a = new stdClass();
+    $a = new \stdClass();
     $a->name = "a";
     $a->value = 1;
-    $b = new stdClass();
+    $b = new \stdClass();
     $b->name = "b";
     $b->value = 2;
-    $c = new stdClass();
+    $c = new \stdClass();
     $c->name = "c";
     $c->value = 3;
     $list = [$a, $b, $c];
@@ -625,12 +626,12 @@ class PhutilTest extends PHPUnit_Framework_TestCase
     $expect = new Pancake('Blueberry', "Maple Syrup");
     $this->assertEquals(
       $expect,
-      newv('Pancake', ['Blueberry', "Maple Syrup"])
+      newv('Packaged\Tests\Pancake', ['Blueberry', "Maple Syrup"])
     );
     $expect = new Pancake();
     $this->assertEquals(
       $expect,
-      newv('Pancake', [])
+      newv('Packaged\Tests\Pancake', [])
     );
   }
 

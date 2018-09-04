@@ -1,5 +1,5 @@
 <?php
-namespace Traits;
+namespace Packaged\Tests\Traits;
 
 use Packaged\Helpers\Traits\ArrayAccessTrait;
 

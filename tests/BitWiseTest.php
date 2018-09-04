@@ -1,8 +1,9 @@
 <?php
+namespace Packaged\Tests;
 
 use Packaged\Helpers\BitWise;
 
-class BitWiseTest extends PHPUnit_Framework_TestCase
+class BitWiseTest extends \PHPUnit_Framework_TestCase
 {
   const ONE = '1';
   const TWO = '2';

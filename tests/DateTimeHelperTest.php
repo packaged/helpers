@@ -1,10 +1,13 @@
 <?php
+namespace Packaged\Tests;
 
-class DateTimeHelperTest extends PHPUnit_Framework_TestCase
+use Packaged\Helpers\DateTimeHelper;
+
+class DateTimeHelperTest extends \PHPUnit_Framework_TestCase
 {
   public function testDate()
   {
-    $dates = \Packaged\Helpers\DateTimeHelper::dateRange(
+    $dates = DateTimeHelper::dateRange(
       "2017-01-01"
     );
     $this->assertEquals(["2017-01-01"], $dates);
@@ -12,7 +15,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
 
   public function testBasicDates()
   {
-    $dates = \Packaged\Helpers\DateTimeHelper::dateRange(
+    $dates = DateTimeHelper::dateRange(
       "2017-01-01,2017-02-02"
     );
     $this->assertEquals(["2017-01-01", "2017-02-02"], $dates);
@@ -20,7 +23,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
 
   public function testSameMonthRange()
   {
-    $dates = \Packaged\Helpers\DateTimeHelper::dateRange(
+    $dates = DateTimeHelper::dateRange(
       "2017-01-01-03"
     );
     $this->assertEquals(["2017-01-01", "2017-01-02", "2017-01-03"], $dates);
@@ -28,7 +31,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
 
   public function testSameYearRange()
   {
-    $dates = \Packaged\Helpers\DateTimeHelper::dateRange(
+    $dates = DateTimeHelper::dateRange(
       "2017-01-30-02-01"
     );
     $this->assertEquals(["2017-01-30", "2017-01-31", "2017-02-01"], $dates);
@@ -36,7 +39,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
 
   public function testRange()
   {
-    $dates = \Packaged\Helpers\DateTimeHelper::dateRange(
+    $dates = DateTimeHelper::dateRange(
       "2017-01-25-2017-01-29"
     );
     $this->assertEquals(
@@ -47,7 +50,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
 
   public function testInverseDateRange()
   {
-    $dates = \Packaged\Helpers\DateTimeHelper::dateRange(
+    $dates = DateTimeHelper::dateRange(
       "2017-01-03-01"
     );
     $this->assertEquals(["2017-01-01", "2017-01-02", "2017-01-03"], $dates);
@@ -55,7 +58,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
 
   public function testInvalidDateRange()
   {
-    $dates = \Packaged\Helpers\DateTimeHelper::dateRange(
+    $dates = DateTimeHelper::dateRange(
       "2017-01-03-"
     );
     $this->assertEquals(["2017-01-03"], $dates);
@@ -77,7 +80,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
     $compare .= date($format, strtotime('-9 days'));
     $compare .= ',5 horse-6 horses,2017-01-01,2017-01-02,8 carrots,-9 horseshoes';
 
-    $dates = \Packaged\Helpers\DateTimeHelper::stringToTimeRange(
+    $dates = DateTimeHelper::stringToTimeRange(
       "-1 day,14 days ago-7 days ago,-7days,10 days ago--9 days,5 horse-6 horses,2017-01-01,2017-01-02,8 carrots,-9 horseshoes"
     );
     $this->assertEquals($compare, $dates);
@@ -85,8 +88,8 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
 
   public function testHumanDateRange()
   {
-    $dates = \Packaged\Helpers\DateTimeHelper::dateRange(
-      \Packaged\Helpers\DateTimeHelper::stringToTimeRange(
+    $dates = DateTimeHelper::dateRange(
+      DateTimeHelper::stringToTimeRange(
         "-1 day,14 days ago-7 days ago,-7days,10 days ago--9 days"
       )
     );

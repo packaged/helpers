@@ -1,18 +1,19 @@
 <?php
+namespace Packaged\Tests;
 
-/**
- * @author  brooke.bryan
- */
-class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
+use Packaged\Helpers\PackagedHelpers;
+use Packaged\Helpers\Strings;
+
+class GlobalFunctionsTest extends \PHPUnit_Framework_TestCase
 {
   public static function setUpBeforeClass()
   {
-    \Packaged\Helpers\PackagedHelpers::includeGlobalFunctions();
+    PackagedHelpers::includeGlobalFunctions();
   }
 
   public function testDoubleInclude()
   {
-    \Packaged\Helpers\PackagedHelpers::includeGlobalFunctions();
+    PackagedHelpers::includeGlobalFunctions();
     $this->assertTrue(function_exists('idp'));
   }
 
@@ -31,7 +32,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $expectations = [
       ['Strings', "Strings"],
       ['\Packaged\Helpers\Strings', "Strings"],
-      [new \Packaged\Helpers\Strings(), "Strings"],
+      [new Strings(), "Strings"],
     ];
     foreach($expectations as $expect)
     {
@@ -54,11 +55,11 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
 
   public function testPsort()
   {
-    $apple = new stdClass();
+    $apple = new \stdClass();
     $apple->name = "apple";
-    $pear = new stdClass();
+    $pear = new \stdClass();
     $pear->name = "pear";
-    $grape = new stdClass();
+    $grape = new \stdClass();
     $grape->name = "grape";
 
     $expectations = [
@@ -188,7 +189,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
       ['', ''],
       ['Strings', ''],
       ['\Packaged\Helpers\Strings', '\Packaged\Helpers'],
-      [new \Packaged\Helpers\Strings(), '\Packaged\Helpers'],
+      [new Strings(), '\Packaged\Helpers'],
     ];
     foreach($expectations as $expect)
     {
@@ -239,7 +240,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
 
   public function testIdp()
   {
-    $object = new stdClass();
+    $object = new \stdClass();
     $object->name = "apple";
     $this->assertEquals("apple", idp($object, "name", "pear"));
     $this->assertEquals("orange", idp($object, "noprop", "orange"));
@@ -376,7 +377,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
 
   public function testHydrate()
   {
-    $dest = new stdClass();
+    $dest = new \stdClass();
     $dest->nullify = 'Please';
 
     $source = new PropertyClass();

@@ -1,8 +1,10 @@
 <?php
+namespace Packaged\Tests;
 
 use Packaged\Helpers\Arrays;
+use Packaged\Helpers\Strings;
 
-class ArraysTest extends PHPUnit_Framework_TestCase
+class ArraysTest extends \PHPUnit_Framework_TestCase
 {
   public function testIFilterInvalidIndexThrowException()
   {
@@ -11,14 +13,14 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     {
       Arrays::ifilter([], null);
     }
-    catch(InvalidArgumentException $ex)
+    catch(\InvalidArgumentException $ex)
     {
       $caught = $ex;
     }
 
     $this->assertEquals(
       true,
-      ($caught instanceof InvalidArgumentException)
+      ($caught instanceof \InvalidArgumentException)
     );
   }
 
@@ -165,7 +167,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       {
         call_user_func($callable, $input);
       }
-      catch(Exception $ex)
+      catch(\Exception $ex)
       {
         if(!($ex instanceof $exception_class))
         {
@@ -174,7 +176,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         $caught = $ex;
       }
 
-      $actual = !($caught instanceof Exception);
+      $actual = !($caught instanceof \Exception);
 
       if($expect === $actual)
       {
@@ -189,7 +191,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       }
       else
       {
-        if($expect && isset($ex) && $ex instanceof Exception)
+        if($expect && isset($ex) && $ex instanceof \Exception)
         {
           $message = "Test case '{$label}' was expected to succeed, but it " .
             "raised an exception of class " . get_class($ex) . " with " .
@@ -208,7 +210,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
 
   public function testAssertInstancesOf()
   {
-    $object = new stdClass();
+    $object = new \stdClass();
     $inputs = [
       'empty'               => [],
       'stdClass'            => [$object, $object],

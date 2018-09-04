@@ -1,6 +1,9 @@
 <?php
+namespace Packaged\Tests;
 
-class FQDNTest extends PHPUnit_Framework_TestCase
+use Packaged\Helpers\FQDN;
+
+class FQDNTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * @dataProvider fqdnProvider
@@ -13,7 +16,7 @@ class FQDNTest extends PHPUnit_Framework_TestCase
 
   public function testFqdn($fqdn, $domain, $tld, $sub)
   {
-    $fq = new \Packaged\Helpers\FQDN($fqdn);
+    $fq = new FQDN($fqdn);
     $this->assertEquals($domain, $fq->domain());
     $this->assertEquals($tld, $fq->tld());
     $this->assertEquals($sub, $fq->subDomain());
@@ -32,7 +35,7 @@ class FQDNTest extends PHPUnit_Framework_TestCase
 
   public function testDefinedTlds()
   {
-    $fq = new \Packaged\Helpers\FQDN('my.test.random.tld');
+    $fq = new FQDN('my.test.random.tld');
 
     $fq->defineTlds(['random.tld', 'x.y'], true);
     $this->assertEquals(['random.tld', 'x.y'], $fq->getDefinedTlds());
@@ -49,7 +52,7 @@ class FQDNTest extends PHPUnit_Framework_TestCase
 
   public function testUrl()
   {
-    $fq = new \Packaged\Helpers\FQDN('http://my.test.co.uk/webpage.html');
+    $fq = new FQDN('http://my.test.co.uk/webpage.html');
     $this->assertEquals("test", $fq->domain());
     $this->assertEquals("co.uk", $fq->tld());
     $this->assertEquals("my", $fq->subDomain());
