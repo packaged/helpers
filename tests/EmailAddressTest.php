@@ -98,6 +98,15 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
         ['Melanierichards', '', 'Melanierichards'],
       ],
       [
+        'hamzafroogle@bob.com',
+        [
+          'firstName' => 'Hamza',
+          'title'     => 'Dr',
+          'lastName'  => 'Froogle',
+        ],
+        ['Dr.Hamza', '', ''],
+      ],
+      [
         'peadarnewell@bob.com',
         [
           'firstName' => 'Peter',
