@@ -31,7 +31,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     $expectations = [
       ['Strings', "Strings"],
       ['\Packaged\Helpers\Strings', "Strings"],
-      [new \Packaged\Helpers\Strings, "Strings"],
+      [new \Packaged\Helpers\Strings(), "Strings"],
     ];
     foreach($expectations as $expect)
     {
@@ -92,14 +92,10 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
     srand(40);
     $expected = ['z' => 'z', 'y' => 'y', 'x' => 'x'];
     $shuffled = shuffle_assoc($expected);
-    if(PHP_MAJOR_VERSION == 7 && PHP_MINOR_VERSION == 1)
-    {
-      $this->assertEquals('{"z":"z","x":"x","y":"y"}', json_encode($shuffled));
-    }
-    else
-    {
-      $this->assertEquals('{"z":"z","y":"y","x":"x"}', json_encode($shuffled));
-    }
+
+    $this->assertEquals('z', array_shift($shuffled));
+    $this->assertEquals('x', array_shift($shuffled));
+    $this->assertEquals('y', array_shift($shuffled));
   }
 
   public function testStartsWith()
@@ -192,7 +188,7 @@ class GlobalFunctionsTest extends PHPUnit_Framework_TestCase
       ['', ''],
       ['Strings', ''],
       ['\Packaged\Helpers\Strings', '\Packaged\Helpers'],
-      [new \Packaged\Helpers\Strings, '\Packaged\Helpers'],
+      [new \Packaged\Helpers\Strings(), '\Packaged\Helpers'],
     ];
     foreach($expectations as $expect)
     {
