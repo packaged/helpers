@@ -12,11 +12,7 @@ class Strings
    */
   public static function splitOnCamelCase($string)
   {
-    return preg_replace(
-      "/(([a-z])([A-Z])|([A-Z])([A-Z][a-z]))/",
-      "\\2\\4 \\3\\5",
-      $string
-    );
+    return preg_replace("/(([a-z])([A-Z])|([A-Z])([A-Z][a-z]))/", "\\2\\4 \\3\\5", $string);
   }
 
   /**
@@ -241,18 +237,15 @@ class Strings
    * @param string $forceMethod
    *
    * @return string
+   * @throws \Exception
    */
   public static function randomString($length = 40, $forceMethod = null)
   {
-    if(($forceMethod == self::RANDOM_STRING_RANDOM_BYTES || $forceMethod == null) &&
-      function_exists('random_bytes')
-    )
+    if(($forceMethod == self::RANDOM_STRING_RANDOM_BYTES || $forceMethod == null) && function_exists('random_bytes'))
     {
       $randomData = random_bytes(100);
     }
-    else if(($forceMethod == self::RANDOM_STRING_MCRYPT || $forceMethod == null) &&
-      function_exists('mcrypt_create_iv')
-    )
+    else if(($forceMethod == self::RANDOM_STRING_MCRYPT || $forceMethod == null) && function_exists('mcrypt_create_iv'))
     {
       $randomData = mcrypt_create_iv(100, MCRYPT_DEV_URANDOM);
     }
@@ -266,15 +259,12 @@ class Strings
       && @file_exists('/dev/urandom')
     )
     {
-      $randomData = file_get_contents('/dev/urandom', false, null, 0, 100)
-        . uniqid(mt_rand(), true);
+      $randomData = file_get_contents('/dev/urandom', false, null, 0, 100) . uniqid(mt_rand(), true);
     }
     else
     {
       $prefix = substr(
-        str_shuffle(
-          "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        ),
+        str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"),
         0,
         ceil($length / 2)
       );
@@ -361,9 +351,7 @@ class Strings
    *
    * @return string
    */
-  public static function excerpt(
-    $string, $length, $append = ' ...', $forceOnSpace = false
-  )
+  public static function excerpt($string, $length, $append = ' ...', $forceOnSpace = false)
   {
     if(mb_strlen($string) < $length)
     {
@@ -390,9 +378,7 @@ class Strings
    *
    * @return string|false         Return string if it was found, otherwise false
    */
-  public static function between(
-    $string, $start = null, $end = null, $inclusive = false
-  )
+  public static function between($string, $start = null, $end = null, $inclusive = false)
   {
     if($start !== null)
     {
@@ -483,9 +469,7 @@ class Strings
         break;
     }
 
-    throw new \InvalidArgumentException(
-      "Argument must be scalar or object which implements __toString()!"
-    );
+    throw new \InvalidArgumentException("Argument must be scalar or object which implements __toString()!");
   }
 
   /**
@@ -540,9 +524,7 @@ class Strings
    * @return array
    *
    */
-  public static function explode(
-    $delimiter, $string, $defaults = null, $limit = null
-  )
+  public static function explode($delimiter, $string, $defaults = null, $limit = null)
   {
     if($limit === null)
     {
@@ -574,10 +556,7 @@ class Strings
   {
     if(stristr($haystack, $needle))
     {
-      $haystack = substr(
-        $haystack,
-        strpos($haystack, $needle) + strlen($needle)
-      );
+      $haystack = substr($haystack, strpos($haystack, $needle) + strlen($needle));
     }
     return $haystack;
   }
@@ -593,9 +572,10 @@ class Strings
    */
   public static function ltrim($haystack, $needle)
   {
-    if(static::startsWith($haystack, $needle))
+    $nLen = strlen($needle);
+    if(static::startsWith($haystack, $needle, true, $nLen))
     {
-      $haystack = substr($haystack, strlen($needle));
+      $haystack = substr($haystack, $nLen);
     }
     return $haystack;
   }
@@ -683,15 +663,23 @@ class Strings
    * @param      $needle
    * @param bool $case
    *
+   * @param null $knownNeedleLength
+   *
    * @return bool
    */
-  public static function endsWith($haystack, $needle, $case = true)
+  public static function endsWith($haystack, $needle, $case = true, $knownNeedleLength = null)
   {
     if(is_array($needle))
     {
       return static::endsWithAny($haystack, $needle, $case);
     }
-    return static::startsWith(strrev($haystack), strrev($needle), $case);
+
+    if($knownNeedleLength === null)
+    {
+      $knownNeedleLength = strlen($needle);
+    }
+
+    return static::startsWith(strrev($haystack), strrev($needle), $case, $knownNeedleLength);
   }
 
   /**
@@ -722,22 +710,29 @@ class Strings
    * @param      $needle
    * @param bool $case
    *
+   * @param null $knownNeedleLength
+   *
    * @return bool
    */
-  public static function startsWith($haystack, $needle, $case = true)
+  public static function startsWith($haystack, $needle, $case = true, $knownNeedleLength = null)
   {
     if(is_array($needle))
     {
       return static::startsWithAny($haystack, $needle, $case);
     }
 
+    if($knownNeedleLength === null)
+    {
+      $knownNeedleLength = strlen($needle);
+    }
+
     if(!$case)
     {
-      return strncasecmp($haystack, $needle, strlen($needle)) == 0;
+      return strncasecmp($haystack, $needle, $knownNeedleLength) == 0;
     }
     else
     {
-      return strncmp($haystack, $needle, strlen($needle)) == 0;
+      return strncmp($haystack, $needle, $knownNeedleLength) == 0;
     }
   }
 
@@ -763,9 +758,7 @@ class Strings
    *
    * @return string
    */
-  public static function wordWrap(
-    $str, $width = 75, $break = "\n", $cut = false
-  )
+  public static function wordWrap($str, $width = 75, $break = "\n", $cut = false)
   {
     $regexp = $cut
       ? '/^(?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){' . $width . '}/'
