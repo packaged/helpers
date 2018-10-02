@@ -597,4 +597,39 @@ class Arrays
   {
     return ($array !== array_values($array));
   }
+
+  /**
+   * Return a random slice from an array
+   *
+   * @param array $items
+   * @param int   $limit
+   * @param bool  $assoc
+   *
+   * @return array
+   */
+  public static function random(array $items, $limit = 1, $assoc = true)
+  {
+    if($assoc)
+    {
+      $items = static::shuffleAssoc($items);
+    }
+    else
+    {
+      shuffle($items);
+    }
+    return array_slice($items, 0, $limit, true);
+  }
+
+  /**
+   * Return a random item from an array
+   *
+   * @param array $items
+   *
+   * @return mixed
+   */
+  public static function randomItem(array $items)
+  {
+    $final = static::random($items, 1, false);
+    return reset($final);
+  }
 }

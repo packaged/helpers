@@ -547,6 +547,28 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     }
     $this->assertGreaterThan(0, $diffCount);
   }
+
+  public function testRandomItem()
+  {
+    $testArray = Strings::stringToRange('1-50');
+    for($i = 0; $i <= 10; $i++)
+    {
+      $item = Arrays::randomItem($testArray);
+      if($item != 1)
+      {
+        break;
+      }
+    }
+    $this->assertLessThan(10, $i);
+  }
+
+  public function testRandom()
+  {
+    $testArray = Strings::stringToRange('1-50');
+    $this->assertCount(3, Arrays::random($testArray, 3));
+    $this->assertTrue(Arrays::isAssoc(Arrays::random($testArray, 4, true)));
+    $this->assertFalse(Arrays::isAssoc(Arrays::random($testArray, 4, false)));
+  }
 }
 
 final class Thing
