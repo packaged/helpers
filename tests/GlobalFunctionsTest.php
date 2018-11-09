@@ -3,6 +3,7 @@ namespace Packaged\Tests;
 
 use Packaged\Helpers\PackagedHelpers;
 use Packaged\Helpers\Strings;
+use Packaged\Tests\Objects\PropertyClass;
 
 class GlobalFunctionsTest extends \PHPUnit_Framework_TestCase
 {

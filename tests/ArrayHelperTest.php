@@ -7,7 +7,7 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
 {
   public function testConstructors()
   {
-    $arr = ArrayHelper::create(new ObjectArrayHelper());
+    $arr = ArrayHelper::create(new Objects\ObjectArrayHelper());
     $this->assertEquals('Object', $arr->getValue('name'));
     $this->assertEquals('One', $arr->getValue('test'));
     $this->assertEquals('default', $arr->getValue('missing', 'default'));
@@ -96,10 +96,4 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
       ArrayHelper::toArray($testClass)
     );
   }
-}
-
-class ObjectArrayHelper
-{
-  public $name = 'Object';
-  public $test = 'One';
 }

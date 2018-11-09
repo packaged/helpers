@@ -1,10 +1,14 @@
 <?php
 namespace Packaged\Tests;
 
+use Packaged\Tests\Objects\MFilterTestHelper;
+use Packaged\Tests\Objects\Thing;
+
 /**
  * Tests ported from
  * https://github.com/facebook/libphutil/blob/master/src/utils/
  * __tests__/PhutilUtilsTestCase.php
+ *
  * @author  brooke.bryan
  */
 class PhutilTest extends \PHPUnit_Framework_TestCase

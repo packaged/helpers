@@ -3,6 +3,8 @@ namespace Packaged\Tests;
 
 use Packaged\Helpers\Objects;
 use Packaged\Helpers\Strings;
+use Packaged\Tests\Objects\MFilterTestHelper;
+use Packaged\Tests\Objects\Thing;
 
 class ObjectsTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,7 +80,7 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
 
   public function testPropertyNonEmpty()
   {
-    $object = new PropertyClass();
+    $object = new \Packaged\Tests\Objects\PropertyClass();
     $object->name = 't_name';
     $object->age = 't_age';
 
@@ -100,7 +102,7 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
     $dest = new \stdClass();
     $dest->nullify = 'Please';
 
-    $source = new PropertyClass();
+    $source = new \Packaged\Tests\Objects\PropertyClass();
     $source->name = 'Test';
     $source->age = 19;
     $source->nullify = null;
@@ -150,7 +152,7 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
   public function testProperties()
   {
     $expect = ['name' => null, 'age' => null];
-    $class = new PropertyClass();
+    $class = new \Packaged\Tests\Objects\PropertyClass();
     $this->assertNotEquals($expect, $class->objectVars());
     $this->assertEquals($expect, $class->publicVars());
     $this->assertEquals($expect, get_object_vars($class));
@@ -382,23 +384,5 @@ final class Pancake
   public function getSauce()
   {
     return $this->sauce;
-  }
-}
-
-class PropertyClass
-{
-  public $name;
-  public $age;
-  protected $_gender;
-  private $_ryan;
-
-  public function objectVars()
-  {
-    return get_object_vars($this);
-  }
-
-  public function publicVars()
-  {
-    return Objects::propertyValues($this);
   }
 }

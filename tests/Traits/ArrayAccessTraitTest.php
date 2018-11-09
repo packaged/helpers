@@ -21,8 +21,3 @@ class ArrayAccessTraitTest extends \PHPUnit_Framework_TestCase
     $this->assertFalse(isset($arr['one']));
   }
 }
-
-class MockArrayAccessTrait implements \ArrayAccess
-{
-  use ArrayAccessTrait;
-}
