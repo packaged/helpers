@@ -464,6 +464,29 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals($expect, Arrays::igroup($list, 'group'));
   }
 
+  public function testXGroup()
+  {
+    $apple = ['name' => 'Apple', 'type' => 'fruit', 'color' => 'green'];
+    $bear = ['name' => 'Bear', 'type' => 'animal', 'color' => 'brown'];
+    $carrot = ['name' => 'Carrot', 'type' => 'vegetable', 'color' => 'brown'];
+
+    $list = ['a' => $apple, 'b' => $bear, 'c' => $carrot];
+
+    $expect = [
+      'food'    => [
+        'a' => $apple,
+        'c' => $carrot,
+      ],
+      'general' => [
+        'b' => $bear,
+      ],
+    ];
+    $this->assertEquals(
+      $expect,
+      Arrays::xgroup($list, 'type', ['fruit' => 'food', 'vegetable' => 'food'], 'general')
+    );
+  }
+
   public function testArrayNonEmpty()
   {
     $array = ['name' => 't_name', 'age' => 't_age'];

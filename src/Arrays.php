@@ -389,6 +389,38 @@ class Arrays
   }
 
   /**
+   * Group a list of arrays by the value of some index by denomination.
+   *
+   * @param array       $list          List of objects to group by some property value.
+   * @param string      $property      Name of a property to select from each object in
+   *                                   order to determine which group it should be placed into.
+   * @param array       $denominations Array containing group denominations ['from' => 'to']
+   * @param null|string $defaultGroup  If property is not found in denomination, place it in this group
+   *
+   * @return array    Dictionary mapping distinct index values to lists of
+   *                  all objects based on their denomination.
+   */
+  public static function xgroup(array $list, $property, $denominations, $defaultGroup = null)
+  {
+    $indices = [];
+    $map = static::ipull($list, $property);
+    foreach($map as $key => $group)
+    {
+      $target = Arrays::value($denominations, $group, $defaultGroup);
+      if($target !== null)
+      {
+        if(!isset($indices[$target]))
+        {
+          $indices[$target] = [];
+        }
+        $indices[$target][$key] = $list[$key];
+      }
+    }
+
+    return $indices;
+  }
+
+  /**
    * Sort a list of arrays by the value of some index. This method is identical
    * to
    * @{function:msort}, but operates on a list of arrays instead of a list of

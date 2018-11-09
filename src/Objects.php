@@ -518,9 +518,7 @@ class Objects
   }
 
   /**
-   * Group a list of arrays by the value of some property. This function is the
-   * same as @{function:mgroup}, except it operates on the values of object
-   * properties rather than the return values of method calls.
+   * Group a list of arrays by the value of some property by denomination.
    *
    * @param array       $list          List of objects to group by some property value.
    * @param string      $property      Name of a property to select from each object in
