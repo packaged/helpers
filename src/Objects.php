@@ -518,6 +518,40 @@ class Objects
   }
 
   /**
+   * Group a list of arrays by the value of some property. This function is the
+   * same as @{function:mgroup}, except it operates on the values of object
+   * properties rather than the return values of method calls.
+   *
+   * @param array       $list          List of objects to group by some property value.
+   * @param string      $property      Name of a property to select from each object in
+   *                                   order to determine which group it should be placed into.
+   * @param array       $denominations Array containing group denominations ['from' => 'to']
+   * @param null|string $defaultGroup  If property is not found in denomination, place it in this group
+   *
+   * @return array    Dictionary mapping distinct index values to lists of
+   *                  all objects based on their denomination.
+   */
+  public static function xgroup(array $list, $property, $denominations, $defaultGroup = null)
+  {
+    $indices = [];
+    $map = static::ppull($list, $property);
+    foreach($map as $key => $group)
+    {
+      $target = Arrays::value($denominations, $group, $defaultGroup);
+      if($target !== null)
+      {
+        if(!isset($indices[$target]))
+        {
+          $indices[$target] = [];
+        }
+        $indices[$target][$key] = $list[$key];
+      }
+    }
+
+    return $indices;
+  }
+
+  /**
    * Sort a list of objects by the return value of some method. In PHP, this is
    * often vastly more efficient than ##usort()## and similar.
    *

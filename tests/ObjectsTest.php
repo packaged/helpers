@@ -342,6 +342,29 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals($expect, Objects::pgroup($list, 'groupProperty'));
   }
 
+  public function testXGroup()
+  {
+    $apple = new Thing('Apple', 'fruit', 'green', 'food');
+    $bear = new Thing('Bear', 'animal', 'brown', 'creature');
+    $carrot = new Thing('Carrot', 'vegetable', 'brown', 'food');
+
+    $list = ['a' => $apple, 'b' => $bear, 'c' => $carrot];
+
+    $expect = [
+      'food'    => [
+        'a' => $apple,
+        'c' => $carrot,
+      ],
+      'general' => [
+        'b' => $bear,
+      ],
+    ];
+    $this->assertEquals(
+      $expect,
+      Objects::xgroup($list, 'typeProperty', ['fruit' => 'food', 'vegetable' => 'food'], 'general')
+    );
+  }
+
   public function testPsort()
   {
     $apple = new \stdClass();
