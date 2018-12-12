@@ -9,39 +9,39 @@ class PathTest extends \PHPUnit_Framework_TestCase
   {
     $baseDir = dirname(__DIR__);
     $this->assertContains(
-      Path::build($baseDir, 'composer.json'),
+      Path::system($baseDir, 'composer.json'),
       Path::globRecursive($baseDir, '*.json')
     );
     $this->assertContains(
-      Path::build($baseDir, 'phpunit.xml'),
+      Path::system($baseDir, 'phpunit.xml'),
       Path::globRecursive($baseDir, '*.xml')
     );
     $this->assertContains(
-      Path::build($baseDir, 'src', 'Traits', 'ArrayAccessTrait.php'),
+      Path::system($baseDir, 'src', 'Traits', 'ArrayAccessTrait.php'),
       Path::globRecursive($baseDir, '*.php')
     );
   }
 
   public function testBuildPath()
   {
-    $this->assertEquals("a" . DIRECTORY_SEPARATOR . "b", Path::build("a", "b"));
-    $this->assertEquals("a" . DIRECTORY_SEPARATOR . "b", Path::build("a", "b"));
+    $this->assertEquals("a" . DIRECTORY_SEPARATOR . "b", Path::system("a", "b"));
+    $this->assertEquals("a" . DIRECTORY_SEPARATOR . "b", Path::system("a", "b"));
   }
 
   public function testBuildWindowsPath()
   {
-    $this->assertEquals("a\\b", Path::buildWindows("a", "b"));
+    $this->assertEquals("a\\b", Path::windows("a", "b"));
   }
 
   public function testBuildUnixPath()
   {
-    $this->assertEquals("a/b", Path::buildUnix("a", "b"));
+    $this->assertEquals("a/b", Path::unix("a", "b"));
   }
 
   public function testBuildCustomPath()
   {
-    $this->assertEquals("a|b", Path::buildCustom("|", ["a", "b"]));
-    $this->assertEquals("a|b", Path::buildCustom("|", [0 => "a", 1 => "b"]));
+    $this->assertEquals("a|b", Path::custom("|", ["a", "b"]));
+    $this->assertEquals("a|b", Path::custom("|", [0 => "a", 1 => "b"]));
   }
 
   public function baseNameProvider()
