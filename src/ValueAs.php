@@ -17,35 +17,11 @@ class ValueAs
    */
   public static function bool($value, $default = false)
   {
-    if($value === null)
+    if($value !== null && is_string($value))
     {
-      return $default;
+      $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
-
-    if(is_string($value))
-    {
-      if(strcasecmp($value, 'true') === 0)
-      {
-        return true;
-      }
-
-      if(strcasecmp($value, 'false') === 0)
-      {
-        return false;
-      }
-
-      if(strcasecmp($value, 'yes') === 0)
-      {
-        return true;
-      }
-
-      if(strcasecmp($value, 'no') === 0)
-      {
-        return false;
-      }
-    }
-
-    return (bool)$value;
+    return $value === null ? $default : (bool)$value;
   }
 
   /**
