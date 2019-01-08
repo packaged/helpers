@@ -777,4 +777,16 @@ class Strings
     }
     return $result . $str;
   }
+
+  /**
+   * @param string $string             original string
+   * @param string $with               Character or string to wrap the string with
+   * @param bool   $trimWithCharacters setting to true will run trim($string, $with)
+   *
+   * @return string
+   */
+  public static function wrap($string, $with, $trimWithCharacters = false)
+  {
+    return $with . ($trimWithCharacters ? trim($string, $with) : $string) . $with;
+  }
 }

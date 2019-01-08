@@ -680,4 +680,11 @@ class StringsTest extends \PHPUnit_Framework_TestCase
     ];
   }
 
+  public function testWrap()
+  {
+    $this->assertEquals("'hey'", Strings::wrap('hey', '\''));
+    $this->assertEquals("'hey'", Strings::wrap('hey\'', '\'', true));
+    $this->assertEquals("'hey'", Strings::wrap('hey\'\'', '\'', true));
+  }
+
 }
