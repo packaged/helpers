@@ -38,6 +38,11 @@ class PathTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals("a/b", Path::unix("a", "b"));
   }
 
+  public function testBuildUrlPath()
+  {
+    $this->assertEquals("a/b", Path::url("a", "b"));
+  }
+
   public function testBuildCustomPath()
   {
     $this->assertEquals("a|b", Path::custom("|", ["a", "b"]));

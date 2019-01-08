@@ -13,6 +13,13 @@ class ShufflerTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals('abc', $shuffler->read());
   }
 
+  public function testShuffleInvalidProbability()
+  {
+    $shuffler = new Shuffler();
+    $this->setExpectedException("\InvalidArgumentException");
+    $this->assertEquals($shuffler, $shuffler->addValue('abc', 10000000));
+  }
+
   public function testShuffle()
   {
     $s1 = $this->_getShuffler();
