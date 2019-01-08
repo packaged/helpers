@@ -245,10 +245,6 @@ class Strings
     {
       $randomData = random_bytes(100);
     }
-    else if(($forceMethod == self::RANDOM_STRING_MCRYPT || $forceMethod == null) && function_exists('mcrypt_create_iv'))
-    {
-      $randomData = mcrypt_create_iv(100, MCRYPT_DEV_URANDOM);
-    }
     else if(($forceMethod == self::RANDOM_STRING_OPENSSL || $forceMethod == null)
       && function_exists('openssl_random_pseudo_bytes')
     )
@@ -260,6 +256,10 @@ class Strings
     )
     {
       $randomData = file_get_contents('/dev/urandom', false, null, 0, 100) . uniqid(mt_rand(), true);
+    }
+    else if(($forceMethod == self::RANDOM_STRING_MCRYPT) && function_exists('mcrypt_create_iv'))
+    {
+      $randomData = mcrypt_create_iv(100, MCRYPT_DEV_URANDOM);
     }
     else
     {
