@@ -137,4 +137,32 @@ class ValueAsTest extends \PHPUnit_Framework_TestCase
       ValueAs::coalesce(null, false)
     );
   }
+
+  public function testExceptionIf()
+  {
+    $value = false;
+    $this->assertFalse(ValueAs::exceptionIf($value, \Exception::class));
+    $value = true;
+    $this->setExpectedException(\Exception::class, 'Test Exception');
+    $this->assertTrue(ValueAs::exceptionIf($value, \Exception::class, 'Test Exception'));
+  }
+
+  public function testExceptionIfFixed()
+  {
+    $this->setExpectedException(\Exception::class, 'Test Exception');
+    $this->assertTrue(ValueAs::exceptionIf(true, new \Exception('Test Exception')));
+  }
+
+  public function testTransformed()
+  {
+    $callback = function ($value) {
+      if($value == '1')
+      {
+        return null;
+      }
+      return strtoupper($value);
+    };
+    $this->assertEquals('ABC', ValueAs::transformed('AbC', $callback, 'ab'));
+    $this->assertEquals('ab', ValueAs::transformed('1', $callback, 'ab'));
+  }
 }

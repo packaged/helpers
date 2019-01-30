@@ -664,4 +664,32 @@ class Arrays
     $final = static::random($items, 1, false);
     return reset($final);
   }
+
+  /**
+   * Flatten a multi-dimensional associative array with separator.
+   *
+   * @param  array  $array
+   * @param  string $prepend
+   *
+   * @param string  $separator
+   *
+   * @return array
+   */
+
+  public static function flatten($array, $prepend = '', $separator = '.')
+  {
+    $results = [];
+    foreach($array as $key => $value)
+    {
+      if(is_array($value) && !empty($value))
+      {
+        $results = array_merge($results, static::flatten($value, $prepend . $key . $separator));
+      }
+      else
+      {
+        $results[$prepend . $key] = $value;
+      }
+    }
+    return $results;
+  }
 }

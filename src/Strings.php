@@ -257,10 +257,13 @@ class Strings
     {
       $randomData = file_get_contents('/dev/urandom', false, null, 0, 100) . uniqid(mt_rand(), true);
     }
+    // @codeCoverageIgnoreStart
     else if(($forceMethod == self::RANDOM_STRING_MCRYPT) && function_exists('mcrypt_create_iv'))
     {
+      /** @noinspection PhpDeprecationInspection */
       $randomData = mcrypt_create_iv(100, MCRYPT_DEV_URANDOM);
     }
+    // @codeCoverageIgnoreEnd
     else
     {
       $prefix = substr(
@@ -788,5 +791,17 @@ class Strings
   public static function wrap($string, $with, $trimWithCharacters = false)
   {
     return $with . ($trimWithCharacters ? trim($string, $with) : $string) . $with;
+  }
+
+  /**
+   * URL Safe Base64 Decode
+   *
+   * @param $input
+   *
+   * @return bool|string
+   */
+  public static function urlsafeBase64Decode($input)
+  {
+    return base64_decode(str_pad(strtr($input, '-_', '+/'), strlen($input) % 4, '=', STR_PAD_RIGHT));
   }
 }

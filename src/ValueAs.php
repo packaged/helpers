@@ -247,4 +247,37 @@ class ValueAs
     }
     return $result;
   }
+
+  /**
+   * Throw an exception if the value $if is true
+   *
+   * @param       $if
+   * @param       $exception
+   * @param mixed ...$parameters
+   *
+   * @return mixed
+   * @throws \Exception
+   */
+  public static function exceptionIf($if, $exception, ...$parameters)
+  {
+    if($if)
+    {
+      throw (is_string($exception) ? new $exception(...$parameters) : $exception);
+    }
+    return $if;
+  }
+
+  /**
+   * Transform a value through a callback, returning a default is null is returned
+   *
+   * @param          $value
+   * @param callable $callback
+   * @param null     $default
+   *
+   * @return mixed
+   */
+  public static function transformed($value, callable $callback, $default = null)
+  {
+    return self::coalesce($callback($value), $default);
+  }
 }

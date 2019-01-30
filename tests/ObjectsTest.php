@@ -386,6 +386,18 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals($expect[2], Objects::psort($expect[0], $expect[1]));
     }
   }
+
+  public function testWith()
+  {
+    /** @var Pancake $pancake */
+    $pancake = Objects::with(
+      new Pancake(),
+      function (Pancake $p) {
+        $p->fruit = 'Apples';
+      }
+    );
+    $this->assertEquals('Apples', $pancake->getFruit());
+  }
 }
 
 final class Pancake
