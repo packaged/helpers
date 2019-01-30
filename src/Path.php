@@ -8,18 +8,6 @@ class Path
    * handle directory separators
    *
    * @return string
-   * @deprecated
-   */
-  public static function build( /* string... */)
-  {
-    return static::custom(DIRECTORY_SEPARATOR, func_get_args());
-  }
-
-  /**
-   * Concatenate any number of path sections and correctly
-   * handle directory separators
-   *
-   * @return string
    */
   public static function system( /* string... */)
   {
@@ -30,32 +18,10 @@ class Path
    * Concatenate a path with windows style path separators
    *
    * @return string
-   * @deprecated
-   */
-  public static function buildWindows( /* string... */)
-  {
-    return static::custom('\\', func_get_args());
-  }
-
-  /**
-   * Concatenate a path with windows style path separators
-   *
-   * @return string
    */
   public static function windows( /* string... */)
   {
     return static::custom('\\', func_get_args());
-  }
-
-  /**
-   * Concatenate a path with unix style path separators
-   *
-   * @return string
-   * @deprecated
-   */
-  public static function buildUnix( /* string... */)
-  {
-    return static::custom('/', func_get_args());
   }
 
   /**
@@ -76,20 +42,6 @@ class Path
   public static function url( /* string... */)
   {
     return static::custom('/', func_get_args());
-  }
-
-  /**
-   * Concatenate a path with a custom separator
-   *
-   * @param string   $directorySeparator
-   * @param string[] $pathComponents
-   *
-   * @return string
-   * @deprecated
-   */
-  public static function buildCustom($directorySeparator, array $pathComponents)
-  {
-    return static::custom($directorySeparator, $pathComponents);
   }
 
   /**

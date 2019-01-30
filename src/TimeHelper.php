@@ -13,20 +13,6 @@ class TimeHelper
    * @param      $uniqid
    * @param bool $hasEntropy
    *
-   * @deprecated Misleading name, use uniqidToMilliseconds() instead
-   * @return string
-   */
-  public static function uniqidToMicroseconds($uniqid, $hasEntropy = false)
-  {
-    return static::uniqidToMilliseconds($uniqid, $hasEntropy);
-  }
-
-  /**
-   * Convert a unique ID to a microtime
-   *
-   * @param      $uniqid
-   * @param bool $hasEntropy
-   *
    * @return string
    */
   public static function uniqidToMilliseconds($uniqid, $hasEntropy = false)
@@ -39,17 +25,6 @@ class TimeHelper
     $microtime = str_pad($microtime, 6, '0', STR_PAD_LEFT);
     $timestamp = (int)hexdec(substr($uniqid, -13, -5));
     return (int)(($timestamp . '.' . $microtime) * 1000);
-  }
-
-  /**
-   * Retrieve the microtime as an integer
-   *
-   * @deprecated Misleading name, use milliseconds() instead
-   * @return int
-   */
-  public static function microseconds()
-  {
-    return static::milliseconds();
   }
 
   /**
