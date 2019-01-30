@@ -687,4 +687,25 @@ class StringsTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals("'hey'", Strings::wrap('hey\'\'', '\'', true));
   }
 
+  /** @dataProvider urlB64DecodeProvider */
+  public function testUrlsafeBase64Decode($expect, $raw)
+  {
+    $this->assertEquals($expect, Strings::urlsafeBase64Decode($raw));
+  }
+
+  public function urlB64DecodeProvider()
+  {
+    return [
+      ['f', 'Zg=='],
+      ['f', 'Zg='],
+      ['fo', 'Zm8=='],
+      ['foo', 'Zm9v==='],
+      ['foob', 'Zm9vYg=='],
+      ['fooba', 'Zm9vYmE=='],
+      ['foobar', 'Zm9vYmFy====='],
+      ['foobar', 'Zm9vYmFy=='],
+      ['foobar', 'Zm9vYmFy'],
+      [base64_decode('0MB2wKB+L3yvIdzeggmJ+5WOSLaRLTUPXbpzqUe0yuo='), '0MB2wKB-L3yvIdzeggmJ-5WOSLaRLTUPXbpzqUe0yuo'],
+    ];
+  }
 }

@@ -653,4 +653,18 @@ class Objects
 
     return $result;
   }
+
+  /**
+   * Perform a callback against an object, and return the object
+   *
+   * @param mixed    $object
+   * @param callable $callback
+   *
+   * @return mixed $object
+   */
+  public static function with($object, callable $callback)
+  {
+    $callback($object);
+    return $object;
+  }
 }
