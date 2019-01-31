@@ -15,23 +15,23 @@ class TimeHelperTest extends \PHPUnit_Framework_TestCase
    */
   public function testUniqid2microtime($microtime, $uniqid, $hasEntropy)
   {
-    $time = TimeHelper::uniqidToMicroseconds($uniqid, $hasEntropy);
+    $time = TimeHelper::uniqidToMilliseconds($uniqid, $hasEntropy);
     $this->assertEquals($microtime, $time, '', 10);
   }
 
   public function uniqidProvider()
   {
     return [
-      [TimeHelper::microseconds(), uniqid(), false],
-      [TimeHelper::microseconds(), uniqid('PRE'), false],
-      [TimeHelper::microseconds(), uniqid('', true), true],
-      [TimeHelper::microseconds(), uniqid('PRE', true), true],
+      [TimeHelper::milliseconds(), uniqid(), false],
+      [TimeHelper::milliseconds(), uniqid('PRE'), false],
+      [TimeHelper::milliseconds(), uniqid('', true), true],
+      [TimeHelper::milliseconds(), uniqid('PRE', true), true],
     ];
   }
 
-  public function testMicroseconds()
+  public function testMilliseconds()
   {
-    $this->assertInternalType('int', TimeHelper::microseconds());
+    $this->assertInternalType('int', TimeHelper::milliseconds());
   }
 
   public function testToSeconds()

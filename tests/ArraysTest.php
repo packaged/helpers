@@ -593,7 +593,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     $this->assertFalse(Arrays::isAssoc(Arrays::random($testArray, 4, false)));
   }
 
-  public function testFlatten()
+  public function testFlattenExpand()
   {
     $array = [
       'a'  => ['b' => ['c' => 'd']],
@@ -609,5 +609,20 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
       'ab.cd' => 3,
     ];
     $this->assertEquals($expect, Arrays::flatten($array));
+    $this->assertEquals($array, Arrays::expand($expect));
+  }
+
+  public function testTransform()
+  {
+    $this->assertEquals(
+      ['A', 'B', 'C', 'X'],
+      Arrays::transformed(
+        ['a', 'b', 'c', null],
+        function ($value) {
+          return strtoupper($value);
+        },
+        'X'
+      )
+    );
   }
 }
