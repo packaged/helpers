@@ -676,7 +676,7 @@ class Arrays
    * @return array
    */
 
-  public static function flatten($array, $prepend = '', $separator = '.')
+  public static function flatten(array $array, $prepend = '', $separator = '.')
   {
     $results = [];
     foreach($array as $key => $value)
@@ -690,6 +690,61 @@ class Arrays
         $results[$prepend . $key] = $value;
       }
     }
+
     return $results;
+  }
+
+  /**
+   * Expand a flattened array
+   *
+   * @param array  $array
+   * @param string $separator
+   *
+   * @return array
+   */
+  public static function expand(array $array, $separator = '.')
+  {
+    $result = [];
+    foreach($array as $key => $value)
+    {
+      static::expandValue($result, explode($separator, $key), $value);
+    }
+    return $result;
+  }
+
+  /**
+   * @param       $array array to set a value on
+   * @param array $parts array of keys to next e.g. [l1,l2,l3]
+   * @param       $value
+   *
+   * @return mixed
+   */
+  public static function expandValue(&$array, array $parts, $value)
+  {
+    foreach($parts as $key)
+    {
+      $array = &$array[$key];
+    }
+    $array = $value;
+    return $array;
+  }
+
+  /**
+   * Transform an array through a callback, setting a default value on any null items
+   *
+   * @param          $value
+   * @param callable $callback
+   * @param null     $default
+   *
+   * @return mixed
+   */
+  public static function transformed(array $value, callable $callback, $default = null)
+  {
+    $return = [];
+    foreach($value as $k => $v)
+    {
+      $return[$k] = ValueAs::transformed($v, $callback, $default);
+    }
+    return $return;
   }
 }

@@ -160,9 +160,10 @@ class ValueAsTest extends \PHPUnit_Framework_TestCase
       {
         return null;
       }
-      return strtoupper($value);
+      return 'VAL' . strtoupper($value);
     };
-    $this->assertEquals('ABC', ValueAs::transformed('AbC', $callback, 'ab'));
+    $this->assertEquals('VALABC', ValueAs::transformed('AbC', $callback, 'ab'));
     $this->assertEquals('ab', ValueAs::transformed('1', $callback, 'ab'));
+    $this->assertEquals('ab', ValueAs::transformed(null, $callback, 'ab'));
   }
 }

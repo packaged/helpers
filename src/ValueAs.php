@@ -278,6 +278,6 @@ class ValueAs
    */
   public static function transformed($value, callable $callback, $default = null)
   {
-    return self::coalesce($callback($value), $default);
+    return $value ? self::coalesce($callback($value), $default) : $default;
   }
 }
