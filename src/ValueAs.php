@@ -251,18 +251,18 @@ class ValueAs
   /**
    * Throw an exception if the value $if is true
    *
-   * @param       $if
-   * @param       $exception
-   * @param mixed ...$parameters
+   * @param        $if
+   * @param        $exception
+   * @param string $message
    *
    * @return mixed
    * @throws \Exception
    */
-  public static function exceptionIf($if, $exception, ...$parameters)
+  public static function exceptionIf($if, $exception, $message = '')
   {
     if($if)
     {
-      throw (is_string($exception) ? new $exception(...$parameters) : $exception);
+      throw (is_string($exception) ? new $exception($message) : $exception);
     }
     return $if;
   }

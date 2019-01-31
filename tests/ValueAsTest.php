@@ -141,15 +141,15 @@ class ValueAsTest extends \PHPUnit_Framework_TestCase
   public function testExceptionIf()
   {
     $value = false;
-    $this->assertFalse(ValueAs::exceptionIf($value, \Exception::class));
+    $this->assertFalse(ValueAs::exceptionIf($value, '\\Exception'));
     $value = true;
-    $this->setExpectedException(\Exception::class, 'Test Exception');
-    $this->assertTrue(ValueAs::exceptionIf($value, \Exception::class, 'Test Exception'));
+    $this->setExpectedException('\\Exception', 'Test Exception');
+    $this->assertTrue(ValueAs::exceptionIf($value, '\\Exception', 'Test Exception'));
   }
 
   public function testExceptionIfFixed()
   {
-    $this->setExpectedException(\Exception::class, 'Test Exception');
+    $this->setExpectedException('\\Exception', 'Test Exception');
     $this->assertTrue(ValueAs::exceptionIf(true, new \Exception('Test Exception')));
   }
 
