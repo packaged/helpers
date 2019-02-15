@@ -1,57 +1,61 @@
+notify:
+  webhooks:
+    - url: https://coveralls.io/webhook?repo_token=$COVERALLS_REPO_TOKEN
+
 defaults: &defaults
   steps:
-  # common php steps
-  - run: echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
-  - run: if [ -n "$ADD_PACKAGES" ]; then apk -U add $ADD_PACKAGES; fi;
-  - run: if [ -n "$ADD_MODULES" ]; then docker-php-ext-install $ADD_MODULES; fi;
-  - run: echo "date.timezone = UTC" >> $(php --ini |grep Scan |awk '{print $NF}')/timezone.ini
-  - run: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+    # common php steps
+    - run: echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+    - run: if [ -n "$ADD_PACKAGES" ]; then apk -U add $ADD_PACKAGES; fi;
+    - run: if [ -n "$ADD_MODULES" ]; then docker-php-ext-install $ADD_MODULES; fi;
+    - run: echo "date.timezone = UTC" >> $(php --ini |grep Scan |awk '{print $NF}')/timezone.ini
+    - run: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
-  # pre-checkout steps
+    # pre-checkout steps
 
-  # checkout
-  - checkout
+    # checkout
+    - checkout
 
-  # post-checkout steps
+    # post-checkout steps
 
-  # run tests
-  - run: composer install -n --prefer-dist
-  - run: php vendor/phpunit/phpunit/phpunit -c phpunit.xml --log-junit /tmp/test-results/phpunit/junit.xml
-  - store_test_results:
-      path: /tmp/test-results
+    # run tests
+    - run: composer install -n --prefer-dist
+    - run: php vendor/phpunit/phpunit/phpunit -c phpunit.xml --log-junit /tmp/test-results/phpunit/junit.xml
+    - store_test_results:
+        path: /tmp/test-results
 
 version: 2
 jobs:
   build-php71:
     <<: *defaults
     docker:
-    - image: php:7.1-alpine
-      environment:
-        ADD_MODULES: bcmath
+      - image: php:7.1-alpine
+        environment:
+          ADD_MODULES: bcmath
   build-php72:
     <<: *defaults
     docker:
-    - image: php:7.2-alpine
-      environment:
-        ADD_MODULES: bcmath
+      - image: php:7.2-alpine
+        environment:
+          ADD_MODULES: bcmath
   build-php73:
     <<: *defaults
     docker:
-    - image: php:7.3-alpine
-      environment:
-        ADD_MODULES: bcmath
+      - image: php:7.3-alpine
+        environment:
+          ADD_MODULES: bcmath
   build-phpRC:
     <<: *defaults
     docker:
-    - image: php:rc-alpine
-      environment:
-        ADD_MODULES: bcmath
+      - image: php:rc-alpine
+        environment:
+          ADD_MODULES: bcmath
 
 workflows:
   version: 2
   build:
     jobs:
-    - build-php71
-    - build-php72
-    - build-php73
-    - build-phpRC
+      - build-php71
+      - build-php72
+      - build-php73
+      - build-phpRC
