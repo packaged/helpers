@@ -166,4 +166,17 @@ class ValueAsTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals('ab', ValueAs::transformed('1', $callback, 'ab'));
     $this->assertEquals('ab', ValueAs::transformed(null, $callback, 'ab'));
   }
+
+  public function testCaught()
+  {
+    $this->assertEquals('abc', ValueAs::caught(function () { throw new \Exception('e'); }, 'abc'));
+    $this->assertEquals(
+      'abcdef',
+      ValueAs::caught(
+        function () { throw new \Exception('abc'); },
+        function (\Exception $e) { return $e->getMessage() . 'def'; }
+      )
+    );
+    $this->assertEquals('xyz', ValueAs::caught(function () { return 'xyz'; }, 'abc'));
+  }
 }
