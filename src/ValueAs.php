@@ -280,4 +280,24 @@ class ValueAs
   {
     return $value ? self::coalesce($callback($value), $default) : $default;
   }
+
+  /**
+   * Call a callable, catching any exception and returning default
+   *
+   * @param callable $callable
+   * @param mixed    $default
+   *
+   * @return mixed
+   */
+  public static function caught(callable $callable, $default = null)
+  {
+    try
+    {
+      return $callable();
+    }
+    catch(\Exception $e)
+    {
+      return is_callable($default) ? $default($e) : $default;
+    }
+  }
 }
