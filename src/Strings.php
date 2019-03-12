@@ -804,4 +804,35 @@ class Strings
   {
     return base64_decode(str_pad(strtr($input, '-_', '+/'), strlen($input) % 4, '=', STR_PAD_RIGHT));
   }
+
+  /**
+   * Split a string into an array and key each part by $names.
+   * Using null as a name will exclude it from the result.
+   *
+   * @param string $delimiter
+   * @param string $string
+   * @param array  $names
+   *
+   * @return array
+   */
+  public static function namedSplit($delimiter, $string, array $names)
+  {
+    $return = [];
+    $values = explode($delimiter, $string);
+    foreach($names as $i => $name)
+    {
+      if(isset($values[$i]))
+      {
+        if($name !== null)
+        {
+          $return[$name] = $values[$i];
+        }
+      }
+      else
+      {
+        break;
+      }
+    }
+    return $return;
+  }
 }
