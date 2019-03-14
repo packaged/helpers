@@ -815,7 +815,7 @@ class Strings
    *
    * @return array
    */
-  public static function namedSplit($delimiter, $string, array $names)
+  public static function namedSplit($delimiter, $string, ...$names)
   {
     $return = [];
     $values = explode($delimiter, $string);

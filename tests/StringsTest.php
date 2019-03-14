@@ -711,36 +711,13 @@ class StringsTest extends \PHPUnit_Framework_TestCase
 
   public function testNamedSplit()
   {
-    $label = Strings::namedSplit(':', 'label:value', ['label', 'value']);
-    $this->assertSame(
-      [
-        'label' => 'label',
-        'value' => 'value',
-      ],
-      $label
-    );
-    $label = Strings::namedSplit(':', 'label:value:x', ['label', 'value']);
-    $this->assertSame(
-      [
-        'label' => 'label',
-        'value' => 'value',
-      ],
-      $label
-    );
-    $label = Strings::namedSplit(':', 'label', ['label', 'value']);
-    $this->assertSame(
-      [
-        'label' => 'label',
-      ],
-      $label
-    );
-    $label = Strings::namedSplit(':', 'label:x:value', ['label', null, 'value']);
-    $this->assertSame(
-      [
-        'label' => 'label',
-        'value' => 'value',
-      ],
-      $label
-    );
+    $label = Strings::namedSplit(':', 'label:value', 'label', 'value');
+    $this->assertSame(['label' => 'label', 'value' => 'value',], $label);
+    $label = Strings::namedSplit(':', 'label:value:x', 'label', 'value');
+    $this->assertSame(['label' => 'label', 'value' => 'value',], $label);
+    $label = Strings::namedSplit(':', 'label', 'label', 'value');
+    $this->assertSame(['label' => 'label',], $label);
+    $label = Strings::namedSplit(':', 'label:x:value', 'label', null, 'value');
+    $this->assertSame(['label' => 'label', 'value' => 'value',], $label);
   }
 }
