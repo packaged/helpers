@@ -747,4 +747,16 @@ class Arrays
     }
     return $return;
   }
+
+  /**
+   * @param array    $array  Input array
+   * @param callable $filter Filter the key/value of the array - be aware ARRAY_FILTER_USE_BOTH is set  fn($v, $k)
+   * @param callable $apply  Transform an item of an array
+   *
+   * @return array
+   */
+  public static function mapFilter(array $array, callable $filter, callable $apply): array
+  {
+    return array_map($apply, array_filter($array, $filter, ARRAY_FILTER_USE_BOTH));
+  }
 }
