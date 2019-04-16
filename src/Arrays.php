@@ -1,6 +1,8 @@
 <?php
 namespace Packaged\Helpers;
 
+use Generator;
+
 class Arrays
 {
   /**
@@ -97,7 +99,7 @@ class Arrays
    * choke if you pass it some non-referenceable value like the return value of
    * a function.
    *
-   * @param    array $arr Array to retrieve the first element from.
+   * @param array $arr Array to retrieve the first element from.
    *
    * @return   mixed  The first value of the array.
    */
@@ -111,7 +113,7 @@ class Arrays
    * that it won't warn you if you pass some non-referencable array to
    * it -- e.g., the result of some other array operation.
    *
-   * @param    array $arr Array to retrieve the last element from.
+   * @param array $arr Array to retrieve the last element from.
    *
    * @return   mixed  The last value of the array.
    */
@@ -123,7 +125,7 @@ class Arrays
   /**
    * Returns the first key of an array.
    *
-   * @param    array $arr Array to retrieve the first key from.
+   * @param array $arr Array to retrieve the first key from.
    *
    * @return   int|string  The first key of the array.
    */
@@ -136,7 +138,7 @@ class Arrays
   /**
    * Returns the last key of an array.
    *
-   * @param    array $arr Array to retrieve the last key from.
+   * @param array $arr Array to retrieve the last key from.
    *
    * @return   int|string  The last key of the array.
    */
@@ -668,10 +670,10 @@ class Arrays
   /**
    * Flatten a multi-dimensional associative array with separator.
    *
-   * @param  array  $array
-   * @param  string $prepend
+   * @param array  $array
+   * @param string $prepend
    *
-   * @param string  $separator
+   * @param string $separator
    *
    * @return array
    */
@@ -749,14 +751,20 @@ class Arrays
   }
 
   /**
-   * @param array    $array  Input array
-   * @param callable $filter Filter the key/value of the array - be aware ARRAY_FILTER_USE_BOTH is set  fn($v, $k)
-   * @param callable $apply  Transform an item of an array
+   * @param array    $iterator Input array
+   * @param callable $filter   Filter the key/value of the array - be aware ARRAY_FILTER_USE_BOTH is set  fn($v, $k)
+   * @param callable $apply    Transform an item of an array
    *
-   * @return array
+   * @return Generator
    */
-  public static function mapFilter(array $array, callable $filter, callable $apply): array
+  public static function filterTransform(array $iterator, callable $filter, callable $apply)
   {
-    return array_map($apply, array_filter($array, $filter, ARRAY_FILTER_USE_BOTH));
+    foreach($iterator as $k => $v)
+    {
+      if($filter($v, $k))
+      {
+        yield $k => $apply($v);
+      }
+    }
   }
 }
