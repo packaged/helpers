@@ -633,6 +633,6 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
       function ($v) { return $v % 2 == 0; },
       function ($v) { return base_convert($v, 10, 36); }
     );
-    $this->assertEquals([2, 4, 6, 8, 'a', 'c', 'e', 'g', 'i', 'k',], array_values($result));
+    $this->assertEquals([2, 4, 6, 8, 'a', 'c', 'e', 'g', 'i', 'k',], array_values(iterator_to_array($result)));
   }
 }
