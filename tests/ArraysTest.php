@@ -626,9 +626,9 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     );
   }
 
-  public function testMapFilter()
+  public function testFilterTransform()
   {
-    $result = Arrays::mapFilter(
+    $result = Arrays::filterTransform(
       range(1, 20),
       function ($v) { return $v % 2 == 0; },
       function ($v) { return base_convert($v, 10, 36); }

@@ -757,7 +757,7 @@ class Arrays
    *
    * @return Generator
    */
-  public static function mapFilter(iterable $iterator, callable $filter, callable $apply): Generator
+  public static function filterTransform(iterable $iterator, callable $filter, callable $apply): Generator
   {
     foreach($iterator as $k => $v)
     {
