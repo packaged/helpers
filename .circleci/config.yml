@@ -58,7 +58,18 @@ jobs:
     - image: php:7.2-alpine
       environment:
         ADD_MODULES: bcmath
-
+  build-php73:
+    <<: *defaults
+    docker:
+      - image: php:7.3-alpine
+        environment:
+          ADD_MODULES: bcmath
+  build-phpRC:
+    <<: *defaults
+    docker:
+      - image: php:rc-alpine
+        environment:
+          ADD_MODULES: bcmath
 workflows:
   version: 2
   build:
