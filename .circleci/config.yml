@@ -63,9 +63,9 @@ workflows:
   version: 2
   build:
     jobs:
-    - build-php54
-    - build-php55
     - build-php56
     - build-php70
     - build-php71
     - build-php72
+    - build-php73
+    - build-phpRC
