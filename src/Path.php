@@ -68,7 +68,7 @@ class Path
     {
       if($section !== '')
       {
-        if(empty($fullPath) && $section[0] === $directorySeparator)
+        if(empty($fullPath) && $section[0] === $directorySeparator && $section !== $directorySeparator)
         {
           $fullPath[] = '';
         }
