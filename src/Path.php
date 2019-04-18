@@ -7,41 +7,49 @@ class Path
    * Concatenate any number of path sections and correctly
    * handle directory separators
    *
+   * @param array $parts
+   *
    * @return string
    */
-  public static function system( /* string... */)
+  public static function system(...$parts)
   {
-    return static::custom(DIRECTORY_SEPARATOR, func_get_args());
+    return static::custom(DIRECTORY_SEPARATOR, $parts);
   }
 
   /**
    * Concatenate a path with windows style path separators
    *
+   * @param array $parts
+   *
    * @return string
    */
-  public static function windows( /* string... */)
+  public static function windows(...$parts)
   {
-    return static::custom('\\', func_get_args());
+    return static::custom('\\', $parts);
   }
 
   /**
    * Concatenate a path with unix style path separators
    *
+   * @param array $parts
+   *
    * @return string
    */
-  public static function unix( /* string... */)
+  public static function unix(...$parts)
   {
-    return static::custom('/', func_get_args());
+    return static::custom('/', $parts);
   }
 
   /**
    * Concatenate a path with unix style path separators
    *
+   * @param array $parts
+   *
    * @return string
    */
-  public static function url( /* string... */)
+  public static function url(...$parts)
   {
-    return static::custom('/', func_get_args());
+    return static::custom('/', $parts);
   }
 
   /**
@@ -54,24 +62,21 @@ class Path
    */
   public static function custom($directorySeparator, array $pathComponents)
   {
-    $fullPath = "";
+    $fullPath = [];
+    $charList = '/\\' . $directorySeparator;
     foreach($pathComponents as $section)
     {
-      if(!empty($section))
+      if($section !== '')
       {
-        if($fullPath == "")
+        if(empty($fullPath) && $section[0] === $directorySeparator)
         {
-          $fullPath = $section;
+          $fullPath[] = '';
         }
-        else
-        {
-          $fullPath = rtrim($fullPath, '/\\' . $directorySeparator) .
-            $directorySeparator . ltrim($section, '/\\' . $directorySeparator);
-        }
+        $fullPath[] = trim($section, $charList);
       }
     }
 
-    return $fullPath;
+    return implode($directorySeparator, $fullPath);
   }
 
   /**
