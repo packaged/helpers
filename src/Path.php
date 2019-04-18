@@ -66,6 +66,7 @@ class Path
     $charList = '/\\' . $separator;
     foreach($pathComponents as $section)
     {
+      $section = (string)$section;
       if(isset($section[1]))
       {
         $fullPath[] = empty($fullPath) ? rtrim($section, $charList) : trim($section, $charList);
