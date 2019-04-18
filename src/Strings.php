@@ -422,11 +422,13 @@ class Strings
   /**
    * Concatinate multiple values to a single string
    *
+   * @param string ...$strings
+   *
    * @return string
    */
-  public static function concat(/* string... */)
+  public static function concat(...$strings)
   {
-    return implode('', func_get_args());
+    return implode('', $strings);
   }
 
   /**
@@ -444,7 +446,7 @@ class Strings
   /**
    * Assert that passed data can be converted to string.
    *
-   * @param  string $parameter Assert that this data is valid.
+   * @param string $parameter Assert that this data is valid.
    *
    * @return void
    *

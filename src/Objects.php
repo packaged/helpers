@@ -426,19 +426,18 @@ class Objects
    * See also @{function:igroup}, which works the same way but operates on
    * array indexes.
    *
-   * @param   $list   array    List of objects to group by some property.
-   * @param   $by     string  Name of a method, like 'getType', to call on
-   *                  each object in order to determine which group it should be
-   *                  placed into.
-   * @param   ...     Zero or more additional method names, to subgroup the
-   *                  groups.
+   * @param       $list   array    List of objects to group by some property.
+   * @param mixed ...$by  string  Name of a method, like 'getType', to call on
+   *                      each object in order to determine which group it should be
+   *                      placed into.  Additional sub groups can be provided
    *
    * @return  array    Dictionary mapping distinct method returns to lists of
    *                  all objects which returned that value.
    */
-  public static function mgroup(array $list, $by /* , ... */)
+  public static function mgroup(array $list, ...$by)
   {
-    $map = static::mpull($list, $by);
+    $groupBy = array_shift($by);
+    $map = static::mpull($list, $groupBy);
 
     $groups = [];
     foreach($map as $group)
@@ -452,18 +451,11 @@ class Objects
       $groups[$group][$key] = $list[$key];
     }
 
-    $args = func_get_args();
-    $args = array_slice($args, 2);
-    if($args)
+    if($by)
     {
-      array_unshift($args, null);
       foreach($groups as $groupKey => $grouped)
       {
-        $args[0] = $grouped;
-        $groups[$groupKey] = call_user_func_array(
-          '\Packaged\Helpers\Objects::mgroup',
-          $args
-        );
+        $groups[$groupKey] = self::mgroup($grouped, ...$by);
       }
     }
 
@@ -475,18 +467,19 @@ class Objects
    * same as @{function:mgroup}, except it operates on the values of object
    * properties rather than the return values of method calls.
    *
-   * @param   $list    array List of objects to group by some property value.
-   * @param   $by      string  Name of a property to select from each object in
-   *                   order to determine which group it should be placed into.
-   * @param   ...     Zero or more additional property names, to subgroup the
-   *                   groups.
+   * @param   $list       array List of objects to group by some property value.
+   * @param   ...$by      string  Name of a property to select from each object in
+   *                      order to determine which group it should be placed into.
+   *                      Zero or more additional property names, to subgroup the
+   *                      groups.
    *
    * @return  array    Dictionary mapping distinct index values to lists of
    *                  all objects which had that value at the index.
    */
-  public static function pgroup(array $list, $by /* , ... */)
+  public static function pgroup(array $list, ...$by)
   {
-    $map = static::ppull($list, $by);
+    $groupBy = array_shift($by);
+    $map = static::ppull($list, $groupBy);
 
     $groups = [];
     foreach($map as $group)
@@ -499,18 +492,11 @@ class Objects
       $groups[$group][$key] = $list[$key];
     }
 
-    $args = func_get_args();
-    $args = array_slice($args, 2);
-    if($args)
+    if($by)
     {
-      array_unshift($args, null);
       foreach($groups as $groupKey => $grouped)
       {
-        $args[0] = $grouped;
-        $groups[$groupKey] = call_user_func_array(
-          '\Packaged\Helpers\Objects::pgroup',
-          $args
-        );
+        $groups[$groupKey] = self::pgroup($grouped, ...$by);
       }
     }
 
