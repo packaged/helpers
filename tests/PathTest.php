@@ -74,4 +74,10 @@ class PathTest extends \PHPUnit_Framework_TestCase
   {
     $this->assertEquals($expected, Path::baseName($input));
   }
+
+  public function testUrl()
+  {
+    $this->assertEquals('/', Path::url('/', ''));
+    $this->assertEquals('/test', Path::url('/', '/test'));
+  }
 }
