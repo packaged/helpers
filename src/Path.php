@@ -55,28 +55,28 @@ class Path
   /**
    * Concatenate a path with a custom separator
    *
-   * @param string   $directorySeparator
+   * @param string   $separator
    * @param string[] $pathComponents
    *
    * @return string
    */
-  public static function custom($directorySeparator, array $pathComponents)
+  public static function custom($separator, array $pathComponents)
   {
     $fullPath = [];
-    $charList = '/\\' . $directorySeparator;
+    $charList = '/\\' . $separator;
     foreach($pathComponents as $section)
     {
-      if($section !== '')
+      if(isset($section[1]))
       {
-        if(empty($fullPath) && $section[0] === $directorySeparator && $section !== $directorySeparator)
-        {
-          $fullPath[] = '';
-        }
-        $fullPath[] = trim($section, $charList);
+        $fullPath[] = empty($fullPath) ? rtrim($section, $charList) : trim($section, $charList);
+      }
+      else if(isset($section[0]))
+      {
+        $fullPath[] = $section == $separator ? '' : $section;
       }
     }
 
-    return implode($directorySeparator, $fullPath);
+    return ($fullPath[0] == '' && count($fullPath) === 1 ? $separator : implode($separator, $fullPath));
   }
 
   /**
