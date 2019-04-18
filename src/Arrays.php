@@ -91,7 +91,7 @@ class Arrays
       return [];
     }
 
-    return call_user_func_array('array_merge', $arrayv);
+    return array_merge(...$arrayv);
   }
 
   /**

@@ -9,34 +9,38 @@ class DependencyArray
 
   public function __construct()
   {
-    $this->_items         = [];
-    $this->_depends       = [];
+    $this->_items = [];
+    $this->_depends = [];
     $this->_hasDependency = [];
   }
 
   public function add($item, $dependsOn = [])
   {
     $this->_items[] = $item;
-    $dependsOn      = (array)$dependsOn;
+    $dependsOn = (array)$dependsOn;
     foreach($dependsOn as $dependsOnItem)
     {
-      $this->_items[]                   = $dependsOnItem;
+      $this->_items[] = $dependsOnItem;
       $this->_depends[$dependsOnItem][] = $item;
     }
 
-    $this->_items                = array_unique($this->_items);
+    $this->_items = array_unique($this->_items);
     $this->_hasDependency[$item] = $dependsOn;
   }
 
+  /**
+   * @return array
+   * @throws \Exception
+   */
   public function getLoadOrder()
   {
-    $order    = [];
+    $order = [];
     $itmCount = count($this->_items);
 
     $hasChanged = true;
     while(count($order) < $itmCount && $hasChanged === true)
     {
-      $hasChanged           = false;
+      $hasChanged = false;
       $this->_hasDependency = (array)$this->_hasDependency;
       foreach($this->_hasDependency as $item => $dependencies)
       {

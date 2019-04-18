@@ -17,6 +17,7 @@ class System
 
   /**
    * Detect if the server is running on Mac
+   *
    * @return bool
    */
   public static function isMac()
@@ -32,7 +33,7 @@ class System
   public static function isHHVM()
   {
     return defined('HHVM_VERSION')
-    || (array_key_exists('HPHP', $_ENV) && $_ENV['HPHP'] === 1);
+      || (array_key_exists('HPHP', $_ENV) && $_ENV['HPHP'] === 1);
   }
 
   /**
@@ -140,7 +141,7 @@ class System
           'phpinfo',
           'phpversion',
           'php_uname',
-          'php_sapi_name'
+          'php_sapi_name',
         ],
         ValueAs::arr($enabledFunctions)
       );

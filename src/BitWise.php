@@ -99,7 +99,7 @@ class BitWise implements BitWiseInterface
   /**
    * @param $value
    *
-   * @return string
+   * @return array
    */
   public static function getBits($value)
   {

@@ -37,6 +37,7 @@ class Objects
    *
    * @return object     A new object of the specified class, constructed by
    *                  passing the argument vector to its constructor.
+   * @throws \ReflectionException
    */
   public static function create($className, array $argv)
   {

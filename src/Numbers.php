@@ -79,10 +79,10 @@ class Numbers
     }
 
     return (
-    $number > 0
-      // precision of 1 decimal places
-      ? floor($number * 10) / 10
-      : ceil($number * 10) / 10
-    ) . $suffixes[$suffixIndex];
+      $number > 0
+        // precision of 1 decimal places
+        ? floor($number * 10) / 10
+        : ceil($number * 10) / 10
+      ) . $suffixes[$suffixIndex];
   }
 }

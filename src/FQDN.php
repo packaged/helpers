@@ -21,7 +21,7 @@ class FQDN
     'me'  => 'me',
     'gov' => 'gov',
     'net' => 'net',
-    'edu' => 'edu'
+    'edu' => 'edu',
   ];
 
   public function __construct($fqdn)
