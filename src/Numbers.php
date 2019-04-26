@@ -1,6 +1,13 @@
 <?php
 namespace Packaged\Helpers;
 
+use function abs;
+use function ceil;
+use function floor;
+use function is_numeric;
+use function number_format;
+use function sizeof;
+
 class Numbers
 {
   /**

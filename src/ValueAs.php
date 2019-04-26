@@ -1,6 +1,18 @@
 <?php
 namespace Packaged\Helpers;
 
+use Exception;
+use function explode;
+use function filter_var;
+use function is_array;
+use function is_callable;
+use function is_object;
+use function is_scalar;
+use function is_string;
+use function str_replace;
+use function stristr;
+use const FILTER_VALIDATE_BOOLEAN;
+
 /**
  * Class ValueAs
  * Retrieve your value back in a format you know you can deal with
@@ -106,7 +118,7 @@ class ValueAs
     }
 
     // Normalize newlines.
-    return \str_replace(
+    return str_replace(
       ["\r\n", "\r"],
       "\n",
       $value
@@ -200,26 +212,6 @@ class ValueAs
   }
 
   /**
-   * Returns the first argument which is not strictly null, or ##null## if there
-   * are no such arguments. Identical to the MySQL function of the same name.
-   *
-   * @param  ...$args         mixed Zero or more arguments of any type.
-   *
-   * @return mixed       First non-##null## arg, or null if no such arg exists.
-   */
-  public static function coalesce(...$args)
-  {
-    foreach($args as $arg)
-    {
-      if($arg !== null)
-      {
-        return $arg;
-      }
-    }
-    return null;
-  }
-
-  /**
    * Similar to @{function:coalesce}, but less strict: returns the first
    * non-##empty()## argument, instead of the first argument that is strictly
    * non-##null##. If no argument is nonempty, it returns the last argument.
@@ -254,7 +246,7 @@ class ValueAs
    * @param mixed ...$parameters
    *
    * @return mixed
-   * @throws \Exception
+   * @throws Exception
    */
   public static function exceptionIf($if, $exception, ...$parameters)
   {
@@ -280,6 +272,26 @@ class ValueAs
   }
 
   /**
+   * Returns the first argument which is not strictly null, or ##null## if there
+   * are no such arguments. Identical to the MySQL function of the same name.
+   *
+   * @param  ...$args         mixed Zero or more arguments of any type.
+   *
+   * @return mixed       First non-##null## arg, or null if no such arg exists.
+   */
+  public static function coalesce(...$args)
+  {
+    foreach($args as $arg)
+    {
+      if($arg !== null)
+      {
+        return $arg;
+      }
+    }
+    return null;
+  }
+
+  /**
    * Call a callable, catching any exception and returning default
    *
    * @param callable $callable
@@ -293,7 +305,7 @@ class ValueAs
     {
       return $callable();
     }
-    catch(\Exception $e)
+    catch(Exception $e)
     {
       return is_callable($default) ? $default($e) : $default;
     }

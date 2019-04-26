@@ -1,6 +1,12 @@
 <?php
 namespace Packaged\Helpers;
 
+use InvalidArgumentException;
+use function array_diff;
+use function array_rand;
+use function base_convert;
+use function count;
+
 class Shuffler
 {
   protected $_values = [];
@@ -12,7 +18,7 @@ class Shuffler
     $this->_values[$key] = $value;
     if($probability < 1 || $probability > 1000)
     {
-      throw new \InvalidArgumentException("Shuffler probability must be between 1 and 1000");
+      throw new InvalidArgumentException("Shuffler probability must be between 1 and 1000");
     }
     for($i = 0; $i < $probability; $i++)
     {

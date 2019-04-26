@@ -1,12 +1,14 @@
 <?php
 namespace Packaged\Tests;
 
+use Exception;
 use Packaged\Helpers\RetryHelper;
+use PHPUnit_Framework_TestCase;
 
-class RetryTest extends \PHPUnit_Framework_TestCase
+class RetryTest extends PHPUnit_Framework_TestCase
 {
   /**
-   * @expectedException \Exception
+   * @expectedException Exception
    * @expectedExceptionMessage fail 3
    */
   public function testRetries()
@@ -14,13 +16,13 @@ class RetryTest extends \PHPUnit_Framework_TestCase
     $count = 0;
     $callFn = function () use (&$count) {
       $count++;
-      throw new \Exception('fail ' . $count);
+      throw new Exception('fail ' . $count);
     };
     RetryHelper::retry(2, $callFn);
   }
 
   /**
-   * @expectedException \Exception
+   * @expectedException Exception
    * @expectedExceptionMessage fail 1
    */
   public function testNoRetries()
@@ -28,13 +30,13 @@ class RetryTest extends \PHPUnit_Framework_TestCase
     $count = 0;
     $callFn = function () use (&$count) {
       $count++;
-      throw new \Exception('fail ' . $count);
+      throw new Exception('fail ' . $count);
     };
     RetryHelper::retry(0, $callFn);
   }
 
   /**
-   * @expectedException \Exception
+   * @expectedException Exception
    * @expectedExceptionMessage Invalid value for retries
    */
   public function testNegativeRetries()
@@ -42,7 +44,7 @@ class RetryTest extends \PHPUnit_Framework_TestCase
     $count = 0;
     $callFn = function () use (&$count) {
       $count++;
-      throw new \Exception('fail ' . $count);
+      throw new Exception('fail ' . $count);
     };
     RetryHelper::retry(-1000, $callFn);
   }
@@ -59,7 +61,7 @@ class RetryTest extends \PHPUnit_Framework_TestCase
       {
         return 'response';
       }
-      throw new \Exception('fail ' . $count);
+      throw new Exception('fail ' . $count);
     };
     $response = RetryHelper::retry(2, $callFn);
     $this->assertEquals('response', $response);

@@ -2,8 +2,9 @@
 namespace Packaged\Tests\Traits;
 
 use Packaged\Helpers\Traits\ArrayAccessTrait;
+use PHPUnit_Framework_TestCase;
 
-class ArrayAccessTraitTest extends \PHPUnit_Framework_TestCase
+class ArrayAccessTraitTest extends PHPUnit_Framework_TestCase
 {
   public function testTrait()
   {

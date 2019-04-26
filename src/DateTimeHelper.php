@@ -1,6 +1,15 @@
 <?php
 namespace Packaged\Helpers;
 
+use function array_slice;
+use function count;
+use function date;
+use function explode;
+use function implode;
+use function preg_match;
+use function strlen;
+use function strtotime;
+
 class DateTimeHelper
 {
   /**

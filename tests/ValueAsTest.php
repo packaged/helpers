@@ -1,9 +1,12 @@
 <?php
 namespace Packaged\Tests;
 
+use Exception;
 use Packaged\Helpers\ValueAs;
+use PHPUnit_Framework_TestCase;
+use stdClass;
 
-class ValueAsTest extends \PHPUnit_Framework_TestCase
+class ValueAsTest extends PHPUnit_Framework_TestCase
 {
   /**
    * @dataProvider exactProvider
@@ -39,7 +42,7 @@ class ValueAsTest extends \PHPUnit_Framework_TestCase
 
   public function exactProvider()
   {
-    $objectTest = new \stdClass();
+    $objectTest = new stdClass();
     $objectTest->item = 'value';
 
     return [
@@ -83,7 +86,7 @@ class ValueAsTest extends \PHPUnit_Framework_TestCase
 
   public function matchProvider()
   {
-    $objectTest = new \stdClass();
+    $objectTest = new stdClass();
     $objectTest->item = 'value';
 
     return [
@@ -141,16 +144,16 @@ class ValueAsTest extends \PHPUnit_Framework_TestCase
   public function testExceptionIf()
   {
     $value = false;
-    $this->assertFalse(ValueAs::exceptionIf($value, \Exception::class));
+    $this->assertFalse(ValueAs::exceptionIf($value, Exception::class));
     $value = true;
-    $this->setExpectedException(\Exception::class, 'Test Exception');
-    $this->assertTrue(ValueAs::exceptionIf($value, \Exception::class, 'Test Exception'));
+    $this->setExpectedException(Exception::class, 'Test Exception');
+    $this->assertTrue(ValueAs::exceptionIf($value, Exception::class, 'Test Exception'));
   }
 
   public function testExceptionIfFixed()
   {
-    $this->setExpectedException(\Exception::class, 'Test Exception');
-    $this->assertTrue(ValueAs::exceptionIf(true, new \Exception('Test Exception')));
+    $this->setExpectedException(Exception::class, 'Test Exception');
+    $this->assertTrue(ValueAs::exceptionIf(true, new Exception('Test Exception')));
   }
 
   public function testTransformed()
@@ -169,12 +172,12 @@ class ValueAsTest extends \PHPUnit_Framework_TestCase
 
   public function testCaught()
   {
-    $this->assertEquals('abc', ValueAs::caught(function () { throw new \Exception('e'); }, 'abc'));
+    $this->assertEquals('abc', ValueAs::caught(function () { throw new Exception('e'); }, 'abc'));
     $this->assertEquals(
       'abcdef',
       ValueAs::caught(
-        function () { throw new \Exception('abc'); },
-        function (\Exception $e) { return $e->getMessage() . 'def'; }
+        function () { throw new Exception('abc'); },
+        function (Exception $e) { return $e->getMessage() . 'def'; }
       )
     );
     $this->assertEquals('xyz', ValueAs::caught(function () { return 'xyz'; }, 'abc'));

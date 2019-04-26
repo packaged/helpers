@@ -1,6 +1,13 @@
 <?php
 namespace Packaged\Helpers;
 
+use function floor;
+use function hexdec;
+use function microtime;
+use function str_pad;
+use function substr;
+use const STR_PAD_LEFT;
+
 class TimeHelper
 {
   const SQL_DATETIME = 'Y-m-d H:i:s';

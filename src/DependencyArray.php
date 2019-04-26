@@ -1,6 +1,11 @@
 <?php
 namespace Packaged\Helpers;
 
+use Exception;
+use function array_unique;
+use function count;
+use function in_array;
+
 class DependencyArray
 {
   protected $_items;
@@ -30,7 +35,7 @@ class DependencyArray
 
   /**
    * @return array
-   * @throws \Exception
+   * @throws Exception
    */
   public function getLoadOrder()
   {
@@ -55,7 +60,7 @@ class DependencyArray
 
     if(count($order) < $itmCount && $hasChanged === false)
     {
-      throw new \Exception('Impossible set of dependencies');
+      throw new Exception('Impossible set of dependencies');
     }
 
     return $order;

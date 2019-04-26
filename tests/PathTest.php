@@ -2,8 +2,9 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\Path;
+use PHPUnit_Framework_TestCase;
 
-class PathTest extends \PHPUnit_Framework_TestCase
+class PathTest extends PHPUnit_Framework_TestCase
 {
   public function testGlobRecursive()
   {

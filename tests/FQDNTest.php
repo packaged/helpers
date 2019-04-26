@@ -2,8 +2,9 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\FQDN;
+use PHPUnit_Framework_TestCase;
 
-class FQDNTest extends \PHPUnit_Framework_TestCase
+class FQDNTest extends PHPUnit_Framework_TestCase
 {
   /**
    * @dataProvider fqdnProvider

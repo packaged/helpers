@@ -2,8 +2,9 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\Numbers;
+use PHPUnit_Framework_TestCase;
 
-class NumbersTest extends \PHPUnit_Framework_TestCase
+class NumbersTest extends PHPUnit_Framework_TestCase
 {
   public function testFormat()
   {

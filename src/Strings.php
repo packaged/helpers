@@ -1,46 +1,74 @@
 <?php
 namespace Packaged\Helpers;
 
+use Exception;
+use InvalidArgumentException;
+use function array_merge;
+use function array_pad;
+use function array_pop;
+use function array_replace;
+use function array_shift;
+use function base64_decode;
+use function ceil;
+use function chr;
+use function end;
+use function explode;
+use function file_exists;
+use function file_get_contents;
+use function function_exists;
+use function gettype;
+use function htmlspecialchars;
+use function implode;
+use function is_array;
+use function is_numeric;
+use function json_encode;
+use function lcfirst;
+use function ltrim;
+use function mb_strlen;
+use function mb_strrpos;
+use function mb_substr;
+use function mcrypt_create_iv;
+use function md5;
+use function method_exists;
+use function mt_rand;
+use function openssl_random_pseudo_bytes;
+use function preg_match;
+use function preg_replace;
+use function preg_split;
+use function rand;
+use function random_bytes;
+use function range;
+use function str_pad;
+use function str_replace;
+use function str_shuffle;
+use function str_split;
+use function stripos;
+use function stristr;
+use function strlen;
+use function strncasecmp;
+use function strncmp;
+use function strpos;
+use function strrev;
+use function strstr;
+use function strtok;
+use function strtolower;
+use function substr;
+use function trim;
+use function ucfirst;
+use function ucwords;
+use function uniqid;
+use const ENT_QUOTES;
+use const JSON_PRETTY_PRINT;
+use const MCRYPT_DEV_URANDOM;
+use const STR_PAD_RIGHT;
+
 class Strings
 {
-  /**
-   * Split a camel case string to words e.g. firstName becomes first name
-   *
-   * @param $string
-   *
-   * @return mixed
-   */
-  public static function splitOnCamelCase($string)
-  {
-    return preg_replace("/(([a-z])([A-Z])|([A-Z])([A-Z][a-z]))/", "\\2\\4 \\3\\5", $string);
-  }
-
-  /**
-   * Split a string on underscores e.g. first_name > first name
-   *
-   * @param $string
-   *
-   * @return mixed
-   */
-  public static function splitOnUnderscores($string)
-  {
-    return str_replace('_', ' ', $string);
-  }
-
-  /**
-   * Convert a string to an underscored string
-   *
-   * @param $string
-   *
-   * @return mixed|string
-   */
-  public static function stringToUnderScore($string)
-  {
-    $string = self::splitOnCamelCase($string);
-    $string = str_replace(' ', '_', $string);
-    $string = strtolower($string);
-    return $string;
-  }
+  const RANDOM_STRING_RANDOM_BYTES = 'random_bytes';
+  const RANDOM_STRING_MCRYPT = 'mcrypt';
+  const RANDOM_STRING_OPENSSL = 'openssl';
+  const RANDOM_STRING_URANDOM = 'urandom';
+  const RANDOM_STRING_CUSTOM = 'custom';
 
   /**
    * Convert a string to camel case
@@ -71,6 +99,30 @@ class Strings
     $string = ucwords($string);
     $string = str_replace(' ', '', $string);
     return $string;
+  }
+
+  /**
+   * Split a camel case string to words e.g. firstName becomes first name
+   *
+   * @param $string
+   *
+   * @return mixed
+   */
+  public static function splitOnCamelCase($string)
+  {
+    return preg_replace("/(([a-z])([A-Z])|([A-Z])([A-Z][a-z]))/", "\\2\\4 \\3\\5", $string);
+  }
+
+  /**
+   * Split a string on underscores e.g. first_name > first name
+   *
+   * @param $string
+   *
+   * @return mixed
+   */
+  public static function splitOnUnderscores($string)
+  {
+    return str_replace('_', ' ', $string);
   }
 
   /**
@@ -109,6 +161,33 @@ class Strings
   }
 
   /**
+   * Convert a string to an underscored string
+   *
+   * @param $string
+   *
+   * @return mixed|string
+   */
+  public static function stringToUnderScore($string)
+  {
+    $string = self::splitOnCamelCase($string);
+    $string = str_replace(' ', '_', $string);
+    $string = strtolower($string);
+    return $string;
+  }
+
+  /**
+   * Convert a string to a nice url friendly format
+   *
+   * @param $url
+   *
+   * @return string
+   */
+  public static function urlize($url)
+  {
+    return strtolower(static::hyphenate($url));
+  }
+
+  /**
    * Hyphenate a string, converting spaces and underscores to hyphens
    *
    * @param $string
@@ -122,18 +201,6 @@ class Strings
       "_" => '-',
     ];
     return strtr($string, $replacements);
-  }
-
-  /**
-   * Convert a string to a nice url friendly format
-   *
-   * @param $url
-   *
-   * @return string
-   */
-  public static function urlize($url)
-  {
-    return strtolower(static::hyphenate($url));
   }
 
   /**
@@ -224,12 +291,6 @@ class Strings
     return [$part1, $part2];
   }
 
-  const RANDOM_STRING_RANDOM_BYTES = 'random_bytes';
-  const RANDOM_STRING_MCRYPT = 'mcrypt';
-  const RANDOM_STRING_OPENSSL = 'openssl';
-  const RANDOM_STRING_URANDOM = 'urandom';
-  const RANDOM_STRING_CUSTOM = 'custom';
-
   /**
    * Generate a random string of $length bytes
    *
@@ -237,7 +298,7 @@ class Strings
    * @param string $forceMethod
    *
    * @return string
-   * @throws \Exception
+   * @throws Exception
    */
   public static function randomString($length = 40, $forceMethod = null)
   {
@@ -440,7 +501,7 @@ class Strings
    */
   public static function escape($string)
   {
-    return \htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
   }
 
   /**
@@ -450,7 +511,7 @@ class Strings
    *
    * @return void
    *
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    */
   public static function stringable($parameter)
   {
@@ -474,7 +535,7 @@ class Strings
         break;
     }
 
-    throw new \InvalidArgumentException("Argument must be scalar or object which implements __toString()!");
+    throw new InvalidArgumentException("Argument must be scalar or object which implements __toString()!");
   }
 
   /**
@@ -586,6 +647,60 @@ class Strings
   }
 
   /**
+   * Check a string starts with a specific string
+   *
+   * @param      $haystack
+   * @param      $needle
+   * @param bool $case
+   *
+   * @param null $knownNeedleLength
+   *
+   * @return bool
+   */
+  public static function startsWith($haystack, $needle, $case = true, $knownNeedleLength = null)
+  {
+    if(is_array($needle))
+    {
+      return static::startsWithAny($haystack, $needle, $case);
+    }
+
+    if($knownNeedleLength === null)
+    {
+      $knownNeedleLength = strlen($needle);
+    }
+
+    if(!$case)
+    {
+      return strncasecmp($haystack, $needle, $knownNeedleLength) == 0;
+    }
+    else
+    {
+      return strncmp($haystack, $needle, $knownNeedleLength) == 0;
+    }
+  }
+
+  /**
+   * Check a string starts with one of the needles provided
+   *
+   * @param       $haystack
+   * @param array $needles
+   * @param bool  $case
+   *
+   * @return bool
+   */
+  public static function startsWithAny($haystack, array $needles, $case = true)
+  {
+    foreach($needles as $needle)
+    {
+      if(static::startsWith($haystack, $needle, $case))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Trim non null strings
    *
    * @param        $string
@@ -596,27 +711,6 @@ class Strings
   public static function ntrim($string, $charlist = " \t\n\r\0\x0B")
   {
     return $string === null ? null : trim($string, $charlist);
-  }
-
-  /**
-   * Check a string contains another string
-   *
-   * @param        $haystack
-   * @param string $needle
-   * @param bool   $case
-   *
-   * @return bool
-   */
-  public static function contains($haystack, $needle, $case = true)
-  {
-    if($case)
-    {
-      return strpos($haystack, $needle) !== false;
-    }
-    else
-    {
-      return stripos($haystack, $needle) !== false;
-    }
   }
 
   /**
@@ -638,6 +732,27 @@ class Strings
       }
     }
     return false;
+  }
+
+  /**
+   * Check a string contains another string
+   *
+   * @param        $haystack
+   * @param string $needle
+   * @param bool   $case
+   *
+   * @return bool
+   */
+  public static function contains($haystack, $needle, $case = true)
+  {
+    if($case)
+    {
+      return strpos($haystack, $needle) !== false;
+    }
+    else
+    {
+      return stripos($haystack, $needle) !== false;
+    }
   }
 
   /**
@@ -685,60 +800,6 @@ class Strings
     }
 
     return static::startsWith(strrev($haystack), strrev($needle), $case, $knownNeedleLength);
-  }
-
-  /**
-   * Check a string starts with one of the needles provided
-   *
-   * @param       $haystack
-   * @param array $needles
-   * @param bool  $case
-   *
-   * @return bool
-   */
-  public static function startsWithAny($haystack, array $needles, $case = true)
-  {
-    foreach($needles as $needle)
-    {
-      if(static::startsWith($haystack, $needle, $case))
-      {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Check a string starts with a specific string
-   *
-   * @param      $haystack
-   * @param      $needle
-   * @param bool $case
-   *
-   * @param null $knownNeedleLength
-   *
-   * @return bool
-   */
-  public static function startsWith($haystack, $needle, $case = true, $knownNeedleLength = null)
-  {
-    if(is_array($needle))
-    {
-      return static::startsWithAny($haystack, $needle, $case);
-    }
-
-    if($knownNeedleLength === null)
-    {
-      $knownNeedleLength = strlen($needle);
-    }
-
-    if(!$case)
-    {
-      return strncasecmp($haystack, $needle, $knownNeedleLength) == 0;
-    }
-    else
-    {
-      return strncmp($haystack, $needle, $knownNeedleLength) == 0;
-    }
   }
 
   /**

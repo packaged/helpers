@@ -2,8 +2,9 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\DateTimeHelper;
+use PHPUnit_Framework_TestCase;
 
-class DateTimeHelperTest extends \PHPUnit_Framework_TestCase
+class DateTimeHelperTest extends PHPUnit_Framework_TestCase
 {
   public function testDate()
   {

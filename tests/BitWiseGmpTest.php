@@ -2,11 +2,12 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\BitWiseGmp;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @requires extension gmp
  */
-class BitWiseGmpTest extends \PHPUnit_Framework_TestCase
+class BitWiseGmpTest extends PHPUnit_Framework_TestCase
 {
   const ONE = '1';
   const TWO = '2';

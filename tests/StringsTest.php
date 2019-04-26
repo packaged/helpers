@@ -1,12 +1,15 @@
 <?php
 namespace Packaged\Tests;
 
+use Exception;
+use InvalidArgumentException;
 use Packaged\Helpers\Strings;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @author  brooke.bryan
  */
-class StringsTest extends \PHPUnit_Framework_TestCase
+class StringsTest extends PHPUnit_Framework_TestCase
 {
   public function testSplitOnCamelCase()
   {
@@ -387,7 +390,7 @@ class StringsTest extends \PHPUnit_Framework_TestCase
     Strings::stringable(1);
     Strings::stringable(9.9999);
     Strings::stringable(true);
-    Strings::stringable(new \Exception('.'));
+    Strings::stringable(new Exception('.'));
 
     $obj = (object)[];
     $caught = null;
@@ -395,7 +398,7 @@ class StringsTest extends \PHPUnit_Framework_TestCase
     {
       Strings::stringable($obj);
     }
-    catch(\InvalidArgumentException $ex)
+    catch(InvalidArgumentException $ex)
     {
       $caught = $ex;
     }
@@ -410,7 +413,7 @@ class StringsTest extends \PHPUnit_Framework_TestCase
     {
       Strings::stringable($array);
     }
-    catch(\InvalidArgumentException $ex)
+    catch(InvalidArgumentException $ex)
     {
       $caught = $ex;
     }
@@ -421,7 +424,7 @@ class StringsTest extends \PHPUnit_Framework_TestCase
     {
       Strings::stringable(tmpfile());
     }
-    catch(\InvalidArgumentException $ex)
+    catch(InvalidArgumentException $ex)
     {
       $caught = $ex;
     }

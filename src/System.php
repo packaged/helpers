@@ -1,19 +1,24 @@
 <?php
 namespace Packaged\Helpers;
 
+use function array_diff;
+use function array_key_exists;
+use function array_merge;
+use function defined;
+use function exec;
+use function explode;
+use function in_array;
+use function ini_get;
+use function preg_match;
+use function sprintf;
+use function stristr;
+use function strncasecmp;
+use function usleep;
+use const PHP_OS;
+
 class System
 {
   private static $commandCache = [];
-
-  /**
-   * Detect if the server is running Windows
-   *
-   * @return bool
-   */
-  public static function isWindows()
-  {
-    return strncasecmp(PHP_OS, 'WIN', 3) == 0;
-  }
 
   /**
    * Detect if the server is running on Mac
@@ -34,23 +39,6 @@ class System
   {
     return defined('HHVM_VERSION')
       || (array_key_exists('HPHP', $_ENV) && $_ENV['HPHP'] === 1);
-  }
-
-  /**
-   * Detect if the script is running on App Engine
-   *
-   * @param string $server $_SERVER['SERVER_SOFTWARE']
-   *
-   * @return bool
-   */
-  public static function isAppEngine($server = null)
-  {
-    if($server === null && isset($_SERVER['SERVER_SOFTWARE']))
-    {
-      $server = $_SERVER['SERVER_SOFTWARE'];
-    }
-
-    return stristr($server, 'Google App Engine') !== false;
   }
 
   /**
@@ -108,6 +96,16 @@ class System
   }
 
   /**
+   * Detect if the server is running Windows
+   *
+   * @return bool
+   */
+  public static function isWindows()
+  {
+    return strncasecmp(PHP_OS, 'WIN', 3) == 0;
+  }
+
+  /**
    * Check to see if a function has been disabled through php.ini
    *
    * @param string $function         function name to verify
@@ -148,6 +146,23 @@ class System
       $disabledFunctions = array_merge($disabledFunctions, $aeDisabled);
     }
     return in_array($function, $disabledFunctions);
+  }
+
+  /**
+   * Detect if the script is running on App Engine
+   *
+   * @param string $server $_SERVER['SERVER_SOFTWARE']
+   *
+   * @return bool
+   */
+  public static function isAppEngine($server = null)
+  {
+    if($server === null && isset($_SERVER['SERVER_SOFTWARE']))
+    {
+      $server = $_SERVER['SERVER_SOFTWARE'];
+    }
+
+    return stristr($server, 'Google App Engine') !== false;
   }
 
   /**

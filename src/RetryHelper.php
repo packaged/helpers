@@ -1,6 +1,9 @@
 <?php
 namespace Packaged\Helpers;
 
+use Exception;
+use function is_int;
+
 class RetryHelper
 {
   /**
@@ -16,7 +19,7 @@ class RetryHelper
    * @param callable|null $catchFunction
    *
    * @return mixed
-   * @throws \Exception
+   * @throws Exception
    */
   public static function retry(
     $retries, callable $callFunction, callable $catchFunction = null
@@ -25,7 +28,7 @@ class RetryHelper
     $return = null;
     if(!is_int($retries) || $retries < 0)
     {
-      throw new \Exception('Invalid value for retries');
+      throw new Exception('Invalid value for retries');
     }
 
     while(true)
@@ -35,7 +38,7 @@ class RetryHelper
         $return = $callFunction();
         break;
       }
-      catch(\Exception $e)
+      catch(Exception $e)
       {
         if(($catchFunction && !$catchFunction($e)) || $retries <= 0)
         {

@@ -1,6 +1,26 @@
 <?php
 namespace Packaged\Helpers;
 
+use Exception;
+use InvalidArgumentException;
+use ReflectionClass;
+use ReflectionException;
+use function array_filter;
+use function array_keys;
+use function array_pop;
+use function array_shift;
+use function asort;
+use function basename;
+use function count;
+use function explode;
+use function get_class;
+use function get_object_vars;
+use function implode;
+use function is_object;
+use function is_string;
+use function ltrim;
+use function str_replace;
+
 class Objects
 {
   /**
@@ -37,11 +57,11 @@ class Objects
    *
    * @return object     A new object of the specified class, constructed by
    *                  passing the argument vector to its constructor.
-   * @throws \ReflectionException
+   * @throws ReflectionException
    */
   public static function create($className, array $argv)
   {
-    $reflector = new \ReflectionClass($className);
+    $reflector = new ReflectionClass($className);
     if($argv)
     {
       return $reflector->newInstanceArgs($argv);
@@ -84,7 +104,7 @@ class Objects
    *
    * @return void
    *
-   * @throws \Exception
+   * @throws Exception
    */
   public static function hydrate(
     $destination, $source, array $properties = null, $copyNull = true
@@ -92,7 +112,7 @@ class Objects
   {
     if(!is_object($destination) || !is_object($source))
     {
-      throw new \Exception("hydrate() must be given objects");
+      throw new Exception("hydrate() must be given objects");
     }
 
     if($properties === null)
@@ -128,6 +148,21 @@ class Objects
   }
 
   /**
+   * Access an object property, retrieving the value stored there
+   * if it exists or a default if it does not.
+   *
+   * @param object $object   Source object
+   * @param string $property Property name to pull from the object
+   * @param mixed  $default  Default value if the property does not exist
+   *
+   * @return mixed
+   */
+  public static function property($object, $property, $default = null)
+  {
+    return isset($object->$property) ? $object->$property : $default;
+  }
+
+  /**
    * Return an array with only the public properties and their values.
    *
    * If calling get_object_vars withing a class,
@@ -141,21 +176,6 @@ class Objects
   public static function propertyValues($object)
   {
     return get_object_vars($object);
-  }
-
-  /**
-   * Access an object property, retrieving the value stored there
-   * if it exists or a default if it does not.
-   *
-   * @param object $object   Source object
-   * @param string $property Property name to pull from the object
-   * @param mixed  $default  Default value if the property does not exist
-   *
-   * @return mixed
-   */
-  public static function property($object, $property, $default = null)
-  {
-    return isset($object->$property) ? $object->$property : $default;
   }
 
   /**
@@ -195,176 +215,6 @@ class Objects
   {
     $class = is_object($class) ? get_class($class) : $class;
     return basename(str_replace('\\', '/', $class));
-  }
-
-  /**
-   * Call a method on a list of objects. Short for "method pull", this function
-   * works just like @{function:ipull}, except that it operates on a list of
-   * objects instead of a list of arrays. This function simplifies a common
-   * type
-   * of mapping operation:
-   *
-   *    COUNTEREXAMPLE
-   *    $names = array();
-   *    foreach ($objects as $key => $object) {
-   *      $names[$key] = $object->getName();
-   *    }
-   *
-   * You can express this more concisely with mpull():
-   *
-   *    $names = mpull($objects, 'getName');
-   *
-   * mpull() takes a third argument, which allows you to do the same but for
-   * the array's keys:
-   *
-   *    COUNTEREXAMPLE
-   *    $names = array();
-   *    foreach ($objects as $object) {
-   *      $names[$object->getID()] = $object->getName();
-   *    }
-   *
-   * This is the mpull version():
-   *
-   *    $names = mpull($objects, 'getName', 'getID');
-   *
-   * If you pass ##null## as the second argument, the objects will be
-   * preserved:
-   *
-   *    COUNTEREXAMPLE
-   *    $id_map = array();
-   *    foreach ($objects as $object) {
-   *      $id_map[$object->getID()] = $object;
-   *    }
-   *
-   * With mpull():
-   *
-   *    $id_map = mpull($objects, null, 'getID');
-   *
-   * See also @{function:ipull}, which works similarly but accesses array
-   * indexes instead of calling methods.
-   *
-   * @param   $list         array          Some list of objects.
-   * @param   $method       string|null   Determines which **values**
-   *                        will appear in the result array. Use a string like
-   *                        'getName' to store the value of calling the named
-   *                        method in each value, or
-   *                        ##null## to preserve the original objects.
-   * @param   $keyMethod    string|null   Determines how **keys** will be
-   *                        assigned in the result array. Use a string like
-   *                        'getID' to use the result of calling the named
-   *                        method as each object's key, or ##null## to
-   *                        preserve the original keys.
-   *
-   * @return  array          A dictionary with keys and values derived
-   *                         according
-   *                        to whatever you passed as $method and $key_method.
-   */
-  public static function mpull(array $list, $method, $keyMethod = null)
-  {
-    $result = [];
-    foreach($list as $key => $object)
-    {
-      if($keyMethod !== null)
-      {
-        $key = $object->$keyMethod();
-      }
-      if($method !== null)
-      {
-        $value = $object->$method();
-      }
-      else
-      {
-        $value = $object;
-      }
-      $result[$key] = $value;
-    }
-    return $result;
-  }
-
-  /**
-   * Access a property on a list of objects. Short for "property pull", this
-   * function works just like @{function:mpull}, except that it accesses object
-   * properties instead of methods. This function simplifies a common type of
-   * mapping operation:
-   *
-   *    COUNTEREXAMPLE
-   *    $names = array();
-   *    foreach ($objects as $key => $object) {
-   *      $names[$key] = $object->name;
-   *    }
-   *
-   * You can express this more concisely with ppull():
-   *
-   *    $names = ppull($objects, 'name');
-   *
-   * ppull() takes a third argument, which allows you to do the same but for
-   * the array's keys:
-   *
-   *    COUNTEREXAMPLE
-   *    $names = array();
-   *    foreach ($objects as $object) {
-   *      $names[$object->id] = $object->name;
-   *    }
-   *
-   * This is the ppull version():
-   *
-   *    $names = ppull($objects, 'name', 'id');
-   *
-   * If you pass ##null## as the second argument, the objects will be
-   * preserved:
-   *
-   *    COUNTEREXAMPLE
-   *    $id_map = array();
-   *    foreach ($objects as $object) {
-   *      $id_map[$object->id] = $object;
-   *    }
-   *
-   * With ppull():
-   *
-   *    $id_map = ppull($objects, null, 'id');
-   *
-   * See also @{function:mpull}, which works similarly but calls object methods
-   * instead of accessing object properties.
-   *
-   * @param   $list         array Some list of objects.
-   * @param   $property     string|null   Determines which **values** will
-   *                        appear in the result array. Use a string like
-   *                        'name' to store the value of accessing the named
-   *                        property in each value, or
-   *                        ##null## to preserve the original objects.
-   * @param   $keyProperty  string|null   Determines how **keys** will be
-   *                        assigned in the result array. Use a string like
-   *                        'id' to use the result of accessing the named
-   *                        property as each object's key, or
-   *                        ##null## to preserve the original keys.
-   *
-   * @return  array          A dictionary with keys and values derived
-   *                         according
-   *                        to whatever you passed as $property and
-   *                        $key_property.
-   */
-  public static function ppull(array $list, $property, $keyProperty = null)
-  {
-    $result = [];
-    foreach($list as $key => $object)
-    {
-      if($keyProperty !== null && is_object($object))
-      {
-        $key = $object->$keyProperty;
-      }
-
-      if($property !== null && is_object($object))
-      {
-        $value = $object->$property;
-      }
-      else
-      {
-        $value = $object;
-      }
-
-      $result[$key] = $value;
-    }
-    return $result;
   }
 
   /**
@@ -464,6 +314,90 @@ class Objects
   }
 
   /**
+   * Call a method on a list of objects. Short for "method pull", this function
+   * works just like @{function:ipull}, except that it operates on a list of
+   * objects instead of a list of arrays. This function simplifies a common
+   * type
+   * of mapping operation:
+   *
+   *    COUNTEREXAMPLE
+   *    $names = array();
+   *    foreach ($objects as $key => $object) {
+   *      $names[$key] = $object->getName();
+   *    }
+   *
+   * You can express this more concisely with mpull():
+   *
+   *    $names = mpull($objects, 'getName');
+   *
+   * mpull() takes a third argument, which allows you to do the same but for
+   * the array's keys:
+   *
+   *    COUNTEREXAMPLE
+   *    $names = array();
+   *    foreach ($objects as $object) {
+   *      $names[$object->getID()] = $object->getName();
+   *    }
+   *
+   * This is the mpull version():
+   *
+   *    $names = mpull($objects, 'getName', 'getID');
+   *
+   * If you pass ##null## as the second argument, the objects will be
+   * preserved:
+   *
+   *    COUNTEREXAMPLE
+   *    $id_map = array();
+   *    foreach ($objects as $object) {
+   *      $id_map[$object->getID()] = $object;
+   *    }
+   *
+   * With mpull():
+   *
+   *    $id_map = mpull($objects, null, 'getID');
+   *
+   * See also @{function:ipull}, which works similarly but accesses array
+   * indexes instead of calling methods.
+   *
+   * @param   $list         array          Some list of objects.
+   * @param   $method       string|null   Determines which **values**
+   *                        will appear in the result array. Use a string like
+   *                        'getName' to store the value of calling the named
+   *                        method in each value, or
+   *                        ##null## to preserve the original objects.
+   * @param   $keyMethod    string|null   Determines how **keys** will be
+   *                        assigned in the result array. Use a string like
+   *                        'getID' to use the result of calling the named
+   *                        method as each object's key, or ##null## to
+   *                        preserve the original keys.
+   *
+   * @return  array          A dictionary with keys and values derived
+   *                         according
+   *                        to whatever you passed as $method and $key_method.
+   */
+  public static function mpull(array $list, $method, $keyMethod = null)
+  {
+    $result = [];
+    foreach($list as $key => $object)
+    {
+      if($keyMethod !== null)
+      {
+        $key = $object->$keyMethod();
+      }
+      if($method !== null)
+      {
+        $value = $object->$method();
+      }
+      else
+      {
+        $value = $object;
+      }
+      $result[$key] = $value;
+    }
+    return $result;
+  }
+
+  /**
    * Group a list of arrays by the value of some property. This function is the
    * same as @{function:mgroup}, except it operates on the values of object
    * properties rather than the return values of method calls.
@@ -502,6 +436,92 @@ class Objects
     }
 
     return $groups;
+  }
+
+  /**
+   * Access a property on a list of objects. Short for "property pull", this
+   * function works just like @{function:mpull}, except that it accesses object
+   * properties instead of methods. This function simplifies a common type of
+   * mapping operation:
+   *
+   *    COUNTEREXAMPLE
+   *    $names = array();
+   *    foreach ($objects as $key => $object) {
+   *      $names[$key] = $object->name;
+   *    }
+   *
+   * You can express this more concisely with ppull():
+   *
+   *    $names = ppull($objects, 'name');
+   *
+   * ppull() takes a third argument, which allows you to do the same but for
+   * the array's keys:
+   *
+   *    COUNTEREXAMPLE
+   *    $names = array();
+   *    foreach ($objects as $object) {
+   *      $names[$object->id] = $object->name;
+   *    }
+   *
+   * This is the ppull version():
+   *
+   *    $names = ppull($objects, 'name', 'id');
+   *
+   * If you pass ##null## as the second argument, the objects will be
+   * preserved:
+   *
+   *    COUNTEREXAMPLE
+   *    $id_map = array();
+   *    foreach ($objects as $object) {
+   *      $id_map[$object->id] = $object;
+   *    }
+   *
+   * With ppull():
+   *
+   *    $id_map = ppull($objects, null, 'id');
+   *
+   * See also @{function:mpull}, which works similarly but calls object methods
+   * instead of accessing object properties.
+   *
+   * @param   $list         array Some list of objects.
+   * @param   $property     string|null   Determines which **values** will
+   *                        appear in the result array. Use a string like
+   *                        'name' to store the value of accessing the named
+   *                        property in each value, or
+   *                        ##null## to preserve the original objects.
+   * @param   $keyProperty  string|null   Determines how **keys** will be
+   *                        assigned in the result array. Use a string like
+   *                        'id' to use the result of accessing the named
+   *                        property as each object's key, or
+   *                        ##null## to preserve the original keys.
+   *
+   * @return  array          A dictionary with keys and values derived
+   *                         according
+   *                        to whatever you passed as $property and
+   *                        $key_property.
+   */
+  public static function ppull(array $list, $property, $keyProperty = null)
+  {
+    $result = [];
+    foreach($list as $key => $object)
+    {
+      if($keyProperty !== null && is_object($object))
+      {
+        $key = $object->$keyProperty;
+      }
+
+      if($property !== null && is_object($object))
+      {
+        $value = $object->$property;
+      }
+      else
+      {
+        $value = $object;
+      }
+
+      $result[$key] = $value;
+    }
+    return $result;
   }
 
   /**
@@ -617,14 +637,14 @@ class Objects
    *                      which pass the filter instead of keeping them.
    *
    * @return array   List of objects which pass the filter.
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    */
 
   public static function mfilter(array $list, $method, $negate = false)
   {
     if(!is_string($method))
     {
-      throw new \InvalidArgumentException('Argument method is not a string.');
+      throw new InvalidArgumentException('Argument method is not a string.');
     }
 
     $result = [];

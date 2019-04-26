@@ -1,6 +1,26 @@
 <?php
 namespace Packaged\Helpers;
 
+use function array_filter;
+use function array_pop;
+use function array_shift;
+use function array_unshift;
+use function count;
+use function explode;
+use function implode;
+use function preg_replace;
+use function str_ireplace;
+use function str_replace;
+use function stristr;
+use function strlen;
+use function strncasecmp;
+use function strrev;
+use function strtolower;
+use function substr;
+use function trim;
+use function ucfirst;
+use function ucwords;
+
 class EmailAddress
 {
   protected $_username = '';
@@ -38,6 +58,15 @@ class EmailAddress
     }
     $this->_providedName = [trim($first), trim($middle), trim($last)];
     return $this;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getUsername()
+  {
+    $this->_calculate();
+    return $this->_username;
   }
 
   protected function _calculate()
@@ -261,15 +290,6 @@ class EmailAddress
         $this->_middleName = $this->_providedName[1];
       }
     }
-  }
-
-  /**
-   * @return mixed
-   */
-  public function getUsername()
-  {
-    $this->_calculate();
-    return $this->_username;
   }
 
   /**

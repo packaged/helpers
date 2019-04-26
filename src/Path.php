@@ -1,6 +1,18 @@
 <?php
 namespace Packaged\Helpers;
 
+use function array_merge;
+use function basename;
+use function count;
+use function glob;
+use function implode;
+use function rtrim;
+use function str_replace;
+use function trim;
+use const DIRECTORY_SEPARATOR;
+use const GLOB_NOSORT;
+use const GLOB_ONLYDIR;
+
 class Path
 {
   /**
@@ -14,6 +26,34 @@ class Path
   public static function system(...$parts)
   {
     return static::custom(DIRECTORY_SEPARATOR, $parts);
+  }
+
+  /**
+   * Concatenate a path with a custom separator
+   *
+   * @param string   $separator
+   * @param string[] $pathComponents
+   *
+   * @return string
+   */
+  public static function custom($separator, array $pathComponents)
+  {
+    $fullPath = [];
+    $charList = '/\\' . $separator;
+    foreach($pathComponents as $section)
+    {
+      $section = (string)$section;
+      if(isset($section[1]))
+      {
+        $fullPath[] = empty($fullPath) ? rtrim($section, $charList) : trim($section, $charList);
+      }
+      else if(isset($section[0]))
+      {
+        $fullPath[] = $section == $separator ? '' : $section;
+      }
+    }
+
+    return ($fullPath[0] == '' && count($fullPath) === 1 ? $separator : implode($separator, $fullPath));
   }
 
   /**
@@ -50,34 +90,6 @@ class Path
   public static function url(...$parts)
   {
     return static::custom('/', $parts);
-  }
-
-  /**
-   * Concatenate a path with a custom separator
-   *
-   * @param string   $separator
-   * @param string[] $pathComponents
-   *
-   * @return string
-   */
-  public static function custom($separator, array $pathComponents)
-  {
-    $fullPath = [];
-    $charList = '/\\' . $separator;
-    foreach($pathComponents as $section)
-    {
-      $section = (string)$section;
-      if(isset($section[1]))
-      {
-        $fullPath[] = empty($fullPath) ? rtrim($section, $charList) : trim($section, $charList);
-      }
-      else if(isset($section[0]))
-      {
-        $fullPath[] = $section == $separator ? '' : $section;
-      }
-    }
-
-    return ($fullPath[0] == '' && count($fullPath) === 1 ? $separator : implode($separator, $fullPath));
   }
 
   /**

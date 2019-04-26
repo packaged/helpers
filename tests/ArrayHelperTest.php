@@ -2,8 +2,10 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\ArrayHelper;
+use PHPUnit_Framework_TestCase;
+use stdClass;
 
-class ArrayHelperTest extends \PHPUnit_Framework_TestCase
+class ArrayHelperTest extends PHPUnit_Framework_TestCase
 {
   public function testConstructors()
   {
@@ -61,7 +63,7 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
 
   public function testArrayAccess()
   {
-    $testClass = new \stdClass();
+    $testClass = new stdClass();
     $testClass->value1 = 'value one';
     $testClass->value2 = 'value two';
     $testClass->array = ['test' => 'test1', 'test'];
@@ -77,10 +79,10 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
 
   public function testToArray()
   {
-    $testClass = new \stdClass();
+    $testClass = new stdClass();
     $testClass->value1 = 'value one';
     $testClass->array = ['test' => 'test1', 'test'];
-    $testClass->nested = new \stdClass();
+    $testClass->nested = new stdClass();
     $testClass->nested->value1 = 'value one';
     $testClass->nested->array = ['test' => 'test1', 'test'];
 

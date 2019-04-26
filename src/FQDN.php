@@ -1,6 +1,18 @@
 <?php
 namespace Packaged\Helpers;
 
+use function array_combine;
+use function array_keys;
+use function array_merge;
+use function array_reverse;
+use function count;
+use function explode;
+use function filter_var;
+use function parse_url;
+use function strlen;
+use function strtolower;
+use const FILTER_VALIDATE_URL;
+
 /**
  * Fully qualified domain name
  */
@@ -74,6 +86,17 @@ class FQDN
   }
 
   /**
+   * Sub Domain e.g. www.
+   *
+   * @return string|null
+   */
+  public function subDomain()
+  {
+    $this->_prepareHost();
+    return $this->_subdomain;
+  }
+
+  /**
    * Take the host string and split into subdomain , domain & tld
    *
    * @return $this
@@ -131,17 +154,6 @@ class FQDN
     }
 
     return $this;
-  }
-
-  /**
-   * Sub Domain e.g. www.
-   *
-   * @return string|null
-   */
-  public function subDomain()
-  {
-    $this->_prepareHost();
-    return $this->_subdomain;
   }
 
   /**

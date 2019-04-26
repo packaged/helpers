@@ -2,6 +2,32 @@
 namespace Packaged\Helpers;
 
 use Generator;
+use InvalidArgumentException;
+use function array_combine;
+use function array_key_exists;
+use function array_keys;
+use function array_map;
+use function array_merge;
+use function array_pop;
+use function array_shift;
+use function array_slice;
+use function array_values;
+use function asort;
+use function count;
+use function end;
+use function explode;
+use function get_class;
+use function gettype;
+use function implode;
+use function in_array;
+use function is_array;
+use function is_object;
+use function is_scalar;
+use function key;
+use function reset;
+use function shuffle;
+use function strcasecmp;
+use function strtolower;
 
 class Arrays
 {
@@ -185,7 +211,7 @@ class Arrays
    * @param  $class string  Name of the class or 'array' to check arrays.
    *
    * @return array   Returns passed array.
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    */
   public static function instancesOf(array $arr, $class)
   {
@@ -198,7 +224,7 @@ class Arrays
         if(!is_array($object))
         {
           $given = gettype($object);
-          throw new \InvalidArgumentException(
+          throw new InvalidArgumentException(
             "Array item with key '{$key}' must be of type array, " .
             "{$given} given."
           );
@@ -211,7 +237,7 @@ class Arrays
         {
           $given = 'instance of ' . get_class($object);
         }
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
           "Array item with key '{$key}' must be an instance of {$class}, " .
           "{$given} given."
         );
@@ -219,6 +245,42 @@ class Arrays
     }
 
     return $arr;
+  }
+
+  /**
+   * Short for 'array pull'.  Extracts specified items from a list of arrays
+   * and returns them in an array keyed by the original key, or alternatively the
+   * value of another item on the array.
+   *
+   * @param array[]     $list     A list of arrays.
+   * @param string[]    $keys     Array of keys to extract.
+   * @param string|null $keyIndex Determines how **keys** will be
+   *                              assigned in the result array. Use a string like
+   *                              'id' to use the specified index as each item's
+   *                              key, or ##null## to preserve the original keys.
+   *
+   * @return array                An array keyed by $keyProperty populated by the
+   *                              properties specified in $properties.
+   */
+  public static function apull(array $list, array $keys, $keyIndex = null)
+  {
+    $result = [];
+    foreach($list as $key => $data)
+    {
+      if($keyIndex !== null)
+      {
+        $key = $data[$keyIndex];
+      }
+
+      $value = [];
+      foreach($keys as $index)
+      {
+        $value[$index] = Arrays::value($data, $index);
+      }
+
+      $result[$key] = $value;
+    }
+    return $result;
   }
 
   /**
@@ -249,6 +311,46 @@ class Arrays
     }
 
     return $default;
+  }
+
+  /**
+   * Group a list of arrays by the value of some index. This function is the
+   * same as @{function:mgroup}, except it operates on the values of array
+   * indexes rather than the return values of method calls.
+   *
+   * @param   $list       array List of arrays to group by some index value.
+   * @param   ...$by      string  Name of an index to select from each array in
+   *                      order to determine which group it should be placed into.
+   *                      Additional groups can be provided for sub grouping
+   *
+   * @return  array    Dictionary mapping distinct index values to lists of
+   *                  all objects which had that value at the index.
+   */
+  public static function igroup(array $list, ...$by)
+  {
+    $groupBy = array_shift($by);
+    $map = static::ipull($list, $groupBy);
+
+    $groups = [];
+    foreach($map as $group)
+    {
+      $groups[$group] = [];
+    }
+
+    foreach($map as $key => $group)
+    {
+      $groups[$group][$key] = $list[$key];
+    }
+
+    if($by)
+    {
+      foreach($groups as $groupKey => $grouped)
+      {
+        $groups[$groupKey] = self::igroup($grouped, ...$by);
+      }
+    }
+
+    return $groups;
   }
 
   /**
@@ -305,82 +407,6 @@ class Arrays
       $result[$key] = $value;
     }
     return $result;
-  }
-
-  /**
-   * Short for 'array pull'.  Extracts specified items from a list of arrays
-   * and returns them in an array keyed by the original key, or alternatively the
-   * value of another item on the array.
-   *
-   * @param array[]     $list     A list of arrays.
-   * @param string[]    $keys     Array of keys to extract.
-   * @param string|null $keyIndex Determines how **keys** will be
-   *                              assigned in the result array. Use a string like
-   *                              'id' to use the specified index as each item's
-   *                              key, or ##null## to preserve the original keys.
-   *
-   * @return array                An array keyed by $keyProperty populated by the
-   *                              properties specified in $properties.
-   */
-  public static function apull(array $list, array $keys, $keyIndex = null)
-  {
-    $result = [];
-    foreach($list as $key => $data)
-    {
-      if($keyIndex !== null)
-      {
-        $key = $data[$keyIndex];
-      }
-
-      $value = [];
-      foreach($keys as $index)
-      {
-        $value[$index] = Arrays::value($data, $index);
-      }
-
-      $result[$key] = $value;
-    }
-    return $result;
-  }
-
-  /**
-   * Group a list of arrays by the value of some index. This function is the
-   * same as @{function:mgroup}, except it operates on the values of array
-   * indexes rather than the return values of method calls.
-   *
-   * @param   $list       array List of arrays to group by some index value.
-   * @param   ...$by      string  Name of an index to select from each array in
-   *                      order to determine which group it should be placed into.
-   *                      Additional groups can be provided for sub grouping
-   *
-   * @return  array    Dictionary mapping distinct index values to lists of
-   *                  all objects which had that value at the index.
-   */
-  public static function igroup(array $list, ...$by)
-  {
-    $groupBy = array_shift($by);
-    $map = static::ipull($list, $groupBy);
-
-    $groups = [];
-    foreach($map as $group)
-    {
-      $groups[$group] = [];
-    }
-
-    foreach($map as $key => $group)
-    {
-      $groups[$group][$key] = $list[$key];
-    }
-
-    if($by)
-    {
-      foreach($groups as $groupKey => $grouped)
-      {
-        $groups[$groupKey] = self::igroup($grouped, ...$by);
-      }
-    }
-
-    return $groups;
   }
 
   /**
@@ -465,13 +491,13 @@ class Arrays
    *                      which pass the filter instead of keeping them.
    *
    * @return array   List of arrays which pass the filter.
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    */
   public static function ifilter(array $list, $index, $negate = false)
   {
     if(!is_scalar($index))
     {
-      throw new \InvalidArgumentException('Argument index is not a scalar.');
+      throw new InvalidArgumentException('Argument index is not a scalar.');
     }
 
     $result = [];
@@ -591,29 +617,6 @@ class Arrays
   }
 
   /**
-   * Shuffles an array maintaining key association
-   *
-   * @param array $array
-   *
-   * @return array
-   */
-  public static function shuffleAssoc($array)
-  {
-    if(!is_array($array))
-    {
-      return $array;
-    }
-    $keys = array_keys($array);
-    shuffle($keys);
-    $return = [];
-    foreach($keys as $key)
-    {
-      $return[$key] = $array[$key];
-    }
-    return $return;
-  }
-
-  /**
    * Check to see if an array is associative
    *
    * @param array $array
@@ -623,6 +626,19 @@ class Arrays
   public static function isAssoc(array $array)
   {
     return ($array !== array_values($array));
+  }
+
+  /**
+   * Return a random item from an array
+   *
+   * @param array $items
+   *
+   * @return mixed
+   */
+  public static function randomItem(array $items)
+  {
+    $final = static::random($items, 1, false);
+    return reset($final);
   }
 
   /**
@@ -648,16 +664,26 @@ class Arrays
   }
 
   /**
-   * Return a random item from an array
+   * Shuffles an array maintaining key association
    *
-   * @param array $items
+   * @param array $array
    *
-   * @return mixed
+   * @return array
    */
-  public static function randomItem(array $items)
+  public static function shuffleAssoc($array)
   {
-    $final = static::random($items, 1, false);
-    return reset($final);
+    if(!is_array($array))
+    {
+      return $array;
+    }
+    $keys = array_keys($array);
+    shuffle($keys);
+    $return = [];
+    foreach($keys as $key)
+    {
+      $return[$key] = $array[$key];
+    }
+    return $return;
   }
 
   /**

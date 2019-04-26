@@ -2,8 +2,9 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\EmailAddress;
+use PHPUnit_Framework_TestCase;
 
-class EmailAddressTest extends \PHPUnit_Framework_TestCase
+class EmailAddressTest extends PHPUnit_Framework_TestCase
 {
   /**
    * @param       $email

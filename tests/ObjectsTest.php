@@ -1,12 +1,16 @@
 <?php
 namespace Packaged\Tests;
 
+use InvalidArgumentException;
 use Packaged\Helpers\Objects;
 use Packaged\Helpers\Strings;
 use Packaged\Tests\Objects\MFilterTestHelper;
+use Packaged\Tests\Objects\PropertyClass;
 use Packaged\Tests\Objects\Thing;
+use PHPUnit_Framework_TestCase;
+use stdClass;
 
-class ObjectsTest extends \PHPUnit_Framework_TestCase
+class ObjectsTest extends PHPUnit_Framework_TestCase
 {
   public function testMFilterNullMethodThrowException()
   {
@@ -15,12 +19,12 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
     {
       Objects::mfilter([], null);
     }
-    catch(\InvalidArgumentException $ex)
+    catch(InvalidArgumentException $ex)
     {
       $caught = $ex;
     }
 
-    $this->assertEquals(true, ($caught instanceof \InvalidArgumentException));
+    $this->assertEquals(true, ($caught instanceof InvalidArgumentException));
   }
 
   public function testMFilterWithEmptyValueFiltered()
@@ -80,7 +84,7 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
 
   public function testPropertyNonEmpty()
   {
-    $object = new \Packaged\Tests\Objects\PropertyClass();
+    $object = new PropertyClass();
     $object->name = 't_name';
     $object->age = 't_age';
 
@@ -99,10 +103,10 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
 
   public function testHydrate()
   {
-    $dest = new \stdClass();
+    $dest = new stdClass();
     $dest->nullify = 'Please';
 
-    $source = new \Packaged\Tests\Objects\PropertyClass();
+    $source = new PropertyClass();
     $source->name = 'Test';
     $source->age = 19;
     $source->nullify = null;
@@ -152,7 +156,7 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
   public function testProperties()
   {
     $expect = ['name' => null, 'age' => null];
-    $class = new \Packaged\Tests\Objects\PropertyClass();
+    $class = new PropertyClass();
     $this->assertNotEquals($expect, $class->objectVars());
     $this->assertEquals($expect, $class->publicVars());
     $this->assertEquals($expect, get_object_vars($class));
@@ -162,7 +166,7 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
 
   public function testIdp()
   {
-    $object = new \stdClass();
+    $object = new stdClass();
     $object->name = "apple";
     $this->assertEquals("apple", Objects::property($object, "name", "pear"));
     $this->assertEquals(
@@ -205,13 +209,13 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
 
   public function testPpull()
   {
-    $a = new \stdClass();
+    $a = new stdClass();
     $a->name = "a";
     $a->value = 1;
-    $b = new \stdClass();
+    $b = new stdClass();
     $b->name = "b";
     $b->value = 2;
-    $c = new \stdClass();
+    $c = new stdClass();
     $c->name = "c";
     $c->value = 3;
     $list = [$a, $b, $c];
@@ -228,15 +232,15 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
 
   public function testApull()
   {
-    $a = new \stdClass();
+    $a = new stdClass();
     $a->name = "a";
     $a->value1 = 1;
     $a->value2 = 2;
-    $b = new \stdClass();
+    $b = new stdClass();
     $b->name = "b";
     $b->value1 = 2;
     $b->value2 = 3;
-    $c = new \stdClass();
+    $c = new stdClass();
     $c->name = "c";
     $c->value1 = 3;
     $c->value2 = 4;
@@ -367,11 +371,11 @@ class ObjectsTest extends \PHPUnit_Framework_TestCase
 
   public function testPsort()
   {
-    $apple = new \stdClass();
+    $apple = new stdClass();
     $apple->name = "apple";
-    $pear = new \stdClass();
+    $pear = new stdClass();
     $pear->name = "pear";
-    $grape = new \stdClass();
+    $grape = new stdClass();
     $grape->name = "grape";
 
     $expectations = [

@@ -1,6 +1,18 @@
 <?php
 namespace Packaged\Helpers;
 
+use function end;
+use function gmp_and;
+use function gmp_cmp;
+use function gmp_com;
+use function gmp_init;
+use function gmp_mod;
+use function gmp_mul;
+use function gmp_or;
+use function gmp_strval;
+use function gmp_sub;
+use function gmp_xor;
+
 class BitWiseGmp implements BitWiseInterface
 {
   /**
@@ -58,20 +70,20 @@ class BitWiseGmp implements BitWiseInterface
    *
    * @return bool
    */
-  public static function has($value, $mask)
-  {
-    return gmp_cmp(gmp_and($value, $mask), $mask) === 0;
-  }
-
-  /**
-   * @param $value
-   * @param $mask
-   *
-   * @return bool
-   */
   public static function hasAny($value, $mask)
   {
     return gmp_cmp(gmp_and($value, $mask), 0) !== 0;
+  }
+
+  /**
+   * @param $mask
+   *
+   * @return string
+   */
+  public static function highest($mask)
+  {
+    $bits = static::getBits($mask);
+    return end($bits);
   }
 
   /**
@@ -94,13 +106,13 @@ class BitWiseGmp implements BitWiseInterface
   }
 
   /**
+   * @param $value
    * @param $mask
    *
-   * @return string
+   * @return bool
    */
-  public static function highest($mask)
+  public static function has($value, $mask)
   {
-    $bits = static::getBits($mask);
-    return end($bits);
+    return gmp_cmp(gmp_and($value, $mask), $mask) === 0;
   }
 }

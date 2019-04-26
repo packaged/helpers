@@ -1,6 +1,8 @@
 <?php
 namespace Packaged\Helpers;
 
+use function extension_loaded;
+
 class BitWise implements BitWiseInterface
 {
   protected static $useGmp = true;
@@ -19,6 +21,11 @@ class BitWise implements BitWiseInterface
       return BitWiseGmp::isSingleBit($value);
     }
     return BitWiseInt::isSingleBit($value);
+  }
+
+  public static function hasGmp()
+  {
+    return static::$useGmp && extension_loaded('gmp');
   }
 
   /**
@@ -122,11 +129,6 @@ class BitWise implements BitWiseInterface
       return BitWiseGmp::highest($mask);
     }
     return BitWiseInt::highest($mask);
-  }
-
-  public static function hasGmp()
-  {
-    return static::$useGmp && extension_loaded('gmp');
   }
 
   public static function preferGmp($value = true)

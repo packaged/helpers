@@ -2,8 +2,9 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\DependencyArray;
+use PHPUnit_Framework_TestCase;
 
-class DependencyArrayTest extends \PHPUnit_Framework_TestCase
+class DependencyArrayTest extends PHPUnit_Framework_TestCase
 {
   public function testDependencies()
   {

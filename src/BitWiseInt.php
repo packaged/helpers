@@ -1,6 +1,8 @@
 <?php
 namespace Packaged\Helpers;
 
+use function end;
+
 class BitWiseInt implements BitWiseInterface
 {
   /**
@@ -57,20 +59,20 @@ class BitWiseInt implements BitWiseInterface
    *
    * @return bool
    */
-  public static function has($value, $mask)
-  {
-    return ((int)$value & (int)$mask) === (int)$mask;
-  }
-
-  /**
-   * @param $value
-   * @param $mask
-   *
-   * @return bool
-   */
   public static function hasAny($value, $mask)
   {
     return ((int)$value & (int)$mask) !== 0;
+  }
+
+  /**
+   * @param $mask
+   *
+   * @return string
+   */
+  public static function highest($mask)
+  {
+    $bits = static::getBits($mask);
+    return end($bits);
   }
 
   /**
@@ -92,13 +94,13 @@ class BitWiseInt implements BitWiseInterface
   }
 
   /**
+   * @param $value
    * @param $mask
    *
-   * @return string
+   * @return bool
    */
-  public static function highest($mask)
+  public static function has($value, $mask)
   {
-    $bits = static::getBits($mask);
-    return end($bits);
+    return ((int)$value & (int)$mask) === (int)$mask;
   }
 }
