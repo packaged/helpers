@@ -2,8 +2,8 @@
 namespace Packaged\Helpers;
 
 use function array_merge;
+use function array_pop;
 use function basename;
-use function count;
 use function glob;
 use function implode;
 use function rtrim;
@@ -38,8 +38,14 @@ class Path
    */
   public static function custom($separator, array $pathComponents)
   {
-    $fullPath = [];
+    if(!isset($pathComponents[1]))
+    {
+      return $pathComponents[0];
+    }
+
     $charList = '/\\' . $separator;
+    $fullPath = [];
+    $last = array_pop($pathComponents);
     foreach($pathComponents as $section)
     {
       $section = (string)$section;
@@ -53,7 +59,12 @@ class Path
       }
     }
 
-    return ($fullPath[0] == '' && count($fullPath) === 1 ? $separator : implode($separator, $fullPath));
+    if($last)
+    {
+      $fullPath[] = ltrim($last, $charList);
+    }
+
+    return (!isset($fullPath[1]) && $fullPath[0] == '' ? $separator : implode($separator, $fullPath));
   }
 
   /**
