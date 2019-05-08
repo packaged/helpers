@@ -35,15 +35,32 @@ class Path
    */
   public static function custom($separator, array $pathComponents)
   {
-    $return = '';
-    foreach($pathComponents as $part)
+    if(!isset($pathComponents[1]))
     {
-      if($part)
+      return $pathComponents[0];
+    }
+
+    $fullPath = [];
+    $last = array_pop($pathComponents);
+    foreach($pathComponents as $section)
+    {
+      $section = (string)$section;
+      if(isset($section[1]))
       {
-        $return = empty($return) ? $part : (rtrim($return, $separator) . $separator . ltrim($part, $separator));
+        $fullPath[] = empty($fullPath) ? rtrim($section, $separator) : trim($section, $separator);
+      }
+      else if(isset($section[0]))
+      {
+        $fullPath[] = $section == $separator ? '' : $section;
       }
     }
-    return $return;
+
+    if($last)
+    {
+      $fullPath[] = ltrim($last, $separator);
+    }
+
+    return (!isset($fullPath[1]) && $fullPath[0] == '' ? $separator : implode($separator, $fullPath));
   }
 
   /**
