@@ -86,6 +86,7 @@ class PathTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('/test', Path::url('/', '/test'));
     $this->assertEquals('/c/4/ab', Path::url('/', 'c', 4, 'ab'));
     $this->assertEquals('/test', Path::url('/', '', '/test', ''));
+    $this->assertEquals('//cdn.domain.tld/test', Path::url('//cdn.domain.tld', '', '/test', ''));
     $this->assertEquals('/test/subdir/test/', Path::url('/test/', '/subdir/test/'));
     $this->assertEquals('/test/subdir/test/', Path::url('/test', '/subdir/test', '/'));
     $this->assertEquals('test/subdir/test/', Path::url('test', '/subdir/test/'));
