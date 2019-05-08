@@ -47,7 +47,9 @@ class PathTest extends PHPUnit_Framework_TestCase
   public function testBuildCustomPath()
   {
     $this->assertEquals("a|b", Path::custom("|", ["a", "b"]));
+    $this->assertEquals("a|b|c", Path::custom("|", ["a", "|b|", "c"]));
     $this->assertEquals("a|b", Path::custom("|", [0 => "a", 1 => "b"]));
+    $this->assertEquals("a/~~b", Path::custom("~~", [0 => "a/", 1 => "b"]));
   }
 
   public function baseNameProvider()
@@ -78,12 +80,15 @@ class PathTest extends PHPUnit_Framework_TestCase
 
   public function testUrl()
   {
+    $this->assertEquals('', Path::url(''));
+    $this->assertEquals('abc', Path::url('abc'));
     $this->assertEquals('/', Path::url('/', ''));
     $this->assertEquals('/test', Path::url('/', '/test'));
     $this->assertEquals('/c/4/ab', Path::url('/', 'c', 4, 'ab'));
     $this->assertEquals('/test', Path::url('/', '', '/test', ''));
-    $this->assertEquals('/test/subdir/test/', Path::url('/test', '/subdir/test/'));
+    $this->assertEquals('/test/subdir/test/', Path::url('/test/', '/subdir/test/'));
     $this->assertEquals('/test/subdir/test/', Path::url('/test', '/subdir/test', '/'));
     $this->assertEquals('test/subdir/test/', Path::url('test', '/subdir/test/'));
+    $this->assertEquals('test/subdir//test/', Path::url('test', '/subdir//test/'));
   }
 }

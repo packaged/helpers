@@ -2,13 +2,10 @@
 namespace Packaged\Helpers;
 
 use function array_merge;
-use function array_pop;
 use function basename;
 use function glob;
-use function implode;
 use function rtrim;
 use function str_replace;
-use function trim;
 use const DIRECTORY_SEPARATOR;
 use const GLOB_NOSORT;
 use const GLOB_ONLYDIR;
@@ -38,33 +35,15 @@ class Path
    */
   public static function custom($separator, array $pathComponents)
   {
-    if(!isset($pathComponents[1]))
+    $return = '';
+    foreach($pathComponents as $part)
     {
-      return $pathComponents[0];
-    }
-
-    $charList = '/\\' . $separator;
-    $fullPath = [];
-    $last = array_pop($pathComponents);
-    foreach($pathComponents as $section)
-    {
-      $section = (string)$section;
-      if(isset($section[1]))
+      if($part)
       {
-        $fullPath[] = empty($fullPath) ? rtrim($section, $charList) : trim($section, $charList);
-      }
-      else if(isset($section[0]))
-      {
-        $fullPath[] = $section == $separator ? '' : $section;
+        $return = empty($return) ? $part : (rtrim($return, $separator) . $separator . ltrim($part, $separator));
       }
     }
-
-    if($last)
-    {
-      $fullPath[] = ltrim($last, $charList);
-    }
-
-    return (!isset($fullPath[1]) && $fullPath[0] == '' ? $separator : implode($separator, $fullPath));
+    return $return;
   }
 
   /**
