@@ -43,13 +43,11 @@ use function str_replace;
 use function str_shuffle;
 use function str_split;
 use function stripos;
-use function stristr;
 use function strlen;
 use function strncasecmp;
 use function strncmp;
 use function strpos;
 use function strrev;
-use function strstr;
 use function strtok;
 use function strtolower;
 use function substr;
@@ -219,7 +217,7 @@ class Strings
     $ranges = preg_split("(,|\s|;|\|)", $string);
     foreach($ranges as $range)
     {
-      if(strstr($range, '-'))
+      if(strpos($range, '-') !== false)
       {
         list($start, $end) = explode("-", $range, 2);
         if(is_numeric($start) && is_numeric($end))
@@ -620,9 +618,10 @@ class Strings
    */
   public static function offset($haystack, $needle)
   {
-    if(stristr($haystack, $needle))
+    $pos = strpos($haystack, $needle);
+    if($pos !== false)
     {
-      $haystack = substr($haystack, strpos($haystack, $needle) + strlen($needle));
+      $haystack = substr($haystack, $pos + strlen($needle));
     }
     return $haystack;
   }

@@ -11,7 +11,6 @@ use function implode;
 use function preg_replace;
 use function str_ireplace;
 use function str_replace;
-use function stristr;
 use function strlen;
 use function strncasecmp;
 use function strrev;
@@ -73,7 +72,7 @@ class EmailAddress
   {
     if(!$this->_calculated)
     {
-      if(stristr($this->_raw, '@'))
+      if(strpos($this->_raw, '@') !== false)
       {
         list($username, $domain) = explode('@', trim($this->_raw), 2);
       }
@@ -83,7 +82,7 @@ class EmailAddress
         $domain = '';
       }
       $this->_domain = strtolower($domain);
-      if(stristr($username, '+'))
+      if(strpos($username, '+') !== false)
       {
         list($this->_base, $this->_extension) = explode('+', $username, 2);
       }

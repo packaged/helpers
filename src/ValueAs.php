@@ -10,7 +10,6 @@ use function is_object;
 use function is_scalar;
 use function is_string;
 use function str_replace;
-use function stristr;
 use const FILTER_VALIDATE_BOOLEAN;
 
 /**
@@ -159,7 +158,7 @@ class ValueAs
 
     if(is_string($value))
     {
-      if(stristr($value, '=') && stristr($value, '&'))
+      if(strpos($value, '=') !== false && strpos($value, '&') !== false)
       {
         $array = [];
         foreach(explode('&', $value) as $set)
@@ -169,7 +168,7 @@ class ValueAs
         }
         return $array;
       }
-      if(stristr($value, ','))
+      if(strpos($value, ',') !== false)
       {
         return explode(',', $value);
       }

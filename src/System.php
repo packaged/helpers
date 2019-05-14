@@ -11,7 +11,6 @@ use function in_array;
 use function ini_get;
 use function preg_match;
 use function sprintf;
-use function stristr;
 use function strncasecmp;
 use function usleep;
 use const PHP_OS;
@@ -162,7 +161,7 @@ class System
       $server = $_SERVER['SERVER_SOFTWARE'];
     }
 
-    return stristr($server, 'Google App Engine') !== false;
+    return strpos($server, 'Google App Engine') !== false;
   }
 
   /**
