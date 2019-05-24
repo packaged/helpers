@@ -4,6 +4,7 @@ namespace Packaged\Helpers;
 use function array_merge;
 use function basename;
 use function glob;
+use function ltrim;
 use function rtrim;
 use function str_replace;
 use const DIRECTORY_SEPARATOR;
@@ -51,7 +52,7 @@ class Path
       }
       else if(isset($section[0]))
       {
-        $fullPath[] = $section == $separator ? '' : $section;
+        $fullPath[] = $section === $separator ? '' : $section;
       }
     }
 
@@ -59,8 +60,12 @@ class Path
     {
       $fullPath[] = ltrim($last, $separator);
     }
+    else if(!isset($fullPath[1]) && $fullPath[0] === '')
+    {
+      return $separator;
+    }
 
-    return (!isset($fullPath[1]) && $fullPath[0] == '' ? $separator : implode($separator, $fullPath));
+    return implode($separator, $fullPath);
   }
 
   /**
