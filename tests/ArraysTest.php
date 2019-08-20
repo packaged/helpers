@@ -635,4 +635,34 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     );
     $this->assertEquals([2, 4, 6, 8, 'a', 'c', 'e', 'g', 'i', 'k',], array_values(iterator_to_array($result)));
   }
+
+  public function testCoalesce()
+  {
+    $data = [
+      'one'   => null,
+      'two'   => '2',
+      'three' => null,
+      'four'  => '4',
+      'five'  => 0,
+    ];
+
+    $this->assertEquals('2', Arrays::coalesce($data, 'one', 'three', 'two'));
+    $this->assertEquals('4', Arrays::coalesce($data, 'one', 'three', 'four', 'two'));
+    $this->assertEquals(0, Arrays::coalesce($data, 'one', 'three', 'five'));
+    $this->assertNull(Arrays::coalesce($data, 'one', 'three'));
+  }
+
+  public function testNonEmpty()
+  {
+    $data = [
+      'one'   => 0,
+      'two'   => '2',
+      'three' => null,
+      'four'  => '4',
+    ];
+
+    $this->assertEquals('2', Arrays::nonempty($data, 'one', 'three', 'two'));
+    $this->assertEquals('4', Arrays::nonempty($data, 'one', 'three', 'four', 'two'));
+    $this->assertNull(Arrays::nonempty($data, 'one', 'three'));
+  }
 }

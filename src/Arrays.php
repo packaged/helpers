@@ -2,6 +2,8 @@
 namespace Packaged\Helpers;
 
 use Generator;
+use function array_shift;
+use function func_get_args;
 
 class Arrays
 {
@@ -766,5 +768,51 @@ class Arrays
         yield $k => $apply($v);
       }
     }
+  }
+
+  /**
+   * Returns the first array value which is not strictly null, or ##null## if there
+   * are no such values.
+   *
+   * @param array $source Input array
+   * @param  ...         One or more arguments for the key names.
+   *
+   * @return mixed       First non-##null## value, or null if no values are set.
+   */
+  public static function coalesce(array $source /* ... */)
+  {
+    $args = func_get_args();
+    array_shift($args);
+    foreach($args as $arg)
+    {
+      if(isset($source[$arg]) && $source[$arg] !== null)
+      {
+        return $source[$arg];
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Returns the first array value which is not empty, or ##null## if there
+   * are no such values.
+   *
+   * @param array $source Input array
+   * @param  ...         One or more arguments for the key names.
+   *
+   * @return mixed       First non-##null## value, or null if no values are set.
+   */
+  public static function nonempty(array $source /* ... */)
+  {
+    $args = func_get_args();
+    array_shift($args);
+    foreach($args as $arg)
+    {
+      if(isset($source[$arg]) && $source[$arg])
+      {
+        return $source[$arg];
+      }
+    }
+    return null;
   }
 }
