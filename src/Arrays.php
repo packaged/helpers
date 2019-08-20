@@ -786,4 +786,46 @@ class Arrays
       }
     }
   }
+
+  /**
+   * Returns the first array value which is not strictly null, or ##null## if there
+   * are no such values.
+   *
+   * @param array $source Input array
+   * @param array $keys   One or more arguments for the key names.
+   *
+   * @return mixed       First non-##null## value, or null if no values are set.
+   */
+  public static function coalesce(array $source, ...$keys)
+  {
+    foreach($keys as $key)
+    {
+      if(isset($source[$key]) && $source[$key] !== null)
+      {
+        return $source[$key];
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Returns the first array value which is not empty, or ##null## if there
+   * are no such values.
+   *
+   * @param array $source Input array
+   * @param array $keys   One or more arguments for the key names.
+   *
+   * @return mixed       First non-##null## value, or null if no values are set.
+   */
+  public static function nonempty(array $source, ...$keys)
+  {
+    foreach($keys as $key)
+    {
+      if(isset($source[$key]) && $source[$key])
+      {
+        return $source[$key];
+      }
+    }
+    return null;
+  }
 }
