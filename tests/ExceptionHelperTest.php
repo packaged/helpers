@@ -17,19 +17,6 @@ class ExceptionHelperTest extends TestCase
    */
   public function testExceptionTrace($arguments, $expected)
   {
-    $tail = '#2 /vendor/phpunit/phpunit/src/Framework/TestCase.php(1062): ReflectionMethod->invokeArgs(Object(Packaged\Tests\ExceptionHelperTest), Array)
-#3 /vendor/phpunit/phpunit/src/Framework/TestCase.php(913): PHPUnit_Framework_TestCase->runTest()
-#4 /vendor/phpunit/phpunit/src/Framework/TestResult.php(686): PHPUnit_Framework_TestCase->runBare()
-#5 /vendor/phpunit/phpunit/src/Framework/TestCase.php(868): PHPUnit_Framework_TestResult->run(Object(Packaged\Tests\ExceptionHelperTest))
-#6 /vendor/phpunit/phpunit/src/Framework/TestSuite.php(733): PHPUnit_Framework_TestCase->run(Object(PHPUnit_Framework_TestResult))
-#7 /vendor/phpunit/phpunit/src/Framework/TestSuite.php(733): PHPUnit_Framework_TestSuite->run(Object(PHPUnit_Framework_TestResult))
-#8 /vendor/phpunit/phpunit/src/Framework/TestSuite.php(733): PHPUnit_Framework_TestSuite->run(Object(PHPUnit_Framework_TestResult))
-#9 /vendor/phpunit/phpunit/src/TextUI/TestRunner.php(517): PHPUnit_Framework_TestSuite->run(Object(PHPUnit_Framework_TestResult))
-#10 /vendor/phpunit/phpunit/src/TextUI/Command.php(186): PHPUnit_TextUI_TestRunner->doRun(Object(PHPUnit_Framework_TestSuite), Array, true)
-#11 /vendor/phpunit/phpunit/src/TextUI/Command.php(116): PHPUnit_TextUI_Command->run(Array, true)
-#12 /vendor/phpunit/phpunit/phpunit(52): PHPUnit_TextUI_Command::main()
-#13 {main}';
-
     try
     {
       $this->_someException(...$arguments);
@@ -37,15 +24,13 @@ class ExceptionHelperTest extends TestCase
     catch(\Throwable $e)
     {
       $this->assertEquals(
-        "#0 /tests/ExceptionHelperTest.php(35): Packaged\Tests\ExceptionHelperTest->_someException({$expected[0]})
-#1 [internal function]: Packaged\\Tests\\ExceptionHelperTest->testExceptionTrace(Array, Array)
-$tail",
+        "#0 /ExceptionHelperTest.php(22): Packaged\Tests\ExceptionHelperTest->_someException({$expected[0]})
+#1 [internal function]: Packaged\\Tests\\ExceptionHelperTest->testExceptionTrace(Array, Array)",
         $this->_normalize($e->getTraceAsString())
       );
       $this->assertEquals(
-        "#0 /tests/ExceptionHelperTest.php(35): Packaged\Tests\ExceptionHelperTest->_someException({$expected[1]})
-#1 [internal function]: Packaged\\Tests\\ExceptionHelperTest->testExceptionTrace(Array, Array)
-$tail",
+        "#0 /ExceptionHelperTest.php(22): Packaged\Tests\ExceptionHelperTest->_someException({$expected[1]})
+#1 [internal function]: Packaged\\Tests\\ExceptionHelperTest->testExceptionTrace(Array, Array)",
         $this->_normalize(ExceptionHelper::getTraceAsString($e))
       );
     }
@@ -77,6 +62,7 @@ $tail",
 
   private function _normalize(string $str)
   {
-    return preg_replace('/^(#\d+) .+?\/helpers/m', '$1 ', $str);
+    $str = implode("\n", array_slice(explode("\n", $str), 0, 2));
+    return preg_replace('/^#0 .+?\/tests/m', '#0 ', $str);
   }
 }
