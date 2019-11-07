@@ -29,23 +29,23 @@ class ExceptionHelper
           {
             $args[] = "'" . $arg . "'";
           }
-          elseif(is_array($arg))
+          else if(is_array($arg))
           {
             $args[] = "Array";
           }
-          elseif(is_null($arg))
+          else if(is_null($arg))
           {
             $args[] = 'NULL';
           }
-          elseif(is_bool($arg))
+          else if(is_bool($arg))
           {
             $args[] = ($arg) ? "true" : "false";
           }
-          elseif(is_object($arg))
+          else if(is_object($arg))
           {
             $args[] = 'Object(' . get_class($arg) . ')';
           }
-          elseif(is_resource($arg))
+          else if(is_resource($arg))
           {
             $args[] = ((string)$arg) . ' (' . get_resource_type($arg) . ')';
           }
