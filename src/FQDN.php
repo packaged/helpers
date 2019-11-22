@@ -5,11 +5,9 @@ use function array_combine;
 use function array_keys;
 use function array_merge;
 use function array_reverse;
-use function count;
 use function explode;
 use function filter_var;
 use function parse_url;
-use function strlen;
 use function strtolower;
 use const FILTER_VALIDATE_URL;
 
@@ -64,14 +62,7 @@ class FQDN
   public function defineTlds(array $tlds, $append = false)
   {
     $tlds = array_combine($tlds, $tlds);
-    if($append)
-    {
-      $this->_definedTlds = array_merge($this->_definedTlds, $tlds);
-    }
-    else
-    {
-      $this->_definedTlds = $tlds;
-    }
+    $this->_definedTlds = $append ? array_merge($this->_definedTlds, $tlds) : $tlds;
     return $this;
   }
 
@@ -97,66 +88,6 @@ class FQDN
   }
 
   /**
-   * Take the host string and split into subdomain , domain & tld
-   *
-   * @return $this
-   */
-  protected function _prepareHost()
-  {
-    if($this->_processed)
-    {
-      return $this;
-    }
-
-    $parts = array_reverse(explode('.', $this->_fqdn));
-    $this->_processed = true;
-
-    if(count($parts) == 1)
-    {
-      $this->_domain = $parts[0];
-      return $this;
-    }
-
-    foreach($parts as $i => $part)
-    {
-      if(empty($this->_tld))
-      {
-        $this->_tld = $part;
-        continue;
-      }
-
-      if(empty($this->_domain))
-      {
-        if($i < 2
-          && (strlen($part) == 2
-            || isset($this->_definedTlds[$part . '.' . $this->_tld])
-            || isset($this->_knownTlds[$part])
-          )
-        )
-        {
-          $this->_tld = $part . '.' . $this->_tld;
-        }
-        else
-        {
-          $this->_domain = $part;
-        }
-        continue;
-      }
-
-      if(empty($this->_subdomain))
-      {
-        $this->_subdomain = $part;
-      }
-      else
-      {
-        $this->_subdomain = $part . '.' . $this->_subdomain;
-      }
-    }
-
-    return $this;
-  }
-
-  /**
    * Main domain, excluding sub domains and tlds
    *
    * @return string
@@ -176,5 +107,75 @@ class FQDN
   {
     $this->_prepareHost();
     return $this->_tld;
+  }
+
+  /**
+   * Take the host string and split into subdomain , domain & tld
+   *
+   * @return $this
+   */
+  protected function _prepareHost()
+  {
+    if($this->_processed)
+    {
+      return $this;
+    }
+
+    $extendedTlds = [];
+    foreach($this->_definedTlds as $tld)
+    {
+      if(strpos($tld, '.') === false)
+      {
+        $extendedTlds[$tld] = $tld;
+      }
+      else
+      {
+        $tldParts = array_reverse(explode('.', $tld));
+        $applyTld = '';
+        foreach($tldParts as $currentTld)
+        {
+          $applyTld = rtrim($currentTld . '.' . $applyTld, '.');
+          $extendedTlds[$applyTld] = $applyTld;
+        }
+      }
+    }
+
+    $parts = array_reverse(explode('.', $this->_fqdn));
+    $this->_processed = true;
+
+    if(!isset($parts[1]))
+    {
+      $this->_domain = $parts[0];
+      return $this;
+    }
+
+    foreach($parts as $i => $part)
+    {
+      if(empty($this->_tld))
+      {
+        $this->_tld = $part;
+      }
+      else if(empty($this->_domain))
+      {
+        if(($i < 2 && !isset($part[2]))
+          || isset($extendedTlds[$part . '.' . $this->_tld])
+          || isset($extendedTlds['*.' . $this->_tld])
+          || isset($this->_knownTlds[$part])
+        )
+        {
+          $this->_tld = $part . '.' . $this->_tld;
+        }
+        else
+        {
+          $this->_domain = $part;
+        }
+      }
+      else
+      {
+        $this->_subdomain = empty($this->_subdomain) ? $part : $part . '.' . $this->_subdomain;
+      }
+    }
+
+    return $this;
   }
 }
