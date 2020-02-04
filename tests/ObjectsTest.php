@@ -2,11 +2,14 @@
 namespace Packaged\Tests;
 
 use InvalidArgumentException;
+use Packaged\Helpers\Branch;
 use Packaged\Helpers\Objects;
 use Packaged\Helpers\Strings;
 use Packaged\Tests\Objects\MFilterTestHelper;
+use Packaged\Tests\Objects\Pancake;
 use Packaged\Tests\Objects\PropertyClass;
 use Packaged\Tests\Objects\Thing;
+use Packaged\Tests\Objects\TreeThing;
 use PHPUnit_Framework_TestCase;
 use stdClass;
 
@@ -73,12 +76,12 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $expect = new Pancake('Blueberry', "Maple Syrup");
     $this->assertEquals(
       $expect,
-      Objects::create('Packaged\Tests\Pancake', ['Blueberry', "Maple Syrup"])
+      Objects::create('Packaged\Tests\Objects\Pancake', ['Blueberry', "Maple Syrup"])
     );
     $expect = new Pancake();
     $this->assertEquals(
       $expect,
-      Objects::create('Packaged\Tests\Pancake', [])
+      Objects::create('Packaged\Tests\Objects\Pancake', [])
     );
   }
 
@@ -393,7 +396,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
 
   public function testWith()
   {
-    /** @var Pancake $pancake */
+    /** @var \Packaged\Tests\Objects\Pancake $pancake */
     $pancake = Objects::with(
       new Pancake(),
       function (Pancake $p) {
@@ -402,26 +405,31 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     );
     $this->assertEquals('Apples', $pancake->getFruit());
   }
-}
 
-final class Pancake
-{
-  public $fruit;
-  public $sauce;
-
-  public function __construct($fruit = null, $sauce = null)
+  public function testTreeP()
   {
-    $this->fruit = $fruit;
-    $this->sauce = $sauce;
+    $tree = Objects::pTree([], 'id', 'parentId');
+    $this->assertInstanceOf(Branch::class, $tree);
+    $this->assertFalse($tree->hasChildren());
+
+    $tree = Objects::pTree([(object)['id' => 0, 'parentId' => null]], 'id', 'parentId');
+    $this->assertInstanceOf(Branch::class, $tree);
+    $this->assertTrue($tree->hasChildren());
+    $this->assertContainsOnlyInstancesOf(Branch::class, $tree->getChildren());
+    $this->assertCount(1, $tree->getChildren());
   }
 
-  public function getFruit()
+  public function testTreeM()
   {
-    return $this->fruit;
-  }
 
-  public function getSauce()
-  {
-    return $this->sauce;
+    $tree = Objects::mTree([], 'getId', 'getParentId');
+    $this->assertInstanceOf(Branch::class, $tree);
+    $this->assertFalse($tree->hasChildren());
+
+    $tree = Objects::mTree([new TreeThing(0, null, 'value', [])], 'getId', 'getParentId');
+    $this->assertInstanceOf(Branch::class, $tree);
+    $this->assertTrue($tree->hasChildren());
+    $this->assertContainsOnlyInstancesOf(Branch::class, $tree->getChildren());
+    $this->assertCount(1, $tree->getChildren());
   }
 }

@@ -4,6 +4,7 @@ namespace Packaged\Tests;
 use Exception;
 use InvalidArgumentException;
 use Packaged\Helpers\Arrays;
+use Packaged\Helpers\Branch;
 use Packaged\Helpers\Strings;
 use PHPUnit_Framework_TestCase;
 use stdClass;
@@ -668,5 +669,18 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('2', Arrays::nonempty($data, 'one', 'three', 'two'));
     $this->assertEquals('4', Arrays::nonempty($data, 'one', 'three', 'four', 'two'));
     $this->assertNull(Arrays::nonempty($data, 'one', 'three'));
+  }
+
+  public function testTree()
+  {
+    $tree = Arrays::iTree([], 'id', 'parentId');
+    $this->assertInstanceOf(Branch::class, $tree);
+    $this->assertFalse($tree->hasChildren());
+
+    $tree = Arrays::iTree(['id' => 0, 'parentId' => null], 'id', 'parentId');
+    $this->assertInstanceOf(Branch::class, $tree);
+    $this->assertTrue($tree->hasChildren());
+    $this->assertContainsOnlyInstancesOf(Branch::class, $tree->getChildren());
+    $this->assertCount(1, $tree->getChildren());
   }
 }
