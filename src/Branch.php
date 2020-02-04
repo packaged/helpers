@@ -11,6 +11,12 @@ class Branch implements JsonSerializable
   protected $_children = [];
   protected $_object;
 
+  /**
+   * Branch constructor.
+   *
+   * @param mixed       $object
+   * @param string|null $parentId
+   */
   protected function __construct($object, ?string $parentId)
   {
     $this->_object = $object;
