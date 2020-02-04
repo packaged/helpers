@@ -11,7 +11,13 @@ class Branch implements JsonSerializable
   protected $_children = [];
   protected $_object;
 
-  protected function __construct($object, ?string $parentId)
+  /**
+   * Branch constructor.
+   *
+   * @param mixed       $object
+   * @param string|null $parentId
+   */
+  protected function __construct($object, $parentId)
   {
     $this->_object = $object;
     $this->_parentId = $parentId;
@@ -29,7 +35,7 @@ class Branch implements JsonSerializable
    *
    * @return static
    */
-  public function pHydrate(array $objects, string $idProperty, string $parentIdProperty)
+  public function pHydrate(array $objects, $idProperty, $parentIdProperty)
   {
     $objects = Objects::ppull($objects, null, $idProperty);
     array_walk($objects, function (&$o) use ($parentIdProperty) { $o = new static($o, $o->{$parentIdProperty}); });
@@ -43,7 +49,7 @@ class Branch implements JsonSerializable
    *
    * @return static
    */
-  public function mHydrate(array $objects, string $idMethod, string $parentIdMethod)
+  public function mHydrate(array $objects, $idMethod, $parentIdMethod)
   {
     $objects = Objects::mpull($objects, null, $idMethod);
     array_walk($objects, function (&$o) use ($parentIdMethod) { $o = new static($o, $o->{$parentIdMethod}()); });
@@ -57,7 +63,7 @@ class Branch implements JsonSerializable
    *
    * @return static
    */
-  public function iHydrate(array $objects, string $idKey, string $parentIdKey)
+  public function iHydrate(array $objects, $idKey, $parentIdKey)
   {
     $objects = Arrays::ipull($objects, null, $idKey);
     array_walk($objects, function (&$o) use ($parentIdKey) { $o = new static($o, $o[$parentIdKey]); });
