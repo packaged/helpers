@@ -9,7 +9,7 @@ class Branch implements JsonSerializable
   protected $_parent;
   protected $_parentId;
   protected $_children = [];
-  protected $_object;
+  protected $_item;
 
   /**
    * Branch constructor.
@@ -19,7 +19,7 @@ class Branch implements JsonSerializable
    */
   protected function __construct($object, $parentId)
   {
-    $this->_object = $object;
+    $this->_item = $object;
     $this->_parentId = $parentId;
   }
 
@@ -124,9 +124,17 @@ class Branch implements JsonSerializable
   /**
    * @return mixed
    */
-  public function getObject()
+  public function getItem()
   {
-    return $this->_object;
+    return $this->_item;
+  }
+
+  /**
+   * @return static
+   */
+  public function getParent()
+  {
+    return $this->_parent;
   }
 
   /**
@@ -134,9 +142,9 @@ class Branch implements JsonSerializable
    */
   public function jsonSerialize()
   {
-    if($this->_object)
+    if($this->_item)
     {
-      return ['object' => $this->_object, 'children' => $this->_children];
+      return ['object' => $this->_item, 'children' => $this->_children];
     }
     return $this->_children;
   }
