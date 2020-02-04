@@ -26,6 +26,9 @@ class BranchTest extends TestCase
       '[{"object":{"id":0,"parentId":null,"key":"value","data":["root data"]},"children":[]},{"object":{"id":1,"parentId":null,"key":"value","data":["root data"]},"children":[{"object":{"id":2,"parentId":1,"key":"value","data":["1 child 1"]},"children":[{"object":{"id":4,"parentId":2,"key":"value","data":["2 child 1"]},"children":[]}]},{"object":{"id":3,"parentId":1,"key":"value","data":["1 child 2"]},"children":[]}]}]',
       json_encode($tree)
     );
+    $this->assertNull($tree->getItem());
+    $this->assertNull($tree->getParent());
+    $this->assertEquals($tree, $tree->getChildren()[0]->getParent());
   }
 
   public function testStdClassTree()
@@ -45,6 +48,9 @@ class BranchTest extends TestCase
       '[{"object":{"id":0,"parentId":null,"key":"value","data":["root data"]},"children":[]},{"object":{"id":1,"parentId":null,"key":"value","data":["root data"]},"children":[{"object":{"id":2,"parentId":1,"key":"value","data":["1 child 1"]},"children":[{"object":{"id":4,"parentId":2,"key":"value","data":["2 child 1"]},"children":[]}]},{"object":{"id":3,"parentId":1,"key":"value","data":["1 child 2"]},"children":[]}]}]',
       json_encode($tree)
     );
+    $this->assertNull($tree->getItem());
+    $this->assertNull($tree->getParent());
+    $this->assertEquals($tree, $tree->getChildren()[0]->getParent());
   }
 
   public function testObjectTree()
@@ -64,8 +70,9 @@ class BranchTest extends TestCase
       '[{"object":{"id":0,"parentId":null,"key":"value","data":["root data"]},"children":[]},{"object":{"id":1,"parentId":null,"key":"value","data":["root data"]},"children":[{"object":{"id":2,"parentId":1,"key":"value","data":["1 child 1"]},"children":[{"object":{"id":4,"parentId":2,"key":"value","data":["2 child 1"]},"children":[]}]},{"object":{"id":3,"parentId":1,"key":"value","data":["1 child 2"]},"children":[]}]}]',
       json_encode($tree)
     );
-
-    $this->assertNull($tree->getObject());
-    $this->assertInstanceOf(TreeThing::class, $tree->getChildren()[0]->getObject());
+    $this->assertNull($tree->getItem());
+    $this->assertNull($tree->getParent());
+    $this->assertEquals($tree, $tree->getChildren()[0]->getParent());
+    $this->assertInstanceOf(TreeThing::class, $tree->getChildren()[0]->getItem());
   }
 }
