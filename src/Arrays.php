@@ -815,4 +815,19 @@ class Arrays
     }
     return null;
   }
+
+  /**
+   * Build a nested tree of Branch objects containing the original array.
+   * Uses indexes names to retrieve the object ID and parent ID.
+   *
+   * @param array  $source      Original objects to organise into a tree
+   * @param string $idKey       Array key used as the ID of this object
+   * @param string $parentIdKey Array key used as the parent ID of this object
+   *
+   * @return Branch
+   */
+  public static function iTree(array $source, string $idKey, string $parentIdKey)
+  {
+    return Branch::trunk()->iHydrate($source, $idKey, $parentIdKey);
+  }
 }

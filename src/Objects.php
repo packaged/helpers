@@ -667,4 +667,34 @@ class Objects
     $callback($object);
     return $object;
   }
+
+  /**
+   * Build a nested tree of Branch objects containing the original object.
+   * Uses property names to retrieve the object ID and parent ID.
+   *
+   * @param array  $source           Original objects to organise into a tree
+   * @param string $idProperty       Property name used as the ID of this object
+   * @param string $parentIdProperty Property name used as the parent ID of this object
+   *
+   * @return Branch
+   */
+  public static function pTree(array $source, string $idProperty, string $parentIdProperty)
+  {
+    return Branch::trunk()->pHydrate($source, $idProperty, $parentIdProperty);
+  }
+
+  /**
+   * Build a nested tree of Branch objects containing the original object.
+   * Uses method names to retrieve the object ID and parent ID.
+   *
+   * @param array  $source         Original objects to organise into a tree
+   * @param string $idMethod       Method name used as the ID of this object
+   * @param string $parentIdMethod Method name used as the parent ID of this object
+   *
+   * @return Branch
+   */
+  public static function mTree(array $source, string $idMethod, string $parentIdMethod)
+  {
+    return Branch::trunk()->mHydrate($source, $idMethod, $parentIdMethod);
+  }
 }

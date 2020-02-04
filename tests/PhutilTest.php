@@ -2,6 +2,7 @@
 namespace Packaged\Tests;
 
 use Packaged\Tests\Objects\MFilterTestHelper;
+use Packaged\Tests\Objects\Pancake;
 use Packaged\Tests\Objects\Thing;
 
 /**
@@ -630,12 +631,12 @@ class PhutilTest extends \PHPUnit_Framework_TestCase
     $expect = new Pancake('Blueberry', "Maple Syrup");
     $this->assertEquals(
       $expect,
-      newv('Packaged\Tests\Pancake', ['Blueberry', "Maple Syrup"])
+      newv('Packaged\Tests\Objects\Pancake', ['Blueberry', "Maple Syrup"])
     );
     $expect = new Pancake();
     $this->assertEquals(
       $expect,
-      newv('Packaged\Tests\Pancake', [])
+      newv('Packaged\Tests\Objects\Pancake', [])
     );
   }
 
