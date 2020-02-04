@@ -826,7 +826,7 @@ class Arrays
    *
    * @return Branch
    */
-  public static function iTree(array $source, string $idKey, string $parentIdKey)
+  public static function iTree(array $source, $idKey, $parentIdKey)
   {
     return Branch::trunk()->iHydrate($source, $idKey, $parentIdKey);
   }

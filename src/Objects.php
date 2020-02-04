@@ -678,7 +678,7 @@ class Objects
    *
    * @return Branch
    */
-  public static function pTree(array $source, string $idProperty, string $parentIdProperty)
+  public static function pTree(array $source, $idProperty, $parentIdProperty)
   {
     return Branch::trunk()->pHydrate($source, $idProperty, $parentIdProperty);
   }
@@ -693,7 +693,7 @@ class Objects
    *
    * @return Branch
    */
-  public static function mTree(array $source, string $idMethod, string $parentIdMethod)
+  public static function mTree(array $source, $idMethod, $parentIdMethod)
   {
     return Branch::trunk()->mHydrate($source, $idMethod, $parentIdMethod);
   }
