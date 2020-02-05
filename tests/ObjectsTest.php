@@ -432,4 +432,43 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $this->assertContainsOnlyInstancesOf(Branch::class, $tree->getChildren());
     $this->assertCount(1, $tree->getChildren());
   }
+
+  public function testPFilterNullPropertyThrowException()
+  {
+    $caught = null;
+    try
+    {
+      Objects::pfilter([], null, 'abc');
+    }
+    catch(InvalidArgumentException $ex)
+    {
+      $caught = $ex;
+    }
+
+    $this->assertEquals(true, ($caught instanceof InvalidArgumentException));
+  }
+
+  public function testPFilter()
+  {
+    $a = new Pancake("apple", "toffee");
+    $b = new Pancake("apple", "strawberry");
+    $c = new Pancake("orange", "toffee");
+    $d = new Pancake("orange", "gravy");
+
+    $list = ['a' => $a, 'b' => $b, 'c' => $c, 'd' => $d];
+
+    $actual = Objects::pfilter($list, 'fruit', 'apple');
+    $this->assertEquals(['a' => $a, 'b' => $b,], $actual);
+
+    $actual = Objects::pfilter($list, 'fruit', 'apple', true);
+    $this->assertEquals(['c' => $c, 'd' => $d,], $actual);
+
+    $matchApple = function ($prop) { return $prop == 'apple'; };
+
+    $actual = Objects::pfilter($list, 'fruit', $matchApple);
+    $this->assertEquals(['a' => $a, 'b' => $b,], $actual);
+
+    $actual = Objects::pfilter($list, 'fruit', $matchApple, true);
+    $this->assertEquals(['c' => $c, 'd' => $d,], $actual);
+  }
 }
