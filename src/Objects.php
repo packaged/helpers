@@ -607,7 +607,7 @@ class Objects
 
   public static function mfilter(array $list, $method, $negate = false)
   {
-    if(!is_string($method))
+    if(!is_string($method) || empty($method))
     {
       throw new InvalidArgumentException('Argument method is not a string.');
     }
@@ -620,6 +620,51 @@ class Objects
       if((!$negate && !empty($value)) || ($negate && empty($value)))
       {
         $result[$key] = $object;
+      }
+    }
+
+    return $result;
+  }
+
+  /**
+   * Filter a list of objects by matching the property against the match value (===)
+   *
+   * @param  $list          array        List of objects to filter.
+   * @param  $property      string       A property name.
+   * @param  $match         mixed       A value to match the property against, or a closure
+   * @param  $negate        bool         Optionally, pass true to drop objects
+   *                        which pass the filter instead of keeping them.
+   *
+   * @return array   List of objects which pass the filter.
+   * @throws InvalidArgumentException
+   */
+
+  public static function pfilter(array $list, $property, $match, $negate = false)
+  {
+    if(!is_string($property) || empty($property))
+    {
+      throw new InvalidArgumentException('Argument property is not a string.');
+    }
+
+    $result = [];
+    if(is_callable($match))
+    {
+      foreach($list as $key => $object)
+      {
+        if($match(Objects::property($object, $property)) != $negate)
+        {
+          $result[$key] = $object;
+        }
+      }
+    }
+    else
+    {
+      foreach($list as $key => $object)
+      {
+        if((Objects::property($object, $property) === $match) != $negate)
+        {
+          $result[$key] = $object;
+        }
       }
     }
 
