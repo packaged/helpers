@@ -75,4 +75,23 @@ class BranchTest extends TestCase
     $this->assertEquals($tree, $tree->getChildren()[0]->getParent());
     $this->assertInstanceOf(TreeThing::class, $tree->getChildren()[0]->getItem());
   }
+
+  public function testNonExistingParent()
+  {
+    $test = [
+      Objects::create(TreeThing::class, ['myid', 'badparent', 'value', ['root data']]),
+    ];
+
+    $tree = Branch::trunk()->mHydrate($test, 'getId', 'getParentId');
+    $this->assertTrue($tree->hasChildren());
+    $this->assertEquals(1, count($tree->getChildren()));
+    $this->assertEquals(
+      '[{"object":{"id":"myid","parentId":"badparent","key":"value","data":["root data"]},"children":[]}]',
+      json_encode($tree)
+    );
+    $this->assertNull($tree->getItem());
+    $this->assertNull($tree->getParent());
+    $this->assertEquals($tree, $tree->getChildren()[0]->getParent());
+    $this->assertInstanceOf(TreeThing::class, $tree->getChildren()[0]->getItem());
+  }
 }
