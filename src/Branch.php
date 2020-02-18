@@ -79,7 +79,7 @@ class Branch implements JsonSerializable
   {
     foreach($objects as $object)
     {
-      if($object->_parentId)
+      if($object->_parentId && isset($objects[$object->_parentId]))
       {
         $object->_setParent($objects[$object->_parentId]);
         $objects[$object->_parentId]->_addChild($object);
