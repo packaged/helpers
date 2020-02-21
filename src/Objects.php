@@ -85,9 +85,7 @@ class Objects
    *
    * @throws \Exception
    */
-  public static function hydrate(
-    $destination, $source, array $properties = null, $copyNull = true
-  )
+  public static function hydrate($destination, $source, array $properties = null, $copyNull = true)
   {
     if(!is_object($destination) || !is_object($source))
     {
@@ -103,6 +101,28 @@ class Objects
     foreach($properties as $property)
     {
       $newVal = static::property($source, $property);
+      if($newVal !== null || $copyNull)
+      {
+        $destination->$property = $newVal;
+      }
+    }
+  }
+
+  public static function mapHydrate($destination, $source, array $properties, $copyNull = true)
+  {
+    if(!is_object($destination) || !is_object($source))
+    {
+      throw new \Exception("mapHydrate() must be given objects");
+    }
+
+    foreach($properties as $property => $callback)
+    {
+      $newVal = static::property($source, $property);
+      if(is_callable($callback))
+      {
+        $newVal = $callback($newVal);
+      }
+
       if($newVal !== null || $copyNull)
       {
         $destination->$property = $newVal;
