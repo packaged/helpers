@@ -143,6 +143,50 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     Objects::hydrate(['' => ''], $source, []);
   }
 
+  public function testMapHydrate()
+  {
+    $dest = new stdClass();
+    $dest->nullify = 'Please';
+
+    $source = new PropertyClass();
+    $source->name = 'Test';
+    $source->age = 19;
+    $source->nullify = null;
+
+    Objects::mapHydrate($dest, $source, [null]);
+    $this->assertEquals('Please', $dest->nullify);
+
+    Objects::mapHydrate($dest, $source, ['nullify' => true], false);
+    $this->assertEquals('Please', $dest->nullify);
+
+    Objects::mapHydrate($dest, $source, ['nullify' => true], true);
+    $this->assertNull($dest->nullify);
+
+    Objects::mapHydrate($dest, $source, ['name' => true]);
+
+    $this->assertObjectHasAttribute('name', $dest);
+    $this->assertEquals('Test', $dest->name);
+
+    $this->assertObjectNotHasAttribute('age', $dest);
+    Objects::mapHydrate($dest, $source, ['age' => true]);
+
+    $this->assertObjectHasAttribute('age', $dest);
+    $this->assertEquals('19', $dest->age);
+
+    $dest->name = null;
+    Objects::mapHydrate($dest, $source, ['name' => true]);
+    $this->assertObjectHasAttribute('name', $dest);
+    $this->assertEquals('Test', $dest->name);
+
+    Objects::mapHydrate($dest, $source, ['age' => function ($val) { return $val * 10; }]);
+
+    $this->assertObjectHasAttribute('age', $dest);
+    $this->assertEquals(190, $dest->age);
+
+    $this->setExpectedException("Exception");
+    Objects::mapHydrate(['' => ''], $source, []);
+  }
+
   public function testClassShortName()
   {
     $expectations = [
