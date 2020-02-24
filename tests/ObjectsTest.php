@@ -139,6 +139,16 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $this->assertObjectHasAttribute('name', $dest);
     $this->assertEquals('Test', $dest->name);
 
+    $dest = new stdClass();
+    $dest->differentName = 'Dave';
+    $dest->age = 1;
+    $source->name = 'Bob';
+    $source->age = 20;
+
+    Objects::hydrate($dest, $source, ['name' => 'differentName', 'age']);
+    $this->assertEquals($source->name, $dest->differentName);
+    $this->assertEquals($source->age, $dest->age);
+
     $this->setExpectedException("Exception");
     Objects::hydrate(['' => ''], $source, []);
   }

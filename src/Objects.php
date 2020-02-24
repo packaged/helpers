@@ -84,12 +84,12 @@ class Objects
     }
 
     $properties = array_filter($properties);
-    foreach($properties as $property)
+    foreach($properties as $propertyK => $propertyV)
     {
-      $newVal = static::property($source, $property);
+      $newVal = static::property($source, is_int($propertyK) ? $propertyV : $propertyK);
       if($newVal !== null || $copyNull)
       {
-        $destination->$property = $newVal;
+        $destination->$propertyV = $newVal;
       }
     }
   }
