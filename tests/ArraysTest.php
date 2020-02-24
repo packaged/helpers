@@ -469,6 +469,25 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     $this->assertEquals($expect, Arrays::igroup($list, 'group'));
   }
 
+  public function testFlipGroup()
+  {
+    $input = [
+      'com'   => 'classic',
+      'net'   => 'classic',
+      'news'  => 'new',
+      'rocks' => 'new',
+      'uk'    => 'country',
+      'es'    => 'country',
+    ];
+
+    $expect = [
+      'classic' => ['com' => 'com', 'net' => 'net'],
+      'new'     => ['news' => 'news', 'rocks' => 'rocks'],
+      'country' => ['uk' => 'uk', 'es' => 'es'],
+    ];
+    $this->assertEquals($expect, Arrays::flipGroup($input));
+  }
+
   public function testXGroup()
   {
     $apple = ['name' => 'Apple', 'type' => 'fruit', 'color' => 'green'];

@@ -354,6 +354,29 @@ class Arrays
   }
 
   /**
+   * Flip an array, and group by its original values
+   *
+   * @param array $list
+   *
+   * @return array
+   */
+  public static function flipGroup(array $list)
+  {
+    $groups = [];
+
+    foreach($list as $k => $val)
+    {
+      if(!isset($groups[$val]))
+      {
+        $groups[$val] = [];
+      }
+      $groups[$val][$k] = $k;
+    }
+
+    return $groups;
+  }
+
+  /**
    * Choose an index from a list of arrays. Short for "index pull", this
    * function works just like @{function:mpull}, except that it operates on a
    * list of arrays and selects an index from them instead of operating on a
