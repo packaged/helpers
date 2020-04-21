@@ -67,7 +67,7 @@ class Objects
    * @param array  $properties  properties to read
    * @param bool   $copyNull    Copy null values from source to destination
    *
-   * @return void
+   * @return object $destination
    *
    * @throws Exception
    */
@@ -92,6 +92,7 @@ class Objects
         $destination->$propertyV = $newVal;
       }
     }
+    return $destination;
   }
 
   public static function mapHydrate($destination, $source, array $properties, $copyNull = true)
@@ -114,6 +115,8 @@ class Objects
         $destination->$property = $newVal;
       }
     }
+
+    return $destination;
   }
 
   /**
