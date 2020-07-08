@@ -48,7 +48,7 @@ jobs:
   build-phpRC:
     <<: *defaults
     docker:
-      - image: php:rc-alpine
+      - image: php:7.4-alpine
         environment:
           ADD_MODULES: bcmath
 
@@ -59,4 +59,4 @@ workflows:
       - build-php71
       - build-php72
       - build-php73
-      - build-phpRC
+      - build-php74
