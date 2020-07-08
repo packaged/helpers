@@ -29,6 +29,7 @@ class FQDNTest extends \PHPUnit_Framework_TestCase
       ['domain.com', 'domain', 'com', null],
       ['my.domain.com', 'domain', 'com', 'my'],
       ['my.domain.co.uk', 'domain', 'co.uk', 'my'],
+      ['my.domain.ltd.uk', 'domain', 'ltd.uk', 'my'],
       ['second.my.domain.com', 'domain', 'com', 'second.my'],
     ];
   }
