@@ -24,6 +24,20 @@ class FQDN
   protected $_tld;
 
   protected $_definedTlds = [];
+
+  protected $_knownSlds = [
+    'ac.uk'         => 'ac.uk',
+    'gov.uk'        => 'gov.uk',
+    'ltd.uk'        => 'ltd.uk',
+    'mod.uk'        => 'mod.uk',
+    'nhs.uk'        => 'nhs.uk',
+    'nic.uk'        => 'nic.uk',
+    'parliament.uk' => 'parliament.uk',
+    'plc.uk'        => 'plc.uk',
+    'police.uk'     => 'police.uk',
+    'sch.uk'        => 'sch.uk',
+  ];
+
   protected $_knownTlds = [
     'co'  => 'co',
     'com' => 'com',
@@ -160,6 +174,7 @@ class FQDN
         if(($i < 2 && !isset($part[2]))
           || isset($extendedTlds[$part . '.' . $this->_tld])
           || isset($extendedTlds['*.' . $this->_tld])
+          || isset($this->_knownSlds[$part . '.' . $this->_tld])
           || isset($this->_knownTlds[$part])
         )
         {

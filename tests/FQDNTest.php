@@ -30,6 +30,7 @@ class FQDNTest extends PHPUnit_Framework_TestCase
       ['domain.com', 'domain', 'com', null],
       ['my.domain.com', 'domain', 'com', 'my'],
       ['my.domain.co.uk', 'domain', 'co.uk', 'my'],
+      ['my.domain.ltd.uk', 'domain', 'ltd.uk', 'my'],
       ['second.my.domain.com', 'domain', 'com', 'second.my'],
     ];
   }
@@ -49,6 +50,12 @@ class FQDNTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('my', $fq->subDomain());
 
     $this->assertEquals(['random.tld'], $fq->getDefinedTlds());
+
+    $fq = new FQDN('my.test.source.google');
+    $fq->defineTlds(['google']);
+    $this->assertEquals('google', $fq->tld());
+    $this->assertEquals('source', $fq->domain());
+    $this->assertEquals('my.test', $fq->subDomain());
   }
 
   public function testDefinedStarTlds()
