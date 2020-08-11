@@ -127,4 +127,37 @@ class DateTimeHelperTest extends \PHPUnit_Framework_TestCase
     );
     $this->assertEquals(31622400, $leapTest);
   }
+
+  /**
+   * @param $microtime
+   * @param $uniqid
+   * @param $hasEntropy
+   *
+   * @dataProvider uniqidProvider
+   */
+  public function testUniqid2microtime($microtime, $uniqid, $hasEntropy)
+  {
+    $time = DateTimeHelper::uniqidToMilliseconds($uniqid, $hasEntropy);
+    $this->assertEquals($microtime, $time, '', 10);
+  }
+
+  public function uniqidProvider()
+  {
+    return [
+      [DateTimeHelper::milliseconds(), uniqid(), false],
+      [DateTimeHelper::milliseconds(), uniqid('PRE'), false],
+      [DateTimeHelper::milliseconds(), uniqid('', true), true],
+      [DateTimeHelper::milliseconds(), uniqid('PRE', true), true],
+    ];
+  }
+
+  public function testMilliseconds()
+  {
+    $this->assertInternalType('int', DateTimeHelper::milliseconds());
+  }
+
+  public function testToSeconds()
+  {
+    $this->assertEquals(DateTimeHelper::toSeconds(1466159101859), 1466159101);
+  }
 }
