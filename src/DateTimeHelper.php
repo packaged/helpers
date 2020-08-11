@@ -1,6 +1,9 @@
 <?php
 namespace Packaged\Helpers;
 
+use DateInterval;
+use DateTime;
+
 class DateTimeHelper
 {
   const SQL_DATETIME = 'Y-m-d H:i:s';
@@ -52,6 +55,20 @@ class DateTimeHelper
       $time = floor($time / 1000);
     }
     return (int)$time;
+  }
+
+  /**
+   * Return the number of seconds in an interval relative to the epoch or specified time
+   *
+   * @param DateInterval  $interval
+   * @param DateTime|null $relativeTime
+   *
+   * @return int
+   */
+  public static function intervalToSeconds(DateInterval $interval, DateTime $relativeTime = null)
+  {
+    $relativeTime = $relativeTime ?: DateTime::createFromFormat('U', 0);
+    return -$relativeTime->format('U') + $relativeTime->add($interval)->getTimestamp();
   }
 
   /**
