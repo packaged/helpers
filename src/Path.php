@@ -102,13 +102,13 @@ class Path
    */
   public static function custom($separator, array $pathComponents)
   {
-    if(!isset($pathComponents[1]))
+    $last = array_pop($pathComponents);
+    if(empty($pathComponents))
     {
-      return $pathComponents[0];
+      return $last;
     }
 
     $fullPath = [];
-    $last = array_pop($pathComponents);
     foreach($pathComponents as $section)
     {
       $section = (string)$section;
