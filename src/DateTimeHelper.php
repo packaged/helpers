@@ -1,6 +1,8 @@
 <?php
 namespace Packaged\Helpers;
 
+use DateInterval;
+use DateTime;
 use function array_slice;
 use function count;
 use function date;
@@ -61,6 +63,20 @@ class DateTimeHelper
       $time = floor($time / 1000);
     }
     return (int)$time;
+  }
+
+  /**
+   * Return the number of seconds in an interval relative to the epoch or specified time
+   *
+   * @param DateInterval  $interval
+   * @param DateTime|null $relativeTime
+   *
+   * @return int
+   */
+  public static function intervalToSeconds(DateInterval $interval, ?DateTime $relativeTime = null)
+  {
+    $relativeTime = $relativeTime ?? DateTime::createFromFormat('U', 0);
+    return -$relativeTime->format('U') + $relativeTime->add($interval)->getTimestamp();
   }
 
   /**

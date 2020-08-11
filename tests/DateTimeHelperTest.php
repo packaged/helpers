@@ -1,6 +1,8 @@
 <?php
 namespace Packaged\Tests;
 
+use DateInterval;
+use DateTime;
 use Packaged\Helpers\DateTimeHelper;
 use PHPUnit_Framework_TestCase;
 
@@ -113,4 +115,17 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
     $this->assertEquals($compare, $dates);
   }
 
+  public function testIntervalToSeconds()
+  {
+    $y0 = DateTimeHelper::intervalToSeconds(new DateInterval('P1Y'));
+    $this->assertEquals(31536000, $y0);
+    $y0s = DateTimeHelper::intervalToSeconds(new DateInterval('P1Y'), DateTime::createFromFormat('U', 0));
+    $this->assertEquals($y0, $y0s);
+
+    $leapTest = DateTimeHelper::intervalToSeconds(
+      new DateInterval('P1Y'),
+      new DateTime('1 Jan 1972 00:00') // leap year
+    );
+    $this->assertEquals(31622400, $leapTest);
+  }
 }
