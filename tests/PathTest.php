@@ -22,6 +22,8 @@ class PathTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('/abc/d/f/', Path::custom('/', ['', '', '/abc', null, null, '/d', null, 'f', '', '', '/']));
     $this->assertEquals('abc/d//e/f', Path::custom('/', ['abc', '/d//e/', 'f']));
     $this->assertEquals('//cdn.xyz.com/images', Path::custom('/', ['//cdn.xyz.com', 'images']));
+    $this->assertEquals('abc/d/e/f/g', Path::custom('/', ['abc/d', 'e', null, 'f/g']));
+    $this->assertEquals('abc/d/e/f/g', Path::custom('/', ['abc/d/e', null, 'f/g']));
   }
 
   public function testGlobRecursive()
