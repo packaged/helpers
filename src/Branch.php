@@ -227,30 +227,44 @@ class Branch implements JsonSerializable
 
   private static function _iterate(Branch $b, bool $levelOrder = false)
   {
+    $item = $b->getItem();
+    if($item)
+    {
+      yield $item;
+    }
     if($levelOrder)
     {
       if($b->hasChildren())
       {
+        $generators = [];
         foreach($b->getChildren() as $child)
         {
-          yield $child->getItem();
+          array_unshift($generators, self::_iterate($child, $levelOrder));
         }
-        foreach($b->getChildren() as $child)
+
+        $i = count($generators);
+        while($generators)
         {
-          foreach(self::_iterate($child, $levelOrder) as $yielded)
+          $i--;
+          if($i < 0)
           {
-            yield $yielded;
+            $i = count($generators) - 1;
           }
+          /** @var Generator $generator */
+          $generator = $generators[$i];
+          if(!$generator->valid())
+          {
+            unset($generators[$i]);
+            continue;
+          }
+
+          yield $generator->current();
+          $generator->next();
         }
       }
     }
     else
     {
-      $item = $b->getItem();
-      if($item)
-      {
-        yield $item;
-      }
       if($b->hasChildren())
       {
         foreach($b->getChildren() as $child)
