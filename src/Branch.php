@@ -201,13 +201,11 @@ class Branch implements JsonSerializable
   /**
    * Perform a "pre-order" depth-first iteration
    *
-   * @param bool $levelOrder - use "level-order" iteration
-   *
    * @return Generator
    */
-  public function iterate(bool $levelOrder = false)
+  public function iterate()
   {
-    foreach(self::_iterate($this, $levelOrder) as $item)
+    foreach(self::_iterate($this) as $item)
     {
       yield $item;
     }
@@ -216,63 +214,27 @@ class Branch implements JsonSerializable
   /**
    * Return an array of items in depth-first order
    *
-   * @param bool $levelOrder - return in "level-order"
-   *
    * @return array
    */
-  public function flatten(bool $levelOrder = false)
+  public function flatten()
   {
-    return iterator_to_array($this->iterate($levelOrder));
+    return iterator_to_array($this->iterate());
   }
 
-  private static function _iterate(Branch $b, bool $levelOrder = false)
+  private static function _iterate(Branch $b)
   {
     $item = $b->getItem();
     if($item)
     {
       yield $item;
     }
-    if($levelOrder)
+    if($b->hasChildren())
     {
-      if($b->hasChildren())
+      foreach($b->getChildren() as $child)
       {
-        $generators = [];
-        foreach($b->getChildren() as $child)
+        foreach(self::_iterate($child) as $yielded)
         {
-          array_unshift($generators, self::_iterate($child, $levelOrder));
-        }
-
-        $i = count($generators);
-        while($generators)
-        {
-          $i--;
-          if($i < 0)
-          {
-            $i = count($generators) - 1;
-          }
-          /** @var Generator $generator */
-          $generator = $generators[$i];
-          if(!$generator->valid())
-          {
-            unset($generators[$i]);
-            continue;
-          }
-
-          yield $generator->current();
-          $generator->next();
-        }
-      }
-    }
-    else
-    {
-      if($b->hasChildren())
-      {
-        foreach($b->getChildren() as $child)
-        {
-          foreach(self::_iterate($child, $levelOrder) as $yielded)
-          {
-            yield $yielded;
-          }
+          yield $yielded;
         }
       }
     }

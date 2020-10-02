@@ -118,17 +118,24 @@ class BranchTest extends TestCase
       '[{"object":{"id":0,"parentId":null,"key":"value","data":["root data"]},"children":[{"object":{"id":1,"parentId":0,"key":"value","data":["child 1"]},"children":[{"object":{"id":null,"parentId":1,"key":"value","data":["child 1 child"]},"children":[]}]},{"object":{"id":2,"parentId":0,"key":"value","data":["child 2"]},"children":[{"object":{"id":null,"parentId":2,"key":"value","data":["child 2 child"]},"children":[]}]}]}]',
       json_encode($tree)
     );
+  }
 
-    $this->assertEquals($test, $tree->flatten());
-
-    // test level order
-    $test = [
-      $root,
-      $child1,
-      $child2,
-      $child1child,
-      $child2child,
+  public function testFlatten()
+  {
+    $input = [
+      Objects::create(TreeThing::class, ['A', null]),
+      Objects::create(TreeThing::class, ['B', 'A']),
+      Objects::create(TreeThing::class, ['C', 'B']),
+      Objects::create(TreeThing::class, ['D', 'B']),
+      Objects::create(TreeThing::class, ['E', 'D']),
+      Objects::create(TreeThing::class, ['F', 'D']),
+      Objects::create(TreeThing::class, ['G', 'A']),
+      Objects::create(TreeThing::class, ['H', 'G']),
+      Objects::create(TreeThing::class, ['I', 'H']),
+      Objects::create(TreeThing::class, ['J', 'I']),
     ];
-    $this->assertEquals($test, $tree->flatten(true));
+
+    $tree = Branch::trunk()->mHydrate($input, 'getId', 'getParentId');
+    $this->assertEquals('ABCDEFGHIJ', implode('', Objects::mpull($tree->flatten(), 'getId')));
   }
 }
