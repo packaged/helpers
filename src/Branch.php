@@ -2,6 +2,7 @@
 
 namespace Packaged\Helpers;
 
+use Generator;
 use JsonSerializable;
 
 class Branch implements JsonSerializable
@@ -37,9 +38,25 @@ class Branch implements JsonSerializable
    */
   public function pHydrate(array $objects, string $idProperty, string $parentIdProperty)
   {
-    $objects = Objects::ppull($objects, null, $idProperty);
-    array_walk($objects, function (&$o) use ($parentIdProperty) { $o = new static($o, $o->{$parentIdProperty}); });
-    return $this->_hydrate($objects);
+    $newObjects = $appendObjects = [];
+    foreach($objects as $object)
+    {
+      $key = $object->{$idProperty};
+      $o = new static($object, $object->{$parentIdProperty});
+      if($key !== null)
+      {
+        $newObjects[$key] = $o;
+      }
+      else
+      {
+        $appendObjects[] = $o;
+      }
+    }
+    foreach($appendObjects as $o)
+    {
+      $newObjects[] = $o;
+    }
+    return $this->_hydrate($newObjects);
   }
 
   /**
@@ -51,9 +68,25 @@ class Branch implements JsonSerializable
    */
   public function mHydrate(array $objects, string $idMethod, string $parentIdMethod)
   {
-    $objects = Objects::mpull($objects, null, $idMethod);
-    array_walk($objects, function (&$o) use ($parentIdMethod) { $o = new static($o, $o->{$parentIdMethod}()); });
-    return $this->_hydrate($objects);
+    $newObjects = $appendObjects = [];
+    foreach($objects as $object)
+    {
+      $key = $object->{$idMethod}();
+      $o = new static($object, $object->{$parentIdMethod}());
+      if($key !== null)
+      {
+        $newObjects[$key] = $o;
+      }
+      else
+      {
+        $appendObjects[] = $o;
+      }
+    }
+    foreach($appendObjects as $o)
+    {
+      $newObjects[] = $o;
+    }
+    return $this->_hydrate($newObjects);
   }
 
   /**
@@ -65,9 +98,25 @@ class Branch implements JsonSerializable
    */
   public function iHydrate(array $objects, string $idKey, string $parentIdKey)
   {
-    $objects = Arrays::ipull($objects, null, $idKey);
-    array_walk($objects, function (&$o) use ($parentIdKey) { $o = new static($o, $o[$parentIdKey]); });
-    return $this->_hydrate($objects);
+    $newObjects = $appendObjects = [];
+    foreach($objects as $object)
+    {
+      $key = $object[$idKey];
+      $o = new static($object, $object[$parentIdKey]);
+      if($key !== null)
+      {
+        $newObjects[$key] = $o;
+      }
+      else
+      {
+        $appendObjects[] = $o;
+      }
+    }
+    foreach($appendObjects as $o)
+    {
+      $newObjects[] = $o;
+    }
+    return $this->_hydrate($newObjects);
   }
 
   /**
@@ -79,7 +128,7 @@ class Branch implements JsonSerializable
   {
     foreach($objects as $object)
     {
-      if($object->_parentId && isset($objects[$object->_parentId]))
+      if($object->_parentId !== null && isset($objects[$object->_parentId]))
       {
         $object->_setParent($objects[$object->_parentId]);
         $objects[$object->_parentId]->_addChild($object);
@@ -147,5 +196,47 @@ class Branch implements JsonSerializable
       return ['object' => $this->_item, 'children' => $this->_children];
     }
     return $this->_children;
+  }
+
+  /**
+   * Perform a "pre-order" depth-first iteration
+   *
+   * @return Generator
+   */
+  public function iterate()
+  {
+    foreach(self::_iterate($this) as $item)
+    {
+      yield $item;
+    }
+  }
+
+  /**
+   * Return an array of items in depth-first order
+   *
+   * @return array
+   */
+  public function flatten()
+  {
+    return iterator_to_array($this->iterate());
+  }
+
+  private static function _iterate(Branch $b)
+  {
+    $item = $b->getItem();
+    if($item)
+    {
+      yield $item;
+    }
+    if($b->hasChildren())
+    {
+      foreach($b->getChildren() as $child)
+      {
+        foreach(self::_iterate($child) as $yielded)
+        {
+          yield $yielded;
+        }
+      }
+    }
   }
 }

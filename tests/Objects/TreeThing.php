@@ -11,7 +11,7 @@ class TreeThing implements JsonSerializable
   private $_key;
   private $_data;
 
-  public function __construct($id, $parentId, $key, $data)
+  public function __construct($id, $parentId, $key = null, $data = null)
   {
     $this->_id = $id;
     $this->_parentId = $parentId;
