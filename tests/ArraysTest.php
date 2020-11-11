@@ -692,7 +692,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     $this->assertInstanceOf(Branch::class, $tree);
     $this->assertFalse($tree->hasChildren());
 
-    $tree = Arrays::iTree(['id' => 0, 'parentId' => null], 'id', 'parentId');
+    $tree = Arrays::iTree([['id' => 0, 'parentId' => null]], 'id', 'parentId');
     $this->assertInstanceOf(Branch::class, $tree);
     $this->assertTrue($tree->hasChildren());
     $this->assertContainsOnlyInstancesOf(Branch::class, $tree->getChildren());

@@ -26,4 +26,19 @@ class DependencyArrayTest extends \PHPUnit_Framework_TestCase
     $darray->add(3, [3]);
     $darray->getLoadOrder();
   }
+
+  public function testResolve()
+  {
+    $darray = new DependencyArray();
+    $darray->add(1, [2], 'three');
+    $darray->add(2, [3], 'two');
+    $darray->add(3, [], 'one');
+    $this->assertEquals('one,two,three', implode(',', $darray->resolved()));
+
+    $darray = new DependencyArray();
+    $darray->add(1, [2], 'three');
+    $darray->add(2, [3]);
+    $darray->add(3, [], 'one');
+    $this->assertEquals('one,,three', implode(',', $darray->resolved()));
+  }
 }
