@@ -1,69 +1,21 @@
 <?php
 namespace Packaged\Helpers;
 
-use Exception;
-use function array_unique;
-use function count;
-use function in_array;
-
 class DependencyArray
 {
   protected $_items;
+  protected $_itemData;
   protected $_depends;
   protected $_hasDependency;
+  protected $_loadOrder;
 
   public function __construct()
   {
     $this->_items = [];
+    $this->_itemData = [];
     $this->_depends = [];
     $this->_hasDependency = [];
-  }
-
-  public function add($item, $dependsOn = [])
-  {
-    $this->_items[] = $item;
-    $dependsOn = (array)$dependsOn;
-    foreach($dependsOn as $dependsOnItem)
-    {
-      $this->_items[] = $dependsOnItem;
-      $this->_depends[$dependsOnItem][] = $item;
-    }
-
-    $this->_items = array_unique($this->_items);
-    $this->_hasDependency[$item] = $dependsOn;
-  }
-
-  /**
-   * @return array
-   * @throws Exception
-   */
-  public function getLoadOrder()
-  {
-    $order = [];
-    $itmCount = count($this->_items);
-
-    $hasChanged = true;
-    while(count($order) < $itmCount && $hasChanged === true)
-    {
-      $hasChanged = false;
-      $this->_hasDependency = (array)$this->_hasDependency;
-      foreach($this->_hasDependency as $item => $dependencies)
-      {
-        if($this->_satisfied($item, $order))
-        {
-          $order[] = $item;
-          unset($this->_hasDependency[$item]);
-          $hasChanged = true;
-        }
-      }
-    }
-
-    if(count($order) < $itmCount && $hasChanged === false)
-    {
-      throw new Exception('Impossible set of dependencies');
-    }
-
-    return $order;
+    $this->_loadOrder = [];
   }
 
   protected function _satisfied($item, $addedSoFar)
@@ -80,4 +32,71 @@ class DependencyArray
 
     return true;
   }
+
+  public function add($key, $dependsOnKeys = [], $itemData = null)
+  {
+    $this->_loadOrder = [];
+    $this->_items[] = $key;
+    $this->_itemData[$key] = $itemData;
+    $dependsOnKeys = (array)$dependsOnKeys;
+    foreach($dependsOnKeys as $dependsOnItem)
+    {
+      $this->_items[] = $dependsOnItem;
+      $this->_depends[$dependsOnItem][] = $key;
+    }
+
+    $this->_items = array_unique($this->_items);
+    $this->_hasDependency[$key] = $dependsOnKeys;
+    return $this;
+  }
+
+  public function getLoadOrder()
+  {
+    if(!empty($this->_loadOrder))
+    {
+      return $this->_loadOrder;
+    }
+
+    $this->_loadOrder = [];
+    $itmCount = count($this->_items);
+
+    $hasChanged = true;
+    while(count($this->_loadOrder) < $itmCount && $hasChanged === true)
+    {
+      $hasChanged = false;
+      $this->_hasDependency = (array)$this->_hasDependency;
+      foreach($this->_hasDependency as $item => $dependencies)
+      {
+        if($this->_satisfied($item, $this->_loadOrder))
+        {
+          $this->_loadOrder[] = $item;
+          unset($this->_hasDependency[$item]);
+          $hasChanged = true;
+        }
+      }
+    }
+
+    if(count($this->_loadOrder) < $itmCount && $hasChanged === false)
+    {
+      throw new \Exception('Impossible set of dependencies');
+    }
+
+    return $this->_loadOrder;
+  }
+
+  /**
+   * @return array sorted in order with the item data or key
+   *
+   * @throws \Exception
+   */
+  public function resolved()
+  {
+    $return = [];
+    foreach($this->getLoadOrder() as $key)
+    {
+      $return[$key] = isset($this->_itemData[$key]) ? $this->_itemData[$key] : null;
+    }
+    return $return;
+  }
+
 }
