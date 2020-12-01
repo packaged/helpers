@@ -8,11 +8,6 @@
       "email": "brooke@bajb.net"
     }
   ],
-  "config": {
-    "platform": {
-      "php": "7.1"
-    }
-  },
   "require": {
     "php": ">=7.1",
     "ext-json": "*"
