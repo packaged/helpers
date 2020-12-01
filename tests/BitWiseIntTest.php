@@ -2,9 +2,9 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\BitWiseInt;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class BitWiseIntTest extends PHPUnit_Framework_TestCase
+class BitWiseIntTest extends TestCase
 {
   const ONE = '1';
   const TWO = '2';
@@ -18,24 +18,24 @@ class BitWiseIntTest extends PHPUnit_Framework_TestCase
    */
   public function testSingleBit()
   {
-    $this->assertTrue(BitWiseInt::isSingleBit(1));
-    $this->assertTrue(BitWiseInt::isSingleBit("1"));
-    $this->assertTrue(BitWiseInt::isSingleBit(2));
-    $this->assertTrue(BitWiseInt::isSingleBit("2"));
-    $this->assertTrue(BitWiseInt::isSingleBit(4));
+    static::assertTrue(BitWiseInt::isSingleBit(1));
+    static::assertTrue(BitWiseInt::isSingleBit("1"));
+    static::assertTrue(BitWiseInt::isSingleBit(2));
+    static::assertTrue(BitWiseInt::isSingleBit("2"));
+    static::assertTrue(BitWiseInt::isSingleBit(4));
 
     $fails = [3, 5, 6, 7, 9, 10, 11, 13, 14, 15];
     foreach($fails as $checkBit)
     {
-      $this->assertFalse(BitWiseInt::isSingleBit($checkBit));
+      static::assertFalse(BitWiseInt::isSingleBit($checkBit));
     }
 
     $checkBit = 4;
     for($i = 0; $i < 32; $i++)
     {
       $checkBit *= 2;
-      $this->assertTrue(BitWiseInt::isSingleBit($checkBit));
-      $this->assertFalse(BitWiseInt::isSingleBit($checkBit - 3));
+      static::assertTrue(BitWiseInt::isSingleBit($checkBit));
+      static::assertFalse(BitWiseInt::isSingleBit($checkBit - 3));
     }
   }
 
@@ -44,36 +44,36 @@ class BitWiseIntTest extends PHPUnit_Framework_TestCase
     $state = 0;
 
     //Has
-    $this->assertFalse(BitWiseInt::has($state, static::ONE));
+    static::assertFalse(BitWiseInt::has($state, static::ONE));
 
     //Add
     $state = BitWiseInt::add($state, static::ONE);
-    $this->assertTrue(BitWiseInt::has($state, static::ONE));
+    static::assertTrue(BitWiseInt::has($state, static::ONE));
     $state = BitWiseInt::add($state, static::TWO);
     $state = BitWiseInt::add($state, static::TWO);
-    $this->assertTrue(BitWiseInt::has($state, static::ONE));
-    $this->assertTrue(BitWiseInt::has($state, static::TWO));
+    static::assertTrue(BitWiseInt::has($state, static::ONE));
+    static::assertTrue(BitWiseInt::has($state, static::TWO));
 
     //Remove
     $state = BitWiseInt::remove($state, static::ONE);
     $state = BitWiseInt::remove($state, static::ONE);
-    $this->assertTrue(BitWiseInt::has($state, static::TWO));
-    $this->assertFalse(BitWiseInt::has($state, static::ONE));
+    static::assertTrue(BitWiseInt::has($state, static::TWO));
+    static::assertFalse(BitWiseInt::has($state, static::ONE));
 
     //Toggle
     $state = BitWiseInt::toggle($state, static::ONE);
-    $this->assertTrue(BitWiseInt::has($state, static::ONE));
+    static::assertTrue(BitWiseInt::has($state, static::ONE));
     $state = BitWiseInt::toggle($state, static::ONE);
-    $this->assertFalse(BitWiseInt::has($state, static::ONE));
+    static::assertFalse(BitWiseInt::has($state, static::ONE));
 
     //Highest
     $state = BitWiseInt::add($state, static::FOUR);
-    $this->assertEquals(static::FOUR, BitWiseInt::highest($state));
+    static::assertEquals(static::FOUR, BitWiseInt::highest($state));
     $state = BitWiseInt::add($state, static::SIX);
-    $this->assertEquals(static::SIX, BitWiseInt::highest($state));
+    static::assertEquals(static::SIX, BitWiseInt::highest($state));
 
     //Get Bits
-    $this->assertEquals(
+    static::assertEquals(
       [static::TWO, static::FOUR, static::SIX],
       BitWiseInt::getBits($state)
     );
@@ -86,7 +86,7 @@ class BitWiseIntTest extends PHPUnit_Framework_TestCase
     $state = BitWiseInt::add($state, static::FIVE);
 
     $mask = static::TWO | static::THREE;
-    $this->assertFalse(BitWiseInt::has($state, $mask));
-    $this->assertTrue(BitWiseInt::hasAny($state, $mask));
+    static::assertFalse(BitWiseInt::has($state, $mask));
+    static::assertTrue(BitWiseInt::hasAny($state, $mask));
   }
 }

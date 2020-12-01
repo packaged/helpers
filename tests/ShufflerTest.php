@@ -3,23 +3,23 @@ namespace Packaged\Tests;
 
 use Packaged\Helpers\Shuffler;
 use Packaged\Helpers\Strings;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class ShufflerTest extends PHPUnit_Framework_TestCase
+class ShufflerTest extends TestCase
 {
   public function testShuffleOne()
   {
     $shuffler = new Shuffler();
-    $this->assertEquals($shuffler, $shuffler->addValue('abc', 1));
-    $this->assertEquals('abc', $shuffler->read());
+    static::assertEquals($shuffler, $shuffler->addValue('abc', 1));
+    static::assertEquals('abc', $shuffler->read());
   }
 
   public function testShuffleInvalidProbability()
   {
     $shuffler = new Shuffler();
-    $this->setExpectedException("\InvalidArgumentException");
-    $this->assertEquals($shuffler, $shuffler->addValue('abc', 10000000));
+    $this->expectException(\InvalidArgumentException::class);
+    static::assertEquals($shuffler, $shuffler->addValue('abc', 10000000));
   }
 
   public function testShuffle()
@@ -35,12 +35,12 @@ class ShufflerTest extends PHPUnit_Framework_TestCase
         $diffCount++;
       }
     }
-    $this->assertGreaterThan(0, $diffCount);
+    static::assertGreaterThan(0, $diffCount);
     // assert they're both empty
-    $this->assertNull($s1->read());
-    $this->assertNull($s2->read());
-    $this->assertNull($s1->pop());
-    $this->assertNull($s2->pop());
+    static::assertNull($s1->read());
+    static::assertNull($s2->read());
+    static::assertNull($s1->pop());
+    static::assertNull($s2->pop());
   }
 
   public function testShuffleObj()
@@ -55,11 +55,11 @@ class ShufflerTest extends PHPUnit_Framework_TestCase
     $ob2->random = 'string';
     $shuffler->addValue($ob2, 10);
 
-    $this->assertContains($shuffler->read(), [$ob1, $ob2]);
-    $this->assertContains($shuffler->pop(), [$ob1, $ob2]);
-    $this->assertContains($shuffler->pop(), [$ob1, $ob2]);
-    $this->assertNull($shuffler->read());
-    $this->assertNull($shuffler->pop());
+    static::assertContains($shuffler->read(), [$ob1, $ob2]);
+    static::assertContains($shuffler->pop(), [$ob1, $ob2]);
+    static::assertContains($shuffler->pop(), [$ob1, $ob2]);
+    static::assertNull($shuffler->read());
+    static::assertNull($shuffler->pop());
   }
 
   private function _getShuffler()

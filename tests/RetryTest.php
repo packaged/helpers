@@ -3,9 +3,9 @@ namespace Packaged\Tests;
 
 use Exception;
 use Packaged\Helpers\RetryHelper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RetryTest extends PHPUnit_Framework_TestCase
+class RetryTest extends TestCase
 {
   /**
    * @expectedException Exception
@@ -64,7 +64,7 @@ class RetryTest extends PHPUnit_Framework_TestCase
       throw new Exception('fail ' . $count);
     };
     $response = RetryHelper::retry(2, $callFn);
-    $this->assertEquals('response', $response);
-    $this->assertEquals(3, $count);
+    static::assertEquals('response', $response);
+    static::assertEquals(3, $count);
   }
 }

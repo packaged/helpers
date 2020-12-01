@@ -2,42 +2,42 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\Path;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PathTest extends PHPUnit_Framework_TestCase
+class PathTest extends TestCase
 {
   public function testCustom()
   {
-    $this->assertEquals('abc', Path::custom('/', ['abc']));
-    $this->assertEquals('abc', Path::custom('/', ['', 'abc']));
-    $this->assertEquals('abc/d', Path::custom('/', ['abc', 'd']));
-    $this->assertEquals('/abc', Path::custom('/', ['/abc']));
-    $this->assertEquals('/abc/d', Path::custom('/', ['/abc', '', 'd']));
-    $this->assertEquals('/abc/d', Path::custom('/', ['/abc', '/d']));
-    $this->assertEquals('/abc/d/e/', Path::custom('/', ['/abc', '/d', 'e/']));
-    $this->assertEquals('/abc/d/e/f', Path::custom('/', ['/abc', '/d', 'e/', 'f']));
-    $this->assertEquals('/abc/d/0/f', Path::custom('/', ['/abc', '/d', 0, 'f']));
-    $this->assertEquals('/abc/d/f', Path::custom('/', ['/abc', '/d', null, 'f']));
-    $this->assertEquals('/abc/d/f', Path::custom('/', ['', '/abc', '', '/d', null, 'f']));
-    $this->assertEquals('/abc/d/f/', Path::custom('/', ['', '', '/abc', null, null, '/d', null, 'f', '', '', '/']));
-    $this->assertEquals('abc/d//e/f', Path::custom('/', ['abc', '/d//e/', 'f']));
-    $this->assertEquals('//cdn.xyz.com/images', Path::custom('/', ['//cdn.xyz.com', 'images']));
-    $this->assertEquals('abc/d/e/f/g', Path::custom('/', ['abc/d', 'e', null, 'f/g']));
-    $this->assertEquals('abc/d/e/f/g', Path::custom('/', ['abc/d/e', null, 'f/g']));
+    static::assertEquals('abc', Path::custom('/', ['abc']));
+    static::assertEquals('abc', Path::custom('/', ['', 'abc']));
+    static::assertEquals('abc/d', Path::custom('/', ['abc', 'd']));
+    static::assertEquals('/abc', Path::custom('/', ['/abc']));
+    static::assertEquals('/abc/d', Path::custom('/', ['/abc', '', 'd']));
+    static::assertEquals('/abc/d', Path::custom('/', ['/abc', '/d']));
+    static::assertEquals('/abc/d/e/', Path::custom('/', ['/abc', '/d', 'e/']));
+    static::assertEquals('/abc/d/e/f', Path::custom('/', ['/abc', '/d', 'e/', 'f']));
+    static::assertEquals('/abc/d/0/f', Path::custom('/', ['/abc', '/d', 0, 'f']));
+    static::assertEquals('/abc/d/f', Path::custom('/', ['/abc', '/d', null, 'f']));
+    static::assertEquals('/abc/d/f', Path::custom('/', ['', '/abc', '', '/d', null, 'f']));
+    static::assertEquals('/abc/d/f/', Path::custom('/', ['', '', '/abc', null, null, '/d', null, 'f', '', '', '/']));
+    static::assertEquals('abc/d//e/f', Path::custom('/', ['abc', '/d//e/', 'f']));
+    static::assertEquals('//cdn.xyz.com/images', Path::custom('/', ['//cdn.xyz.com', 'images']));
+    static::assertEquals('abc/d/e/f/g', Path::custom('/', ['abc/d', 'e', null, 'f/g']));
+    static::assertEquals('abc/d/e/f/g', Path::custom('/', ['abc/d/e', null, 'f/g']));
   }
 
   public function testGlobRecursive()
   {
     $baseDir = dirname(__DIR__);
-    $this->assertContains(
+    static::assertContains(
       Path::system($baseDir, 'composer.json'),
       Path::globRecursive($baseDir, '*.json')
     );
-    $this->assertContains(
+    static::assertContains(
       Path::system($baseDir, 'phpunit.xml'),
       Path::globRecursive($baseDir, '*.xml')
     );
-    $this->assertContains(
+    static::assertContains(
       Path::system($baseDir, 'src', 'Traits', 'ArrayAccessTrait.php'),
       Path::globRecursive($baseDir, '*.php')
     );
@@ -45,31 +45,31 @@ class PathTest extends PHPUnit_Framework_TestCase
 
   public function testBuildPath()
   {
-    $this->assertEquals("a" . DIRECTORY_SEPARATOR . "b", Path::system("a", "b"));
-    $this->assertEquals("a" . DIRECTORY_SEPARATOR . "b", Path::system("a", "b"));
+    static::assertEquals("a" . DIRECTORY_SEPARATOR . "b", Path::system("a", "b"));
+    static::assertEquals("a" . DIRECTORY_SEPARATOR . "b", Path::system("a", "b"));
   }
 
   public function testBuildWindowsPath()
   {
-    $this->assertEquals("a\\b", Path::windows("a", "b"));
+    static::assertEquals("a\\b", Path::windows("a", "b"));
   }
 
   public function testBuildUnixPath()
   {
-    $this->assertEquals("a/b", Path::unix("a", "b"));
+    static::assertEquals("a/b", Path::unix("a", "b"));
   }
 
   public function testBuildUrlPath()
   {
-    $this->assertEquals("a/b", Path::url("a", "b"));
+    static::assertEquals("a/b", Path::url("a", "b"));
   }
 
   public function testBuildCustomPath()
   {
-    $this->assertEquals("a|b", Path::custom("|", ["a", "b"]));
-    $this->assertEquals("a|b|c", Path::custom("|", ["a", "|b|", "c"]));
-    $this->assertEquals("a|b", Path::custom("|", [0 => "a", 1 => "b"]));
-    $this->assertEquals("a/~~b", Path::custom("~~", [0 => "a/", 1 => "b"]));
+    static::assertEquals("a|b", Path::custom("|", ["a", "b"]));
+    static::assertEquals("a|b|c", Path::custom("|", ["a", "|b|", "c"]));
+    static::assertEquals("a|b", Path::custom("|", [0 => "a", 1 => "b"]));
+    static::assertEquals("a/~~b", Path::custom("~~", [0 => "a/", 1 => "b"]));
   }
 
   public function baseNameProvider()
@@ -95,23 +95,23 @@ class PathTest extends PHPUnit_Framework_TestCase
    */
   public function testBaseName($input, $expected)
   {
-    $this->assertEquals($expected, Path::baseName($input));
+    static::assertEquals($expected, Path::baseName($input));
   }
 
   public function testUrl()
   {
-    $this->assertEquals('', Path::url(''));
-    $this->assertEquals('abc', Path::url('abc'));
-    $this->assertEquals('/', Path::url('/', ''));
-    $this->assertEquals('/test', Path::url('/', '/test'));
-    $this->assertEquals('/c/4/ab', Path::url('/', 'c', 4, 'ab'));
-    $this->assertEquals('/c/0/ab', Path::url('/', 'c', 0, 'ab'));
-    $this->assertEquals('/c/ab', Path::url('/', 'c', null, '', 'ab'));
-    $this->assertEquals('/test', Path::url('/', '', '/test', ''));
-    $this->assertEquals('//cdn.domain.tld/test', Path::url('//cdn.domain.tld', '', '/test', ''));
-    $this->assertEquals('/test/subdir/test/', Path::url('/test/', '/subdir/test/'));
-    $this->assertEquals('/test/subdir/test/', Path::url('/test', '/subdir/test', '/'));
-    $this->assertEquals('test/subdir/test/', Path::url('test', '/subdir/test/'));
-    $this->assertEquals('test/subdir//test/', Path::url('test', '/subdir//test/'));
+    static::assertEquals('', Path::url(''));
+    static::assertEquals('abc', Path::url('abc'));
+    static::assertEquals('/', Path::url('/', ''));
+    static::assertEquals('/test', Path::url('/', '/test'));
+    static::assertEquals('/c/4/ab', Path::url('/', 'c', 4, 'ab'));
+    static::assertEquals('/c/0/ab', Path::url('/', 'c', 0, 'ab'));
+    static::assertEquals('/c/ab', Path::url('/', 'c', null, '', 'ab'));
+    static::assertEquals('/test', Path::url('/', '', '/test', ''));
+    static::assertEquals('//cdn.domain.tld/test', Path::url('//cdn.domain.tld', '', '/test', ''));
+    static::assertEquals('/test/subdir/test/', Path::url('/test/', '/subdir/test/'));
+    static::assertEquals('/test/subdir/test/', Path::url('/test', '/subdir/test', '/'));
+    static::assertEquals('test/subdir/test/', Path::url('test', '/subdir/test/'));
+    static::assertEquals('test/subdir//test/', Path::url('test', '/subdir//test/'));
   }
 }

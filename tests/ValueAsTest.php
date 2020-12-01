@@ -3,10 +3,10 @@ namespace Packaged\Tests;
 
 use Exception;
 use Packaged\Helpers\ValueAs;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class ValueAsTest extends PHPUnit_Framework_TestCase
+class ValueAsTest extends TestCase
 {
   /**
    * @dataProvider exactProvider
@@ -18,7 +18,7 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
    */
   public function testExactConversions($method, $value, $default, $expect)
   {
-    $this->assertSame(
+    static::assertSame(
       $expect,
       ValueAs::$method($value, $default)
     );
@@ -34,7 +34,7 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
    */
   public function testEqualConversions($method, $value, $default, $expect)
   {
-    $this->assertEquals(
+    static::assertEquals(
       $expect,
       ValueAs::$method($value, $default)
     );
@@ -97,22 +97,22 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
 
   public function testNonempty()
   {
-    $this->assertEquals(
+    static::assertEquals(
       'zebra',
       ValueAs::nonempty(false, null, 0, '', [], 'zebra')
     );
 
-    $this->assertEquals(
+    static::assertEquals(
       null,
       ValueAs::nonempty()
     );
 
-    $this->assertEquals(
+    static::assertEquals(
       false,
       ValueAs::nonempty(null, false)
     );
 
-    $this->assertEquals(
+    static::assertEquals(
       null,
       ValueAs::nonempty(false, null)
     );
@@ -120,22 +120,22 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
 
   public function testCoalesce()
   {
-    $this->assertEquals(
+    static::assertEquals(
       'zebra',
       ValueAs::coalesce(null, 'zebra')
     );
 
-    $this->assertEquals(
+    static::assertEquals(
       null,
       ValueAs::coalesce()
     );
 
-    $this->assertEquals(
+    static::assertEquals(
       false,
       ValueAs::coalesce(false, null)
     );
 
-    $this->assertEquals(
+    static::assertEquals(
       false,
       ValueAs::coalesce(null, false)
     );
@@ -144,16 +144,18 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
   public function testExceptionIf()
   {
     $value = false;
-    $this->assertFalse(ValueAs::exceptionIf($value, Exception::class));
+    static::assertFalse(ValueAs::exceptionIf($value, Exception::class));
     $value = true;
-    $this->setExpectedException(Exception::class, 'Test Exception');
-    $this->assertTrue(ValueAs::exceptionIf($value, Exception::class, 'Test Exception'));
+    $this->expectException(Exception::class);
+    $this->expectExceptionMessage('Test Exception');
+    static::assertTrue(ValueAs::exceptionIf($value, Exception::class, 'Test Exception'));
   }
 
   public function testExceptionIfFixed()
   {
-    $this->setExpectedException(Exception::class, 'Test Exception');
-    $this->assertTrue(ValueAs::exceptionIf(true, new Exception('Test Exception')));
+    $this->expectException(Exception::class);
+    $this->expectExceptionMessage('Test Exception');
+    static::assertTrue(ValueAs::exceptionIf(true, new Exception('Test Exception')));
   }
 
   public function testTransformed()
@@ -165,21 +167,21 @@ class ValueAsTest extends PHPUnit_Framework_TestCase
       }
       return 'VAL' . strtoupper($value);
     };
-    $this->assertEquals('VALABC', ValueAs::transformed('AbC', $callback, 'ab'));
-    $this->assertEquals('ab', ValueAs::transformed('1', $callback, 'ab'));
-    $this->assertEquals('ab', ValueAs::transformed(null, $callback, 'ab'));
+    static::assertEquals('VALABC', ValueAs::transformed('AbC', $callback, 'ab'));
+    static::assertEquals('ab', ValueAs::transformed('1', $callback, 'ab'));
+    static::assertEquals('ab', ValueAs::transformed(null, $callback, 'ab'));
   }
 
   public function testCaught()
   {
-    $this->assertEquals('abc', ValueAs::caught(function () { throw new Exception('e'); }, 'abc'));
-    $this->assertEquals(
+    static::assertEquals('abc', ValueAs::caught(function () { throw new Exception('e'); }, 'abc'));
+    static::assertEquals(
       'abcdef',
       ValueAs::caught(
         function () { throw new Exception('abc'); },
         function (Exception $e) { return $e->getMessage() . 'def'; }
       )
     );
-    $this->assertEquals('xyz', ValueAs::caught(function () { return 'xyz'; }, 'abc'));
+    static::assertEquals('xyz', ValueAs::caught(function () { return 'xyz'; }, 'abc'));
   }
 }

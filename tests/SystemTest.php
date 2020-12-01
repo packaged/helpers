@@ -2,9 +2,9 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\System;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SystemTest extends PHPUnit_Framework_TestCase
+class SystemTest extends TestCase
 {
   protected function setUp()
   {
@@ -24,21 +24,21 @@ class SystemTest extends PHPUnit_Framework_TestCase
 
   public function testGlobals()
   {
-    $this->assertInternalType('bool', System::isHHVM());
-    $this->assertInternalType('bool', System::isMac());
-    $this->assertInternalType('bool', System::isWindows());
+    static::assertInternalType('bool', System::isHHVM());
+    static::assertInternalType('bool', System::isMac());
+    static::assertInternalType('bool', System::isWindows());
   }
 
   public function testIsAppEngine()
   {
     $test = $_SERVER['SERVER_SOFTWARE'];
     $_SERVER['SERVER_SOFTWARE'] = 'Google App Engine/1.9.6';
-    $this->assertTrue(System::isAppEngine());
+    static::assertTrue(System::isAppEngine());
     $_SERVER['SERVER_SOFTWARE'] = $test;
-    $this->assertTrue(
+    static::assertTrue(
       System::isAppEngine('Google App Engine/1.9.6')
     );
-    $this->assertFalse(
+    static::assertFalse(
       System::isAppEngine('PHP 5.5.1 Development Server')
     );
   }
@@ -47,12 +47,12 @@ class SystemTest extends PHPUnit_Framework_TestCase
   {
     $test = $_SERVER['SERVER_SOFTWARE'];
     $_SERVER['SERVER_SOFTWARE'] = 'PHP 5.5.1 Development Server';
-    $this->assertTrue(System::isBuiltInDevServer());
+    static::assertTrue(System::isBuiltInDevServer());
     $_SERVER['SERVER_SOFTWARE'] = $test;
-    $this->assertFalse(
+    static::assertFalse(
       System::isBuiltInDevServer('Google App Engine/1.9.6')
     );
-    $this->assertTrue(
+    static::assertTrue(
       System::isBuiltInDevServer(
         'PHP 5.5.1 Development Server'
       )
@@ -61,23 +61,23 @@ class SystemTest extends PHPUnit_Framework_TestCase
 
   public function testCommandFinder()
   {
-    $this->assertInternalType(
+    static::assertInternalType(
       'bool',
       System::commandExists('whois')
     );
     if(System::isWindows())
     {
-      $this->assertTrue(
+      static::assertTrue(
         System::commandExists('explorer')
       );
     }
     else
     {
-      $this->assertTrue(
+      static::assertTrue(
         System::commandExists('echo')
       );
     }
-    $this->assertFalse(
+    static::assertFalse(
       System::commandExists('madeupcommand2')
     );
   }
@@ -93,19 +93,19 @@ class SystemTest extends PHPUnit_Framework_TestCase
 
     foreach($verify as $check)
     {
-      $this->assertTrue(System::isFunctionDisabled($check));
+      static::assertTrue(System::isFunctionDisabled($check));
     }
 
-    $this->assertFalse(System::isFunctionDisabled('echo'));
+    static::assertFalse(System::isFunctionDisabled('echo'));
   }
 
   public function testAppEngineDisabledFunctions()
   {
     $test = $_SERVER['SERVER_SOFTWARE'];
     $_SERVER['SERVER_SOFTWARE'] = 'Google App Engine/1.9.6';
-    $this->assertTrue(System::isAppEngine());
-    $this->assertTrue(System::isFunctionDisabled('phpinfo'));
-    $this->assertFalse(
+    static::assertTrue(System::isAppEngine());
+    static::assertTrue(System::isFunctionDisabled('phpinfo'));
+    static::assertFalse(
       System::isFunctionDisabled(
         'phpinfo',
         'phpinfo,parse_str'
@@ -123,6 +123,6 @@ class SystemTest extends PHPUnit_Framework_TestCase
     $deltaMs = (microtime(true) - $time) * 1000;
     //Microtime appears to be a fairly unreliable way to check
     //Below assertion disabled due to flakey validation
-    //$this->assertTrue($deltaMs > 0.1 && $deltaMs < 1.5);
+    //static::assertTrue($deltaMs > 0.1 && $deltaMs < 1.5);
   }
 }

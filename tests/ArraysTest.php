@@ -6,10 +6,10 @@ use InvalidArgumentException;
 use Packaged\Helpers\Arrays;
 use Packaged\Helpers\Branch;
 use Packaged\Helpers\Strings;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class ArraysTest extends PHPUnit_Framework_TestCase
+class ArraysTest extends TestCase
 {
   public function testIFilterInvalidIndexThrowException()
   {
@@ -23,7 +23,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       $caught = $ex;
     }
 
-    $this->assertEquals(
+    static::assertEquals(
       true,
       ($caught instanceof InvalidArgumentException)
     );
@@ -46,7 +46,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       'c' => ['h' => 'o', 'i' => 'p', 'j' => 'q',],
     ];
 
-    $this->assertEquals($expected, $actual);
+    static::assertEquals($expected, $actual);
   }
 
   public function testIFilterIndexNotExistsAllFiltered()
@@ -59,7 +59,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     $actual = Arrays::ifilter($list, 'NoneExisting');
     $expected = [];
 
-    $this->assertEquals($expected, $actual);
+    static::assertEquals($expected, $actual);
   }
 
   public function testIFilterWithEmptyValueNegateFiltered()
@@ -81,7 +81,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       'f' => ['h' => 'o', 'i' => false, 'j' => 'q',],
     ];
 
-    $this->assertEquals($expected, $actual);
+    static::assertEquals($expected, $actual);
   }
 
   public function testIFilterIndexNotExistsNotFiltered()
@@ -97,12 +97,12 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       'b' => ['h' => 'o', 'i' => '', 'j' => 'q',],
     ];
 
-    $this->assertEquals($expected, $actual);
+    static::assertEquals($expected, $actual);
   }
 
   public function testmergevMergingBasicallyWorksCorrectly()
   {
-    $this->assertEquals(
+    static::assertEquals(
       [],
       Arrays::mergev(
         [ // <empty>
@@ -110,7 +110,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       )
     );
 
-    $this->assertEquals(
+    static::assertEquals(
       [],
       Arrays::mergev(
         [
@@ -121,7 +121,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       )
     );
 
-    $this->assertEquals(
+    static::assertEquals(
       [1, 2, 3, 4, 5],
       Arrays::mergev(
         [
@@ -209,7 +209,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         }
       }
 
-      $this->assertEquals($expect, $actual, $message);
+      static::assertEquals($expect, $actual, $message);
     }
   }
 
@@ -241,11 +241,11 @@ class ArraysTest extends PHPUnit_Framework_TestCase
 
   public function testHeadLast()
   {
-    $this->assertEquals(
+    static::assertEquals(
       'a',
       Arrays::first(explode('.', 'a.b'))
     );
-    $this->assertEquals(
+    static::assertEquals(
       'b',
       Arrays::last(explode('.', 'a.b'))
     );
@@ -253,16 +253,16 @@ class ArraysTest extends PHPUnit_Framework_TestCase
 
   public function testHeadKeyLastKey()
   {
-    $this->assertEquals(
+    static::assertEquals(
       'a',
       Arrays::firstKey(['a' => 0, 'b' => 1])
     );
-    $this->assertEquals(
+    static::assertEquals(
       'b',
       Arrays::lastKey(['a' => 0, 'b' => 1])
     );
-    $this->assertEquals(null, Arrays::firstKey([]));
-    $this->assertEquals(null, Arrays::lastKey([]));
+    static::assertEquals(null, Arrays::firstKey([]));
+    static::assertEquals(null, Arrays::lastKey([]));
   }
 
   public function testIdx()
@@ -271,31 +271,31 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       'present' => true,
       'null'    => null,
     ];
-    $this->assertEquals(true, Arrays::value($array, 'present'));
-    $this->assertEquals(true, Arrays::value($array, 'present', false));
-    $this->assertEquals(null, Arrays::value($array, 'null'));
-    $this->assertEquals(null, Arrays::value($array, 'null', false));
-    $this->assertEquals(null, Arrays::value($array, 'missing'));
-    $this->assertEquals(false, Arrays::value($array, 'missing', false));
+    static::assertEquals(true, Arrays::value($array, 'present'));
+    static::assertEquals(true, Arrays::value($array, 'present', false));
+    static::assertEquals(null, Arrays::value($array, 'null'));
+    static::assertEquals(null, Arrays::value($array, 'null', false));
+    static::assertEquals(null, Arrays::value($array, 'missing'));
+    static::assertEquals(false, Arrays::value($array, 'missing', false));
   }
 
   public function testArrayFuse()
   {
-    $this->assertEquals([], Arrays::fuse([]));
-    $this->assertEquals(['x' => 'x'], Arrays::fuse(['x']));
+    static::assertEquals([], Arrays::fuse([]));
+    static::assertEquals(['x' => 'x'], Arrays::fuse(['x']));
   }
 
   public function testArrayInterleave()
   {
-    $this->assertEquals([], Arrays::interleave('x', []));
-    $this->assertEquals(['y'], Arrays::interleave('x', ['y']));
+    static::assertEquals([], Arrays::interleave('x', []));
+    static::assertEquals(['y'], Arrays::interleave('x', ['y']));
 
-    $this->assertEquals(
+    static::assertEquals(
       ['y', 'x', 'z'],
       Arrays::interleave('x', ['y', 'z'])
     );
 
-    $this->assertEquals(
+    static::assertEquals(
       ['y', 'x', 'z'],
       Arrays::interleave(
         'x',
@@ -309,7 +309,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     $obj1 = (object)[];
     $obj2 = (object)[];
 
-    $this->assertEquals(
+    static::assertEquals(
       [$obj1, $obj2, $obj1, $obj2, $obj1],
       Arrays::interleave(
         $obj2,
@@ -330,7 +330,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
 
     foreach($implode_tests as $x => $y)
     {
-      $this->assertEquals(
+      static::assertEquals(
         implode('', Arrays::interleave($x, $y)),
         implode($x, $y)
       );
@@ -346,17 +346,17 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     ];
 
     $expected = ["a", "b", "c"];
-    $this->assertEquals($expected, Arrays::ipull($list, 'name'));
+    static::assertEquals($expected, Arrays::ipull($list, 'name'));
 
     $expected = ['a' => 1, 'b' => 2, 'c' => 3];
-    $this->assertEquals($expected, Arrays::ipull($list, 'value', 'name'));
+    static::assertEquals($expected, Arrays::ipull($list, 'value', 'name'));
 
     $expected = [
       'a' => ['name' => 'a', 'value' => 1],
       'b' => ['name' => 'b', 'value' => 2],
       'c' => ['name' => 'c', 'value' => 3],
     ];
-    $this->assertEquals($expected, Arrays::ipull($list, null, 'name'));
+    static::assertEquals($expected, Arrays::ipull($list, null, 'name'));
   }
 
   public function testApull()
@@ -378,7 +378,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     ];
     $list = [$a, $b, $c];
 
-    $this->assertEquals(
+    static::assertEquals(
       [
         'a' => ['value1' => 1, 'value2' => 2],
         'b' => ['value1' => 2, 'value2' => 3],
@@ -401,7 +401,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       'b' => ['name' => 'b', 'value' => 2],
       'c' => ['name' => 'c', 'value' => 3],
     ];
-    $this->assertEquals($expected, Arrays::isort($list, 'name'));
+    static::assertEquals($expected, Arrays::isort($list, 'name'));
   }
 
   public function testArraySelectKeys()
@@ -413,7 +413,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     ];
 
     $expect = ['a' => 1, 'b' => 2];
-    $this->assertEquals($expect, Arrays::selectKeys($list, ['a', 'b']));
+    static::assertEquals($expect, Arrays::selectKeys($list, ['a', 'b']));
   }
 
   public function testIGroup()
@@ -444,7 +444,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       'animal'    => ['b' => $bear],
       'vegetable' => ['c' => $carrot],
     ];
-    $this->assertEquals($expect, Arrays::igroup($list, 'type'));
+    static::assertEquals($expect, Arrays::igroup($list, 'type'));
 
     $expect = [
       'food'     => [
@@ -455,7 +455,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         'animal' => ['b' => $bear],
       ],
     ];
-    $this->assertEquals($expect, Arrays::igroup($list, 'group', 'type'));
+    static::assertEquals($expect, Arrays::igroup($list, 'group', 'type'));
 
     $expect = [
       'food'     => [
@@ -466,7 +466,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         'b' => $bear,
       ],
     ];
-    $this->assertEquals($expect, Arrays::igroup($list, 'group'));
+    static::assertEquals($expect, Arrays::igroup($list, 'group'));
   }
 
   public function testFlipGroup()
@@ -485,7 +485,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       'new'     => ['news' => 'news', 'rocks' => 'rocks'],
       'country' => ['uk' => 'uk', 'es' => 'es'],
     ];
-    $this->assertEquals($expect, Arrays::flipGroup($input));
+    static::assertEquals($expect, Arrays::flipGroup($input));
   }
 
   public function testXGroup()
@@ -505,7 +505,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         'b' => $bear,
       ],
     ];
-    $this->assertEquals(
+    static::assertEquals(
       $expect,
       Arrays::xgroup($list, 'type', ['fruit' => 'food', 'vegetable' => 'food'], 'general')
     );
@@ -515,36 +515,36 @@ class ArraysTest extends PHPUnit_Framework_TestCase
   {
     $array = ['name' => 't_name', 'age' => 't_age'];
 
-    $this->assertEquals(
+    static::assertEquals(
       't_age',
       Arrays::inonempty($array, ['miss', 'age', 'name'])
     );
-    $this->assertNull(Arrays::inonempty($array, ['miss1', 'miss2']));
-    $this->assertNull(Arrays::inonempty($array, []));
-    $this->assertEquals(
+    static::assertNull(Arrays::inonempty($array, ['miss1', 'miss2']));
+    static::assertNull(Arrays::inonempty($array, []));
+    static::assertEquals(
       'no',
       Arrays::inonempty($array, ['miss1', 'miss2'], 'no')
     );
-    $this->assertEquals('no', Arrays::inonempty($array, [], 'no'));
+    static::assertEquals('no', Arrays::inonempty($array, [], 'no'));
   }
 
   public function testInArrayI()
   {
     $array = ['ab', 'cd', 'EF', "GH"];
-    $this->assertTrue(Arrays::contains($array, 'ab'));
-    $this->assertTrue(Arrays::contains($array, 'ef'));
-    $this->assertTrue(Arrays::contains($array, 'CD'));
-    $this->assertFalse(Arrays::contains($array, 'ij'));
+    static::assertTrue(Arrays::contains($array, 'ab'));
+    static::assertTrue(Arrays::contains($array, 'ef'));
+    static::assertTrue(Arrays::contains($array, 'CD'));
+    static::assertFalse(Arrays::contains($array, 'ij'));
   }
 
   public function testArrayAdd()
   {
     $initialArray = ["a" => 1, "b" => 2];
-    $this->assertEquals(
+    static::assertEquals(
       $initialArray + ["x"],
       Arrays::addValue($initialArray, "x")
     );
-    $this->assertEquals(
+    static::assertEquals(
       $initialArray + ["c" => 3],
       Arrays::addValue($initialArray, 3, "c")
     );
@@ -559,7 +559,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[3],
         Arrays::toList($expect[0], $expect[1], $expect[2])
       );
@@ -568,19 +568,19 @@ class ArraysTest extends PHPUnit_Framework_TestCase
 
   public function testIsAssociativeArray()
   {
-    $this->assertTrue(Arrays::isAssoc(["a" => "A", "b" => "B"]));
-    $this->assertFalse(Arrays::isAssoc(["A", "B"]));
+    static::assertTrue(Arrays::isAssoc(["a" => "A", "b" => "B"]));
+    static::assertFalse(Arrays::isAssoc(["A", "B"]));
   }
 
   public function testShuffleAssoc()
   {
-    $this->assertEquals('string', Arrays::shuffleAssoc('string'));
+    static::assertEquals('string', Arrays::shuffleAssoc('string'));
 
     // generate random array
     $testArray = Strings::stringToRange('1-50');
     $shuffled = Arrays::shuffleAssoc($testArray);
-    $this->assertFalse((bool)array_diff_assoc($testArray, $shuffled));
-    $this->assertFalse((bool)array_diff_assoc($shuffled, $testArray));
+    static::assertFalse((bool)array_diff_assoc($testArray, $shuffled));
+    static::assertFalse((bool)array_diff_assoc($shuffled, $testArray));
 
     // three times: shuffle and check that it's different
     $diffCount = 0;
@@ -592,7 +592,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         $diffCount++;
       }
     }
-    $this->assertGreaterThan(0, $diffCount);
+    static::assertGreaterThan(0, $diffCount);
   }
 
   public function testRandomItem()
@@ -606,15 +606,15 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         break;
       }
     }
-    $this->assertLessThan(10, $i);
+    static::assertLessThan(10, $i);
   }
 
   public function testRandom()
   {
     $testArray = Strings::stringToRange('1-50');
-    $this->assertCount(3, Arrays::random($testArray, 3));
-    $this->assertTrue(Arrays::isAssoc(Arrays::random($testArray, 4, true)));
-    $this->assertFalse(Arrays::isAssoc(Arrays::random($testArray, 4, false)));
+    static::assertCount(3, Arrays::random($testArray, 3));
+    static::assertTrue(Arrays::isAssoc(Arrays::random($testArray, 4, true)));
+    static::assertFalse(Arrays::isAssoc(Arrays::random($testArray, 4, false)));
   }
 
   public function testFlattenExpand()
@@ -632,13 +632,13 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       '1a'    => 2,
       'ab.cd' => 3,
     ];
-    $this->assertEquals($expect, Arrays::flatten($array));
-    $this->assertEquals($array, Arrays::expand($expect));
+    static::assertEquals($expect, Arrays::flatten($array));
+    static::assertEquals($array, Arrays::expand($expect));
   }
 
   public function testTransform()
   {
-    $this->assertEquals(
+    static::assertEquals(
       ['A', 'B', 'C', 'X'],
       Arrays::transformed(
         ['a', 'b', 'c', null],
@@ -657,7 +657,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       function ($v) { return $v % 2 == 0; },
       function ($v) { return base_convert($v, 10, 36); }
     );
-    $this->assertEquals([2, 4, 6, 8, 'a', 'c', 'e', 'g', 'i', 'k',], array_values(iterator_to_array($result)));
+    static::assertEquals([2, 4, 6, 8, 'a', 'c', 'e', 'g', 'i', 'k',], array_values(iterator_to_array($result)));
   }
 
   public function testCoalesce()
@@ -670,10 +670,10 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       'five'  => 0,
     ];
 
-    $this->assertEquals('2', Arrays::coalesce($data, 'one', 'three', 'two'));
-    $this->assertEquals('4', Arrays::coalesce($data, 'one', 'three', 'four', 'two'));
-    $this->assertEquals(0, Arrays::coalesce($data, 'one', 'three', 'five'));
-    $this->assertNull(Arrays::coalesce($data, 'one', 'three'));
+    static::assertEquals('2', Arrays::coalesce($data, 'one', 'three', 'two'));
+    static::assertEquals('4', Arrays::coalesce($data, 'one', 'three', 'four', 'two'));
+    static::assertEquals(0, Arrays::coalesce($data, 'one', 'three', 'five'));
+    static::assertNull(Arrays::coalesce($data, 'one', 'three'));
   }
 
   public function testNonEmpty()
@@ -685,21 +685,21 @@ class ArraysTest extends PHPUnit_Framework_TestCase
       'four'  => '4',
     ];
 
-    $this->assertEquals('2', Arrays::nonempty($data, 'one', 'three', 'two'));
-    $this->assertEquals('4', Arrays::nonempty($data, 'one', 'three', 'four', 'two'));
-    $this->assertNull(Arrays::nonempty($data, 'one', 'three'));
+    static::assertEquals('2', Arrays::nonempty($data, 'one', 'three', 'two'));
+    static::assertEquals('4', Arrays::nonempty($data, 'one', 'three', 'four', 'two'));
+    static::assertNull(Arrays::nonempty($data, 'one', 'three'));
   }
 
   public function testTree()
   {
     $tree = Arrays::iTree([], 'id', 'parentId');
-    $this->assertInstanceOf(Branch::class, $tree);
-    $this->assertFalse($tree->hasChildren());
+    static::assertInstanceOf(Branch::class, $tree);
+    static::assertFalse($tree->hasChildren());
 
     $tree = Arrays::iTree([['id' => 0, 'parentId' => null]], 'id', 'parentId');
-    $this->assertInstanceOf(Branch::class, $tree);
-    $this->assertTrue($tree->hasChildren());
-    $this->assertContainsOnlyInstancesOf(Branch::class, $tree->getChildren());
-    $this->assertCount(1, $tree->getChildren());
+    static::assertInstanceOf(Branch::class, $tree);
+    static::assertTrue($tree->hasChildren());
+    static::assertContainsOnlyInstancesOf(Branch::class, $tree->getChildren());
+    static::assertCount(1, $tree->getChildren());
   }
 }
