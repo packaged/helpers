@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class SystemTest extends TestCase
 {
-  protected function setUp()
+  protected function setUp(): void
   {
     if(!isset($_SERVER['SERVER_SOFTWARE']))
     {
@@ -14,7 +14,7 @@ class SystemTest extends TestCase
     }
   }
 
-  protected function tearDown()
+  protected function tearDown(): void
   {
     if($_SERVER['SERVER_SOFTWARE'] == 'PHPUnit')
     {
@@ -24,9 +24,9 @@ class SystemTest extends TestCase
 
   public function testGlobals()
   {
-    static::assertInternalType('bool', System::isHHVM());
-    static::assertInternalType('bool', System::isMac());
-    static::assertInternalType('bool', System::isWindows());
+    static::assertIsBool(System::isHHVM());
+    static::assertIsBool(System::isMac());
+    static::assertIsBool(System::isWindows());
   }
 
   public function testIsAppEngine()
@@ -61,25 +61,16 @@ class SystemTest extends TestCase
 
   public function testCommandFinder()
   {
-    static::assertInternalType(
-      'bool',
-      System::commandExists('whois')
-    );
+    static::assertIsBool(System::commandExists('whois'));
     if(System::isWindows())
     {
-      static::assertTrue(
-        System::commandExists('explorer')
-      );
+      static::assertTrue(System::commandExists('explorer'));
     }
     else
     {
-      static::assertTrue(
-        System::commandExists('echo')
-      );
+      static::assertTrue(System::commandExists('echo'));
     }
-    static::assertFalse(
-      System::commandExists('madeupcommand2')
-    );
+    static::assertFalse(System::commandExists('madeupcommand2'));
   }
 
   public function testDisabledFunctionCheck()

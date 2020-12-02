@@ -9,18 +9,18 @@ use PHPUnit\Framework\TestCase;
  */
 class BitWiseGmpTest extends TestCase
 {
-  const ONE = '1';
-  const TWO = '2';
+  const ONE   = '1';
+  const TWO   = '2';
   const THREE = '4';
-  const FOUR = '8';
-  const FIVE = '16';
-  const SIX = '32';
+  const FOUR  = '8';
+  const FIVE  = '16';
+  const SIX   = '32';
 
-  protected function setUp()
+  protected function setUp(): void
   {
     if(!extension_loaded('gmp'))
     {
-      $this->markTestSkipped('The GMP extension is not available.');
+      static::markTestSkipped('The GMP extension is not available.');
     }
   }
 

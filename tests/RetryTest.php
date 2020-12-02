@@ -7,12 +7,11 @@ use PHPUnit\Framework\TestCase;
 
 class RetryTest extends TestCase
 {
-  /**
-   * @expectedException Exception
-   * @expectedExceptionMessage fail 3
-   */
   public function testRetries()
   {
+    self::expectException(Exception::class);
+    self::expectExceptionMessage('fail 3');
+
     $count = 0;
     $callFn = function () use (&$count) {
       $count++;
@@ -21,12 +20,11 @@ class RetryTest extends TestCase
     RetryHelper::retry(2, $callFn);
   }
 
-  /**
-   * @expectedException Exception
-   * @expectedExceptionMessage fail 1
-   */
   public function testNoRetries()
   {
+    self::expectException(Exception::class);
+    self::expectExceptionMessage('fail 1');
+
     $count = 0;
     $callFn = function () use (&$count) {
       $count++;
@@ -35,12 +33,11 @@ class RetryTest extends TestCase
     RetryHelper::retry(0, $callFn);
   }
 
-  /**
-   * @expectedException Exception
-   * @expectedExceptionMessage Invalid value for retries
-   */
   public function testNegativeRetries()
   {
+    self::expectException(Exception::class);
+    self::expectExceptionMessage('Invalid value for retries');
+
     $count = 0;
     $callFn = function () use (&$count) {
       $count++;
