@@ -23,14 +23,12 @@ class ExceptionHelperTest extends TestCase
     }
     catch(\Throwable $e)
     {
-      $this->assertEquals(
-        "#0 /ExceptionHelperTest.php(22): Packaged\Tests\ExceptionHelperTest->_someException({$expected[0]})
-#1 [internal function]: Packaged\\Tests\\ExceptionHelperTest->testExceptionTrace(Array, Array)",
+      static::assertEquals(
+        "#0 /tests/ExceptionHelperTest.php(22): Packaged\Tests\ExceptionHelperTest->_someException({$expected[0]})",
         $this->_normalize($e->getTraceAsString())
       );
-      $this->assertEquals(
-        "#0 /ExceptionHelperTest.php(22): Packaged\Tests\ExceptionHelperTest->_someException({$expected[1]})
-#1 [internal function]: Packaged\\Tests\\ExceptionHelperTest->testExceptionTrace(Array, Array)",
+      static::assertEquals(
+        "#0 /tests/ExceptionHelperTest.php(22): Packaged\Tests\ExceptionHelperTest->_someException({$expected[1]})",
         $this->_normalize(ExceptionHelper::getTraceAsString($e))
       );
     }
@@ -62,7 +60,7 @@ class ExceptionHelperTest extends TestCase
 
   private function _normalize(string $str)
   {
-    $str = implode("\n", array_slice(explode("\n", $str), 0, 2));
-    return preg_replace('/^#0 .+?\/tests/m', '#0 ', $str);
+    $str = implode("\n", array_slice(explode("\n", $str), 0, 1));
+    return str_replace(dirname(__DIR__), '', $str);
   }
 }

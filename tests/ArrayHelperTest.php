@@ -2,17 +2,17 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\ArrayHelper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class ArrayHelperTest extends PHPUnit_Framework_TestCase
+class ArrayHelperTest extends TestCase
 {
   public function testConstructors()
   {
     $arr = ArrayHelper::create(new Objects\ObjectArrayHelper());
-    $this->assertEquals('Object', $arr->getValue('name'));
-    $this->assertEquals('One', $arr->getValue('test'));
-    $this->assertEquals('default', $arr->getValue('missing', 'default'));
+    static::assertEquals('Object', $arr->getValue('name'));
+    static::assertEquals('One', $arr->getValue('test'));
+    static::assertEquals('default', $arr->getValue('missing', 'default'));
 
     $arr = ArrayHelper::create(
       [
@@ -21,23 +21,21 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
         'nullify' => null,
       ]
     );
-    $this->assertEquals('Array', $arr->getValue('name'));
-    $this->assertNull($arr->getValue('nullify'));
-    $this->assertEquals('Two', $arr->getValue('test'));
-    $this->assertEquals('default2', $arr->getValue('missing', 'default2'));
+    static::assertEquals('Array', $arr->getValue('name'));
+    static::assertNull($arr->getValue('nullify'));
+    static::assertEquals('Two', $arr->getValue('test'));
+    static::assertEquals('default2', $arr->getValue('missing', 'default2'));
 
     $arr = ArrayHelper::create('name=string&test=Three');
-    $this->assertEquals('string', $arr->getValue('name'));
-    $this->assertEquals('Three', $arr->getValue('test'));
-    $this->assertEquals('default3', $arr->getValue('missing', 'default3'));
+    static::assertEquals('string', $arr->getValue('name'));
+    static::assertEquals('Three', $arr->getValue('test'));
+    static::assertEquals('default3', $arr->getValue('missing', 'default3'));
   }
 
   public function testUnsupported()
   {
-    $this->setExpectedException(
-      'Exception',
-      'boolean is not currently supported'
-    );
+    $this->expectException(\Exception::class);
+    $this->expectExceptionMessage('boolean is not currently supported');
     ArrayHelper::create(false);
   }
 
@@ -49,10 +47,10 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
         'test' => 'Four',
       ]
     );
-    $this->assertEquals('Array', $arr->getValue('name'));
+    static::assertEquals('Array', $arr->getValue('name'));
     $arr->setValue('name', 'TestGetSet');
-    $this->assertEquals('TestGetSet', $arr->getValue('name'));
-    $this->assertEquals(
+    static::assertEquals('TestGetSet', $arr->getValue('name'));
+    static::assertEquals(
       [
         'name' => 'TestGetSet',
         'test' => 'Four',
@@ -68,13 +66,13 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
     $testClass->value2 = 'value two';
     $testClass->array = ['test' => 'test1', 'test'];
     $array = ArrayHelper::create($testClass);
-    $this->assertEquals('value one', $array['value1']);
-    $this->assertTrue(isset($array['value2']));
+    static::assertEquals('value one', $array['value1']);
+    static::assertTrue(isset($array['value2']));
     unset($array['value2']);
-    $this->assertFalse(isset($array['value2']));
-    $this->assertNull($array['value2']);
+    static::assertFalse(isset($array['value2']));
+    static::assertNull($array['value2']);
     $array['value2'] = 'value new';
-    $this->assertEquals('value new', $array['value2']);
+    static::assertEquals('value new', $array['value2']);
   }
 
   public function testToArray()
@@ -86,7 +84,7 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
     $testClass->nested->value1 = 'value one';
     $testClass->nested->array = ['test' => 'test1', 'test'];
 
-    $this->assertEquals(
+    static::assertEquals(
       [
         'value1' => 'value one',
         'array'  => ['test' => 'test1', 'test'],

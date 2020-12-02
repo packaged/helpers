@@ -2,9 +2,9 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\EmailAddress;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class EmailAddressTest extends PHPUnit_Framework_TestCase
+class EmailAddressTest extends TestCase
 {
   /**
    * @param       $email
@@ -16,77 +16,77 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
   public function testEmail($email, $matches, $name = ['', '', ''])
   {
     $extracted = new EmailAddress($email);
-    $extracted->setName($name[0], $name[1], $name[2]);
+    $extracted->setName(...$name);
 
     if(isset($matches['username']))
     {
-      $this->assertEquals($matches['username'], $extracted->getUsername());
+      static::assertEquals($matches['username'], $extracted->getUsername());
     }
 
     if(isset($matches['domain']))
     {
-      $this->assertEquals($matches['domain'], $extracted->getDomain());
+      static::assertEquals($matches['domain'], $extracted->getDomain());
     }
 
     if(isset($matches['title']))
     {
-      $this->assertEquals($matches['title'], $extracted->getTitle());
+      static::assertEquals($matches['title'], $extracted->getTitle());
     }
 
     if(isset($matches['firstName']))
     {
-      $this->assertEquals($matches['firstName'], $extracted->getFirstName());
+      static::assertEquals($matches['firstName'], $extracted->getFirstName());
     }
     else if(!empty($name[0]))
     {
       if(strlen($name[0]) >= strlen($extracted->getFirstName()))
       {
-        $this->assertEquals(ucwords($name[0]), $extracted->getFirstName());
+        static::assertEquals(ucwords($name[0]), $extracted->getFirstName());
       }
     }
 
     if(isset($matches['middleName']))
     {
-      $this->assertEquals($matches['middleName'], $extracted->getMiddleName());
+      static::assertEquals($matches['middleName'], $extracted->getMiddleName());
     }
     else if(!empty($name[1]))
     {
       if(strlen($name[1]) >= strlen($extracted->getMiddleName()))
       {
-        $this->assertEquals(ucwords($name[1]), $extracted->getMiddleName());
+        static::assertEquals(ucwords($name[1]), $extracted->getMiddleName());
       }
     }
 
     if(isset($matches['lastName']))
     {
-      $this->assertEquals($matches['lastName'], $extracted->getLastName());
+      static::assertEquals($matches['lastName'], $extracted->getLastName());
     }
     else if(!empty($name[2]))
     {
       if(strlen($name[2]) >= strlen($extracted->getLastName()))
       {
-        $this->assertEquals(ucwords($name[2]), $extracted->getLastName());
+        static::assertEquals(ucwords($name[2]), $extracted->getLastName());
       }
     }
 
     if(isset($matches['fullName']))
     {
-      $this->assertEquals($matches['fullName'], $extracted->getFullName());
+      static::assertEquals($matches['fullName'], $extracted->getFullName());
     }
 
     if(isset($matches['lower']))
     {
-      $this->assertEquals($matches['lower'], $extracted->getLower());
+      static::assertEquals($matches['lower'], $extracted->getLower());
     }
 
     if(isset($matches['base']))
     {
-      $this->assertEquals($matches['base'], $extracted->getBase());
+      static::assertEquals($matches['base'], $extracted->getBase());
     }
 
     if(isset($matches['extension']))
     {
-      $this->assertEquals($matches['extension'], $extracted->getExtension());
+      static::assertEquals($matches['extension'], $extracted->getExtension());
     }
   }
 
@@ -219,7 +219,6 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
           'extension'  => '',
         ],
       ],
-      ['andall2001@hotmail.com', []],
       ['c.blennan@hotmail.co.uk', [], ['Christopher', '', '']],
       [
         'yaseenjuiya@hotmail.com',
@@ -388,12 +387,12 @@ class EmailAddressTest extends PHPUnit_Framework_TestCase
   public function testBaseEmail()
   {
     $email = new EmailAddress("john.smith+123@domain.com");
-    $this->assertEquals("john.smith@domain.com", $email->getBaseEmail());
+    static::assertEquals("john.smith@domain.com", $email->getBaseEmail());
   }
 
   public function testUsername()
   {
     $email = new EmailAddress("john.smith");
-    $this->assertEquals("john.smith", $email->getUsername());
+    static::assertEquals("john.smith", $email->getUsername());
   }
 }

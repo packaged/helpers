@@ -4,16 +4,16 @@ namespace Packaged\Tests;
 use DateInterval;
 use DateTime;
 use Packaged\Helpers\DateTimeHelper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class DateTimeHelperTest extends PHPUnit_Framework_TestCase
+class DateTimeHelperTest extends TestCase
 {
   public function testDate()
   {
     $dates = DateTimeHelper::dateRange(
       "2017-01-01"
     );
-    $this->assertEquals(["2017-01-01"], $dates);
+    static::assertEquals(["2017-01-01"], $dates);
   }
 
   public function testBasicDates()
@@ -21,7 +21,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
     $dates = DateTimeHelper::dateRange(
       "2017-01-01,2017-02-02"
     );
-    $this->assertEquals(["2017-01-01", "2017-02-02"], $dates);
+    static::assertEquals(["2017-01-01", "2017-02-02"], $dates);
   }
 
   public function testSameMonthRange()
@@ -29,7 +29,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
     $dates = DateTimeHelper::dateRange(
       "2017-01-01-03"
     );
-    $this->assertEquals(["2017-01-01", "2017-01-02", "2017-01-03"], $dates);
+    static::assertEquals(["2017-01-01", "2017-01-02", "2017-01-03"], $dates);
   }
 
   public function testSameYearRange()
@@ -37,7 +37,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
     $dates = DateTimeHelper::dateRange(
       "2017-01-30-02-01"
     );
-    $this->assertEquals(["2017-01-30", "2017-01-31", "2017-02-01"], $dates);
+    static::assertEquals(["2017-01-30", "2017-01-31", "2017-02-01"], $dates);
   }
 
   public function testRange()
@@ -45,7 +45,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
     $dates = DateTimeHelper::dateRange(
       "2017-01-25-2017-01-29"
     );
-    $this->assertEquals(
+    static::assertEquals(
       ["2017-01-25", "2017-01-26", "2017-01-27", "2017-01-28", "2017-01-29"],
       $dates
     );
@@ -56,7 +56,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
     $dates = DateTimeHelper::dateRange(
       "2017-01-03-01"
     );
-    $this->assertEquals(["2017-01-01", "2017-01-02", "2017-01-03"], $dates);
+    static::assertEquals(["2017-01-01", "2017-01-02", "2017-01-03"], $dates);
   }
 
   public function testInvalidDateRange()
@@ -64,7 +64,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
     $dates = DateTimeHelper::dateRange(
       "2017-01-03-"
     );
-    $this->assertEquals(["2017-01-03"], $dates);
+    static::assertEquals(["2017-01-03"], $dates);
   }
 
   public function testStringToTimeRangee()
@@ -86,7 +86,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
     $dates = DateTimeHelper::stringToTimeRange(
       "-1 day,14 days ago-7 days ago,-7days,10 days ago--9 days,5 horse-6 horses,2017-01-01,2017-01-02,8 carrots,-9 horseshoes"
     );
-    $this->assertEquals($compare, $dates);
+    static::assertEquals($compare, $dates);
   }
 
   public function testHumanDateRange()
@@ -112,21 +112,21 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
     $compare[] = date($format, strtotime('10 days ago'));
     $compare[] = date($format, strtotime('-9 days'));
 
-    $this->assertEquals($compare, $dates);
+    static::assertEquals($compare, $dates);
   }
 
   public function testIntervalToSeconds()
   {
     $y0 = DateTimeHelper::intervalToSeconds(new DateInterval('P1Y'));
-    $this->assertEquals(31536000, $y0);
+    static::assertEquals(31536000, $y0);
     $y0s = DateTimeHelper::intervalToSeconds(new DateInterval('P1Y'), DateTime::createFromFormat('U', 0));
-    $this->assertEquals($y0, $y0s);
+    static::assertEquals($y0, $y0s);
 
     $leapTest = DateTimeHelper::intervalToSeconds(
       new DateInterval('P1Y'),
       new DateTime('1 Jan 1972 00:00') // leap year
     );
-    $this->assertEquals(31622400, $leapTest);
+    static::assertEquals(31622400, $leapTest);
   }
 
   /**
@@ -139,7 +139,7 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
   public function testUniqid2microtime($microtime, $uniqid, $hasEntropy)
   {
     $time = DateTimeHelper::uniqidToMilliseconds($uniqid, $hasEntropy);
-    $this->assertEquals($microtime, $time, '', 10);
+    static::assertEquals($microtime, $time, '', 10);
   }
 
   public function uniqidProvider()
@@ -154,11 +154,11 @@ class DateTimeHelperTest extends PHPUnit_Framework_TestCase
 
   public function testMilliseconds()
   {
-    $this->assertInternalType('int', DateTimeHelper::milliseconds());
+    static::assertIsInt(DateTimeHelper::milliseconds());
   }
 
   public function testToSeconds()
   {
-    $this->assertEquals(DateTimeHelper::toSeconds(1466159101859), 1466159101);
+    static::assertEquals(DateTimeHelper::toSeconds(1466159101859), 1466159101);
   }
 }

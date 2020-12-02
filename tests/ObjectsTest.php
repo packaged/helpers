@@ -10,10 +10,10 @@ use Packaged\Tests\Objects\Pancake;
 use Packaged\Tests\Objects\PropertyClass;
 use Packaged\Tests\Objects\Thing;
 use Packaged\Tests\Objects\TreeThing;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class ObjectsTest extends PHPUnit_Framework_TestCase
+class ObjectsTest extends TestCase
 {
   public function testMFilterNullMethodThrowException()
   {
@@ -27,7 +27,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
       $caught = $ex;
     }
 
-    $this->assertEquals(true, ($caught instanceof InvalidArgumentException));
+    static::assertEquals(true, ($caught instanceof InvalidArgumentException));
   }
 
   public function testMFilterWithEmptyValueFiltered()
@@ -48,7 +48,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
       'c' => $c,
     ];
 
-    $this->assertEquals($expected, $actual);
+    static::assertEquals($expected, $actual);
   }
 
   public function testMFilterWithEmptyValueNegateFiltered()
@@ -68,18 +68,18 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
       'b' => $b,
     ];
 
-    $this->assertEquals($expected, $actual);
+    static::assertEquals($expected, $actual);
   }
 
   public function testNewv()
   {
     $expect = new Pancake('Blueberry', "Maple Syrup");
-    $this->assertEquals(
+    static::assertEquals(
       $expect,
       Objects::create('Packaged\Tests\Objects\Pancake', ['Blueberry', "Maple Syrup"])
     );
     $expect = new Pancake();
-    $this->assertEquals(
+    static::assertEquals(
       $expect,
       Objects::create('Packaged\Tests\Objects\Pancake', [])
     );
@@ -91,17 +91,17 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $object->name = 't_name';
     $object->age = 't_age';
 
-    $this->assertEquals(
+    static::assertEquals(
       't_age',
       Objects::pnonempty($object, ['miss', 'age', 'name'])
     );
-    $this->assertNull(Objects::pnonempty($object, ['miss1', 'miss2']));
-    $this->assertNull(Objects::pnonempty($object, []));
-    $this->assertEquals(
+    static::assertNull(Objects::pnonempty($object, ['miss1', 'miss2']));
+    static::assertNull(Objects::pnonempty($object, []));
+    static::assertEquals(
       'no',
       Objects::pnonempty($object, ['miss1', 'miss2'], 'no')
     );
-    $this->assertEquals('no', Objects::pnonempty($object, [], 'no'));
+    static::assertEquals('no', Objects::pnonempty($object, [], 'no'));
   }
 
   public function testHydrate()
@@ -115,29 +115,29 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $source->nullify = null;
 
     Objects::hydrate($dest, $source, [null]);
-    $this->assertEquals('Please', $dest->nullify);
+    static::assertEquals('Please', $dest->nullify);
 
     Objects::hydrate($dest, $source, ['nullify'], false);
-    $this->assertEquals('Please', $dest->nullify);
+    static::assertEquals('Please', $dest->nullify);
 
     Objects::hydrate($dest, $source, ['nullify'], true);
-    $this->assertNull($dest->nullify);
+    static::assertNull($dest->nullify);
 
     Objects::hydrate($dest, $source, ['name']);
 
-    $this->assertObjectHasAttribute('name', $dest);
-    $this->assertEquals('Test', $dest->name);
+    static::assertObjectHasAttribute('name', $dest);
+    static::assertEquals('Test', $dest->name);
 
-    $this->assertObjectNotHasAttribute('age', $dest);
+    static::assertObjectNotHasAttribute('age', $dest);
     Objects::hydrate($dest, $source, ['age']);
 
-    $this->assertObjectHasAttribute('age', $dest);
-    $this->assertEquals('19', $dest->age);
+    static::assertObjectHasAttribute('age', $dest);
+    static::assertEquals('19', $dest->age);
 
     $dest->name = null;
     Objects::hydrate($dest, $source);
-    $this->assertObjectHasAttribute('name', $dest);
-    $this->assertEquals('Test', $dest->name);
+    static::assertObjectHasAttribute('name', $dest);
+    static::assertEquals('Test', $dest->name);
 
     $dest = new stdClass();
     $dest->differentName = 'Dave';
@@ -146,10 +146,10 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $source->age = 20;
 
     Objects::hydrate($dest, $source, ['name' => 'differentName', 'age']);
-    $this->assertEquals($source->name, $dest->differentName);
-    $this->assertEquals($source->age, $dest->age);
+    static::assertEquals($source->name, $dest->differentName);
+    static::assertEquals($source->age, $dest->age);
 
-    $this->setExpectedException("Exception");
+    $this->expectException(\Exception::class);
     Objects::hydrate(['' => ''], $source, []);
   }
 
@@ -164,36 +164,36 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $source->nullify = null;
 
     Objects::mapHydrate($dest, $source, [null]);
-    $this->assertEquals('Please', $dest->nullify);
+    static::assertEquals('Please', $dest->nullify);
 
     Objects::mapHydrate($dest, $source, ['nullify' => true], false);
-    $this->assertEquals('Please', $dest->nullify);
+    static::assertEquals('Please', $dest->nullify);
 
     Objects::mapHydrate($dest, $source, ['nullify' => true], true);
-    $this->assertNull($dest->nullify);
+    static::assertNull($dest->nullify);
 
     Objects::mapHydrate($dest, $source, ['name' => true]);
 
-    $this->assertObjectHasAttribute('name', $dest);
-    $this->assertEquals('Test', $dest->name);
+    static::assertObjectHasAttribute('name', $dest);
+    static::assertEquals('Test', $dest->name);
 
-    $this->assertObjectNotHasAttribute('age', $dest);
+    static::assertObjectNotHasAttribute('age', $dest);
     Objects::mapHydrate($dest, $source, ['age' => true]);
 
-    $this->assertObjectHasAttribute('age', $dest);
-    $this->assertEquals('19', $dest->age);
+    static::assertObjectHasAttribute('age', $dest);
+    static::assertEquals('19', $dest->age);
 
     $dest->name = null;
     Objects::mapHydrate($dest, $source, ['name' => true]);
-    $this->assertObjectHasAttribute('name', $dest);
-    $this->assertEquals('Test', $dest->name);
+    static::assertObjectHasAttribute('name', $dest);
+    static::assertEquals('Test', $dest->name);
 
     Objects::mapHydrate($dest, $source, ['age' => function ($val) { return $val * 10; }]);
 
-    $this->assertObjectHasAttribute('age', $dest);
-    $this->assertEquals(190, $dest->age);
+    static::assertObjectHasAttribute('age', $dest);
+    static::assertEquals(190, $dest->age);
 
-    $this->setExpectedException("Exception");
+    $this->expectException(\Exception::class);
     Objects::mapHydrate(['' => ''], $source, []);
   }
 
@@ -206,7 +206,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals($expect[1], Objects::classShortname($expect[0]));
+      static::assertEquals($expect[1], Objects::classShortname($expect[0]));
     }
   }
 
@@ -214,19 +214,19 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
   {
     $expect = ['name' => null, 'age' => null];
     $class = new PropertyClass();
-    $this->assertNotEquals($expect, $class->objectVars());
-    $this->assertEquals($expect, $class->publicVars());
-    $this->assertEquals($expect, get_object_vars($class));
-    $this->assertEquals($expect, Objects::propertyValues($class));
-    $this->assertEquals(['name', 'age'], Objects::properties($class));
+    static::assertNotEquals($expect, $class->objectVars());
+    static::assertEquals($expect, $class->publicVars());
+    static::assertEquals($expect, get_object_vars($class));
+    static::assertEquals($expect, Objects::propertyValues($class));
+    static::assertEquals(['name', 'age'], Objects::properties($class));
   }
 
   public function testIdp()
   {
     $object = new stdClass();
     $object->name = "apple";
-    $this->assertEquals("apple", Objects::property($object, "name", "pear"));
-    $this->assertEquals(
+    static::assertEquals("apple", Objects::property($object, "name", "pear"));
+    static::assertEquals(
       "orange",
       Objects::property($object, "noprop", "orange")
     );
@@ -243,7 +243,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals($expect[1], Objects::getNamespace($expect[0]));
+      static::assertEquals($expect[1], Objects::getNamespace($expect[0]));
     }
   }
 
@@ -255,13 +255,13 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $list = [$a, $b, $c];
 
     $expected = [1, 2, 3];
-    $this->assertEquals($expected, Objects::mpull($list, 'getH'));
+    static::assertEquals($expected, Objects::mpull($list, 'getH'));
 
     $expected = ['a' => 1, 'b' => 2, 'c' => 3];
-    $this->assertEquals($expected, Objects::mpull($list, 'getH', 'getI'));
+    static::assertEquals($expected, Objects::mpull($list, 'getH', 'getI'));
 
     $expected = ['a' => $a, 'b' => $b, 'c' => $c];
-    $this->assertEquals($expected, Objects::mpull($list, null, 'getI'));
+    static::assertEquals($expected, Objects::mpull($list, null, 'getI'));
   }
 
   public function testPpull()
@@ -278,13 +278,13 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $list = [$a, $b, $c];
 
     $expected = ["a", "b", "c"];
-    $this->assertEquals($expected, Objects::ppull($list, 'name'));
+    static::assertEquals($expected, Objects::ppull($list, 'name'));
 
     $expected = ['a' => 1, 'b' => 2, 'c' => 3];
-    $this->assertEquals($expected, Objects::ppull($list, 'value', 'name'));
+    static::assertEquals($expected, Objects::ppull($list, 'value', 'name'));
 
     $expected = ['a' => $a, 'b' => $b, 'c' => $c];
-    $this->assertEquals($expected, Objects::ppull($list, null, 'name'));
+    static::assertEquals($expected, Objects::ppull($list, null, 'name'));
   }
 
   public function testApull()
@@ -303,7 +303,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $c->value2 = 4;
     $list = [$a, $b, $c];
 
-    $this->assertEquals(
+    static::assertEquals(
       [
         'a' => ['value1' => 1, 'value2' => 2],
         'b' => ['value1' => 2, 'value2' => 3],
@@ -321,7 +321,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $list = ["b" => $b, "a" => $a, "c" => $c];
 
     $expected = ["a" => $a, "b" => $b, "c" => $c];
-    $this->assertEquals($expected, Objects::msort($list, 'getI'));
+    static::assertEquals($expected, Objects::msort($list, 'getI'));
   }
 
   public function testMGroup()
@@ -337,7 +337,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
       'animal'    => ['b' => $bear],
       'vegetable' => ['c' => $carrot],
     ];
-    $this->assertEquals($expect, Objects::mgroup($list, 'type'));
+    static::assertEquals($expect, Objects::mgroup($list, 'type'));
 
     $expect = [
       'food'     => [
@@ -348,7 +348,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
         'animal' => ['b' => $bear],
       ],
     ];
-    $this->assertEquals($expect, Objects::mgroup($list, 'group', 'type'));
+    static::assertEquals($expect, Objects::mgroup($list, 'group', 'type'));
 
     $expect = [
       'food'     => [
@@ -359,7 +359,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
         'b' => $bear,
       ],
     ];
-    $this->assertEquals($expect, Objects::mgroup($list, 'group'));
+    static::assertEquals($expect, Objects::mgroup($list, 'group'));
   }
 
   public function testPGroup()
@@ -375,7 +375,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
       'animal'    => ['b' => $bear],
       'vegetable' => ['c' => $carrot],
     ];
-    $this->assertEquals($expect, Objects::pgroup($list, 'typeProperty'));
+    static::assertEquals($expect, Objects::pgroup($list, 'typeProperty'));
 
     $expect = [
       'food'     => [
@@ -386,7 +386,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
         'animal' => ['b' => $bear],
       ],
     ];
-    $this->assertEquals(
+    static::assertEquals(
       $expect,
       Objects::pgroup($list, 'groupProperty', 'typeProperty')
     );
@@ -400,7 +400,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
         'b' => $bear,
       ],
     ];
-    $this->assertEquals($expect, Objects::pgroup($list, 'groupProperty'));
+    static::assertEquals($expect, Objects::pgroup($list, 'groupProperty'));
   }
 
   public function testXGroup()
@@ -420,7 +420,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
         'b' => $bear,
       ],
     ];
-    $this->assertEquals(
+    static::assertEquals(
       $expect,
       Objects::xgroup($list, 'typeProperty', ['fruit' => 'food', 'vegetable' => 'food'], 'general')
     );
@@ -444,7 +444,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals($expect[2], Objects::psort($expect[0], $expect[1]));
+      static::assertEquals($expect[2], Objects::psort($expect[0], $expect[1]));
     }
   }
 
@@ -457,34 +457,34 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
         $p->fruit = 'Apples';
       }
     );
-    $this->assertEquals('Apples', $pancake->getFruit());
+    static::assertEquals('Apples', $pancake->getFruit());
   }
 
   public function testTreeP()
   {
     $tree = Objects::pTree([], 'id', 'parentId');
-    $this->assertInstanceOf(Branch::class, $tree);
-    $this->assertFalse($tree->hasChildren());
+    static::assertInstanceOf(Branch::class, $tree);
+    static::assertFalse($tree->hasChildren());
 
     $tree = Objects::pTree([(object)['id' => 0, 'parentId' => null]], 'id', 'parentId');
-    $this->assertInstanceOf(Branch::class, $tree);
-    $this->assertTrue($tree->hasChildren());
-    $this->assertContainsOnlyInstancesOf(Branch::class, $tree->getChildren());
-    $this->assertCount(1, $tree->getChildren());
+    static::assertInstanceOf(Branch::class, $tree);
+    static::assertTrue($tree->hasChildren());
+    static::assertContainsOnlyInstancesOf(Branch::class, $tree->getChildren());
+    static::assertCount(1, $tree->getChildren());
   }
 
   public function testTreeM()
   {
 
     $tree = Objects::mTree([], 'getId', 'getParentId');
-    $this->assertInstanceOf(Branch::class, $tree);
-    $this->assertFalse($tree->hasChildren());
+    static::assertInstanceOf(Branch::class, $tree);
+    static::assertFalse($tree->hasChildren());
 
     $tree = Objects::mTree([new TreeThing(0, null, 'value', [])], 'getId', 'getParentId');
-    $this->assertInstanceOf(Branch::class, $tree);
-    $this->assertTrue($tree->hasChildren());
-    $this->assertContainsOnlyInstancesOf(Branch::class, $tree->getChildren());
-    $this->assertCount(1, $tree->getChildren());
+    static::assertInstanceOf(Branch::class, $tree);
+    static::assertTrue($tree->hasChildren());
+    static::assertContainsOnlyInstancesOf(Branch::class, $tree->getChildren());
+    static::assertCount(1, $tree->getChildren());
   }
 
   public function testPFilterNullPropertyThrowException()
@@ -499,7 +499,7 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
       $caught = $ex;
     }
 
-    $this->assertEquals(true, ($caught instanceof InvalidArgumentException));
+    static::assertEquals(true, ($caught instanceof InvalidArgumentException));
   }
 
   public function testPFilter()
@@ -512,17 +512,17 @@ class ObjectsTest extends PHPUnit_Framework_TestCase
     $list = ['a' => $a, 'b' => $b, 'c' => $c, 'd' => $d];
 
     $actual = Objects::pfilter($list, 'fruit', 'apple');
-    $this->assertEquals(['a' => $a, 'b' => $b,], $actual);
+    static::assertEquals(['a' => $a, 'b' => $b,], $actual);
 
     $actual = Objects::pfilter($list, 'fruit', 'apple', true);
-    $this->assertEquals(['c' => $c, 'd' => $d,], $actual);
+    static::assertEquals(['c' => $c, 'd' => $d,], $actual);
 
     $matchApple = function ($prop) { return $prop == 'apple'; };
 
     $actual = Objects::pfilter($list, 'fruit', $matchApple);
-    $this->assertEquals(['a' => $a, 'b' => $b,], $actual);
+    static::assertEquals(['a' => $a, 'b' => $b,], $actual);
 
     $actual = Objects::pfilter($list, 'fruit', $matchApple, true);
-    $this->assertEquals(['c' => $c, 'd' => $d,], $actual);
+    static::assertEquals(['c' => $c, 'd' => $d,], $actual);
   }
 }

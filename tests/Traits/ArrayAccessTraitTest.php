@@ -2,9 +2,9 @@
 namespace Packaged\Tests\Traits;
 
 use Packaged\Helpers\Traits\ArrayAccessTrait;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ArrayAccessTraitTest extends PHPUnit_Framework_TestCase
+class ArrayAccessTraitTest extends TestCase
 {
   public function testTrait()
   {
@@ -13,12 +13,12 @@ class ArrayAccessTraitTest extends PHPUnit_Framework_TestCase
      * @var $arr ArrayAccessTrait
      */
     $arr['one'] = 1;
-    $this->assertArrayHasKey('one', $arr);
-    $this->assertEquals(1, $arr['one']);
-    $this->assertTrue(isset($arr['one']));
+    static::assertArrayHasKey('one', $arr);
+    static::assertEquals(1, $arr['one']);
+    static::assertTrue(isset($arr['one']));
     unset($arr['one']);
-    $this->assertNull($arr['one']);
-    $this->assertArrayNotHasKey('one', $arr);
-    $this->assertFalse(isset($arr['one']));
+    static::assertNull($arr['one']);
+    static::assertArrayNotHasKey('one', $arr);
+    static::assertFalse(isset($arr['one']));
   }
 }

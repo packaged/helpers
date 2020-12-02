@@ -4,12 +4,12 @@ namespace Packaged\Tests;
 use Exception;
 use InvalidArgumentException;
 use Packaged\Helpers\Strings;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author  brooke.bryan
  */
-class StringsTest extends PHPUnit_Framework_TestCase
+class StringsTest extends TestCase
 {
   public function testSplitOnCamelCase()
   {
@@ -22,7 +22,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::splitOnCamelCase($expect[0])
       );
@@ -36,7 +36,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::splitOnUnderscores($expect[0])
       );
@@ -50,7 +50,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::stringToUnderScore($expect[0])
       );
@@ -65,7 +65,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::stringToCamelCase($expect[0])
       );
@@ -81,7 +81,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::stringToPascalCase($expect[0])
       );
@@ -97,7 +97,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::titleize($expect[0], false)
       );
@@ -113,7 +113,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::titleize($expect[0], true)
       );
@@ -129,7 +129,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::humanize($expect[0], false)
       );
@@ -145,7 +145,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::humanize($expect[0], true)
       );
@@ -161,7 +161,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::hyphenate($expect[0])
       );
@@ -179,7 +179,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::urlize($expect[0])
       );
@@ -200,7 +200,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[1],
         Strings::stringToRange($expect[0])
       );
@@ -216,7 +216,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[2],
         Strings::commonPrefix($expect[0], $expect[1])
       );
@@ -233,7 +233,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[2],
         Strings::commonPrefix($expect[0], $expect[1], false)
       );
@@ -248,7 +248,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect[2],
         Strings::splitAt($expect[0], $expect[1])
       );
@@ -259,7 +259,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
   {
     foreach([1, 10, 50, 100, 500] as $length)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $length,
         strlen(Strings::randomString($length))
       );
@@ -281,7 +281,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     }
     foreach($types as $type)
     {
-      $this->assertEquals(
+      static::assertEquals(
         40,
         strlen(Strings::randomString(40, $type))
       );
@@ -321,7 +321,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
         . ' libero. Curabitur egestas sem eu metus porta,'
         . ' at vestibulum lacus luctus.';
     }
-    $this->assertEquals(
+    static::assertEquals(
       $expect,
       Strings::excerpt(
         $string,
@@ -360,7 +360,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
    */
   public function testBetween($string, $start, $end, $inclusive, $expect)
   {
-    $this->assertEquals(
+    static::assertEquals(
       $expect,
       Strings::between($string, $start, $end, $inclusive)
     );
@@ -402,7 +402,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $caught = $ex;
     }
-    $this->assertInstanceOf("InvalidArgumentException", $caught);
+    static::assertInstanceOf("InvalidArgumentException", $caught);
 
     $array = [
       "foo" => "bar",
@@ -417,7 +417,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $caught = $ex;
     }
-    $this->assertInstanceOf("InvalidArgumentException", $caught);
+    static::assertInstanceOf("InvalidArgumentException", $caught);
 
     $caught = null;
     try
@@ -428,7 +428,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     {
       $caught = $ex;
     }
-    $this->assertInstanceOf("InvalidArgumentException", $caught);
+    static::assertInstanceOf("InvalidArgumentException", $caught);
   }
 
   public function testSplitLines()
@@ -447,7 +447,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
 
     foreach($retain_cases as $input => $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect,
         Strings::splitLines($input, $retainEndings = true),
         ("(Retained) " . addcslashes($input, "\r\n\\"))
@@ -468,7 +468,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
 
     foreach($discard_cases as $input => $expect)
     {
-      $this->assertEquals(
+      static::assertEquals(
         $expect,
         Strings::splitLines($input, $retainEndings = false),
         ("(Discarded) " . addcslashes($input, "\r\n\\"))
@@ -478,7 +478,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
 
   public function testJsonPretty()
   {
-    $this->assertEquals(
+    static::assertEquals(
       '{
     "x": "y"
 }',
@@ -495,17 +495,17 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals($expect[1], Strings::escape($expect[0]));
+      static::assertEquals($expect[1], Strings::escape($expect[0]));
     }
   }
 
   public function testStringFrom()
   {
-    $this->assertEquals(
+    static::assertEquals(
       'Views\Dyn',
       Strings::offset('X\Y\Z\Com\Views\Dyn', 'Com\\')
     );
-    $this->assertEquals(
+    static::assertEquals(
       'X\Y\Z\Com\Views\Dyn',
       Strings::offset('X\Y\Z\Com\Views\Dyn', 'Mi\\')
     );
@@ -513,47 +513,47 @@ class StringsTest extends PHPUnit_Framework_TestCase
 
   public function testStrContains()
   {
-    $this->assertTrue(Strings::contains('abcdef', 'bcd'));
-    $this->assertTrue(Strings::contains('abcdef', 'bcd', false));
-    $this->assertFalse(Strings::contains('abCdef', 'bcd'));
-    $this->assertTrue(Strings::contains('aBcDeF', 'aBcDeF'));
-    $this->assertTrue(Strings::contains('aBcDeF', 'BcD'));
-    $this->assertTrue(Strings::contains('aBcDeF', 'bcd', false));
+    static::assertTrue(Strings::contains('abcdef', 'bcd'));
+    static::assertTrue(Strings::contains('abcdef', 'bcd', false));
+    static::assertFalse(Strings::contains('abCdef', 'bcd'));
+    static::assertTrue(Strings::contains('aBcDeF', 'aBcDeF'));
+    static::assertTrue(Strings::contains('aBcDeF', 'BcD'));
+    static::assertTrue(Strings::contains('aBcDeF', 'bcd', false));
   }
 
   public function testContainsAny()
   {
-    $this->assertTrue(Strings::containsAny('abcdef', ['x', 'y', 'bc']));
-    $this->assertFalse(Strings::containsAny('abcdef', ['x', 'y', 'z']));
-    $this->assertTrue(Strings::containsAny('aBCdef', ['x', 'y', 'bc'], false));
-    $this->assertFalse(Strings::containsAny('aBCdef', ['x', 'y', 'bc']));
-    $this->assertFalse(Strings::containsAny('abcdef', ['x', 'y', 'z']));
+    static::assertTrue(Strings::containsAny('abcdef', ['x', 'y', 'bc']));
+    static::assertFalse(Strings::containsAny('abcdef', ['x', 'y', 'z']));
+    static::assertTrue(Strings::containsAny('aBCdef', ['x', 'y', 'bc'], false));
+    static::assertFalse(Strings::containsAny('aBCdef', ['x', 'y', 'bc']));
+    static::assertFalse(Strings::containsAny('abcdef', ['x', 'y', 'z']));
   }
 
   public function testExploded()
   {
     $defaults = ["a", "b", "c", "d"];
-    $this->assertEquals(
+    static::assertEquals(
       [1, 2, 3, 4],
       Strings::explode(",", "1,2,3,4", $defaults, 4)
     );
-    $this->assertEquals(
+    static::assertEquals(
       [1, 2, "3,4", "d"],
       Strings::explode(",", "1,2,3,4", $defaults, 3)
     );
-    $this->assertEquals(
+    static::assertEquals(
       [1, 2, "c", "d"],
       Strings::explode(",", "1,2", $defaults, 3)
     );
-    $this->assertEquals(
+    static::assertEquals(
       [1, 2, "c", "d"],
       Strings::explode(",", "1,2", $defaults)
     );
-    $this->assertEquals(
+    static::assertEquals(
       [1, 2, 3, 4, 5],
       Strings::explode(",", "1,2,3,4,5", $defaults)
     );
-    $this->assertEquals(
+    static::assertEquals(
       [1, 2, 3, '-', '-'],
       Strings::explode(",", "1,2,3", '-', 5)
     );
@@ -561,50 +561,50 @@ class StringsTest extends PHPUnit_Framework_TestCase
 
   public function testConcat()
   {
-    $this->assertEquals("ab", Strings::concat("a", "b"));
-    $this->assertEquals("a-b", Strings::concat("a", "-", "b"));
+    static::assertEquals("ab", Strings::concat("a", "b"));
+    static::assertEquals("a-b", Strings::concat("a", "-", "b"));
   }
 
   public function testStartsWith()
   {
-    $this->assertTrue(Strings::startsWith("abcdef", "ab", true));
-    $this->assertTrue(Strings::startsWith("aBcdef", "aB", true));
-    $this->assertTrue(Strings::startsWith("abcdef", "aB", false));
-    $this->assertTrue(Strings::startsWith("aBcdef", ["cd", 'aB'], true));
+    static::assertTrue(Strings::startsWith("abcdef", "ab", true));
+    static::assertTrue(Strings::startsWith("aBcdef", "aB", true));
+    static::assertTrue(Strings::startsWith("abcdef", "aB", false));
+    static::assertTrue(Strings::startsWith("aBcdef", ["cd", 'aB'], true));
 
-    $this->assertFalse(Strings::startsWith("aBcdef", "ab", true));
-    $this->assertFalse(Strings::startsWith("aBcdef", "cd", false));
-    $this->assertFalse(Strings::startsWith("aBcdef", "cd", true));
+    static::assertFalse(Strings::startsWith("aBcdef", "ab", true));
+    static::assertFalse(Strings::startsWith("aBcdef", "cd", false));
+    static::assertFalse(Strings::startsWith("aBcdef", "cd", true));
   }
 
   public function testStartsWithAny()
   {
-    $this->assertTrue(Strings::startsWithAny("abcdef", ["c", "ab"], true));
-    $this->assertTrue(Strings::startsWithAny("aBcdef", ["c", "aB"], true));
-    $this->assertFalse(Strings::startsWithAny("abcdef", ["c", "ef"], true));
-    $this->assertTrue(Strings::startsWithAny("aBcdef", ["c", "aB"], false));
-    $this->assertFalse(Strings::startsWithAny("aBcdef", ["c", "ef"], false));
+    static::assertTrue(Strings::startsWithAny("abcdef", ["c", "ab"], true));
+    static::assertTrue(Strings::startsWithAny("aBcdef", ["c", "aB"], true));
+    static::assertFalse(Strings::startsWithAny("abcdef", ["c", "ef"], true));
+    static::assertTrue(Strings::startsWithAny("aBcdef", ["c", "aB"], false));
+    static::assertFalse(Strings::startsWithAny("aBcdef", ["c", "ef"], false));
   }
 
   public function testEndsWith()
   {
-    $this->assertTrue(Strings::endsWith("abcdef", "f", true));
-    $this->assertTrue(Strings::endsWith("aBcdeF", "eF", true));
-    $this->assertTrue(Strings::endsWith("aBcdeF", "ef", false));
-    $this->assertTrue(Strings::endsWith("aBcdeF", ["de", "ef"], false));
+    static::assertTrue(Strings::endsWith("abcdef", "f", true));
+    static::assertTrue(Strings::endsWith("aBcdeF", "eF", true));
+    static::assertTrue(Strings::endsWith("aBcdeF", "ef", false));
+    static::assertTrue(Strings::endsWith("aBcdeF", ["de", "ef"], false));
 
-    $this->assertFalse(Strings::endsWith("aBcdef", "de", false));
-    $this->assertFalse(Strings::endsWith("aBcdef", "eF", true));
+    static::assertFalse(Strings::endsWith("aBcdef", "de", false));
+    static::assertFalse(Strings::endsWith("aBcdef", "eF", true));
   }
 
   public function testEndsWithAny()
   {
-    $this->assertTrue(Strings::endsWithAny("abcdef", ["f", "yx"], true));
-    $this->assertTrue(Strings::endsWithAny("aBcdeF", ["x", "eF"], true));
-    $this->assertTrue(Strings::endsWithAny("aBcdef", ["c", "eF"], false));
+    static::assertTrue(Strings::endsWithAny("abcdef", ["f", "yx"], true));
+    static::assertTrue(Strings::endsWithAny("aBcdeF", ["x", "eF"], true));
+    static::assertTrue(Strings::endsWithAny("aBcdef", ["c", "eF"], false));
 
-    $this->assertFalse(Strings::endsWithAny("abcdef", ["c", "eF"], true));
-    $this->assertFalse(Strings::endsWithAny("aBcdef", ["c", "ab"], false));
+    static::assertFalse(Strings::endsWithAny("abcdef", ["c", "eF"], true));
+    static::assertFalse(Strings::endsWithAny("aBcdef", ["c", "ab"], false));
   }
 
   public function testStripStart()
@@ -616,7 +616,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
     ];
     foreach($expectations as $expect)
     {
-      $this->assertEquals($expect[2], Strings::ltrim($expect[0], $expect[1]));
+      static::assertEquals($expect[2], Strings::ltrim($expect[0], $expect[1]));
     }
   }
 
@@ -629,7 +629,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
   {
     for($i = 0; $i < 100; $i++)
     {
-      $this->assertTrue(
+      static::assertTrue(
         Strings::verifyPattern($pattern, Strings::pattern($pattern))
       );
     }
@@ -648,13 +648,13 @@ class StringsTest extends PHPUnit_Framework_TestCase
   public function testNTrim()
   {
     $string = null;
-    $this->assertNull(Strings::ntrim($string, "abc"));
+    static::assertNull(Strings::ntrim($string, "abc"));
     $string = "abc";
-    $this->assertEquals("", Strings::ntrim($string, "abc"));
+    static::assertEquals("", Strings::ntrim($string, "abc"));
     $string = "cba";
-    $this->assertEquals("", Strings::ntrim($string, "abc"));
+    static::assertEquals("", Strings::ntrim($string, "abc"));
     $string = "abcde";
-    $this->assertEquals("d", Strings::ntrim($string, "abce"));
+    static::assertEquals("d", Strings::ntrim($string, "abce"));
   }
 
   /**
@@ -668,7 +668,7 @@ class StringsTest extends PHPUnit_Framework_TestCase
    */
   public function testWordwrap($expect, $input, $width, $break, $cut)
   {
-    $this->assertEquals(
+    static::assertEquals(
       $expect,
       Strings::wordWrap($input, $width, $break, $cut)
     );
@@ -685,15 +685,15 @@ class StringsTest extends PHPUnit_Framework_TestCase
 
   public function testWrap()
   {
-    $this->assertEquals("'hey'", Strings::wrap('hey', '\''));
-    $this->assertEquals("'hey'", Strings::wrap('hey\'', '\'', true));
-    $this->assertEquals("'hey'", Strings::wrap('hey\'\'', '\'', true));
+    static::assertEquals("'hey'", Strings::wrap('hey', '\''));
+    static::assertEquals("'hey'", Strings::wrap('hey\'', '\'', true));
+    static::assertEquals("'hey'", Strings::wrap('hey\'\'', '\'', true));
   }
 
   /** @dataProvider urlB64DecodeProvider */
   public function testUrlsafeBase64Decode($expect, $raw)
   {
-    $this->assertEquals($expect, Strings::urlsafeBase64Decode($raw));
+    static::assertEquals($expect, Strings::urlsafeBase64Decode($raw));
   }
 
   public function urlB64DecodeProvider()
@@ -715,12 +715,12 @@ class StringsTest extends PHPUnit_Framework_TestCase
   public function testNamedSplit()
   {
     $label = Strings::namedSplit(':', 'label:value', 'label', 'value');
-    $this->assertSame(['label' => 'label', 'value' => 'value',], $label);
+    static::assertSame(['label' => 'label', 'value' => 'value',], $label);
     $label = Strings::namedSplit(':', 'label:value:x', 'label', 'value');
-    $this->assertSame(['label' => 'label', 'value' => 'value',], $label);
+    static::assertSame(['label' => 'label', 'value' => 'value',], $label);
     $label = Strings::namedSplit(':', 'label', 'label', 'value');
-    $this->assertSame(['label' => 'label',], $label);
+    static::assertSame(['label' => 'label',], $label);
     $label = Strings::namedSplit(':', 'label:x:value', 'label', null, 'value');
-    $this->assertSame(['label' => 'label', 'value' => 'value',], $label);
+    static::assertSame(['label' => 'label', 'value' => 'value',], $label);
   }
 }
