@@ -64,10 +64,10 @@ jobs:
       - image: php:7.3-alpine
         environment:
           ADD_MODULES: bcmath
-  build-phpRC:
+  build-php74:
     <<: *defaults
     docker:
-      - image: php:rc-alpine
+      - image: php:7.4-alpine
         environment:
           ADD_MODULES: bcmath
 workflows:
