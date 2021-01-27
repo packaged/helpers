@@ -737,4 +737,53 @@ class Objects
   {
     return Branch::trunk()->mHydrate($source, $idMethod, $parentIdMethod);
   }
+
+  /**
+   * Filter a list of objects by Object method, matching the criteria.
+   *
+   * @param array           $source
+   * @param callable|string $method
+   * @param mixed           $match
+   * @param bool            $negate
+   *
+   * @return array
+   */
+  public static function mMatch(array $source, $method, $match, bool $negate = false)
+  {
+    if(!is_string($method) || empty($method))
+    {
+      throw new InvalidArgumentException('Argument method is not a string.');
+    }
+
+    $result = [];
+
+    if(is_callable($match))
+    {
+      foreach($source as $key => $object)
+      {
+        if($match($object->$method()) !== $negate)
+        {
+          $result[$key] = $object;
+        }
+      }
+    }
+    else
+    {
+      foreach($source as $key => $object)
+      {
+        $value = $object->$method();
+
+        if($value === $match && !$negate)
+        {
+          $result[$key] = $object;
+        }
+        else if($value !== $match && $negate)
+        {
+          $result[$key] = $object;
+        }
+      }
+    }
+
+    return $result;
+  }
 }

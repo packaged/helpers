@@ -525,4 +525,34 @@ class ObjectsTest extends TestCase
     $actual = Objects::pfilter($list, 'fruit', $matchApple, true);
     static::assertEquals(['c' => $c, 'd' => $d,], $actual);
   }
+
+  public function testMMatch()
+  {
+    $a = new Pancake("apple", "toffee");
+    $b = new Pancake("apple", "strawberry");
+    $c = new Pancake("orange", "toffee");
+    $d = new Pancake("orange", "gravy");
+
+    $list = ['a' => $a, 'b' => $b, 'c' => $c, 'd' => $d];
+
+    $actual = Objects::mMatch($list, 'getFruit', 'orange');
+    static::assertEquals(['c' => $c, 'd' => $d], $actual);
+
+    $actual = Objects::mMatch($list, 'getFruit', 'orange', true);
+    static::assertEquals(['a' => $a, 'b' => $b], $actual);
+
+    $actual = Objects::mMatch($list, 'getSauce', 'toffee');
+    static::assertEquals(['a' => $a, 'c' => $c], $actual);
+
+    $actual = Objects::mMatch($list, 'getSauce', 'toffee', true);
+    static::assertEquals(['b' => $b, 'd' => $d], $actual);
+
+    $matchApple = function ($prop) { return $prop === 'apple'; };
+
+    $actual = Objects::mMatch($list, 'getFruit', $matchApple);
+    static::assertEquals(['a' => $a, 'b' => $b], $actual);
+
+    $actual = Objects::mMatch($list, 'getFruit', $matchApple, true);
+    static::assertEquals(['c' => $c, 'd' => $d], $actual);
+  }
 }
