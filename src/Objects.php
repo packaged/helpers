@@ -773,11 +773,7 @@ class Objects
       {
         $value = $object->$method();
 
-        if($value === $match && !$negate)
-        {
-          $result[$key] = $object;
-        }
-        else if($value !== $match && $negate)
+        if(($value === $match) === !$negate)
         {
           $result[$key] = $object;
         }
