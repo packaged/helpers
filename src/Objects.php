@@ -771,9 +771,8 @@ class Objects
     {
       foreach($source as $key => $object)
       {
-        $value = $object->$method();
 
-        if(($value === $match) === !$negate)
+        if(($object->$method() === $match) === !$negate)
         {
           $result[$key] = $object;
         }
