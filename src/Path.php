@@ -126,7 +126,7 @@ class Path
     {
       $fullPath[] = ltrim($last, $separator);
     }
-    else if(!isset($fullPath[1]) && $fullPath[0] === '')
+    else if(!isset($fullPath[1]) && (!isset($fullPath[0]) || $fullPath[0] === ''))
     {
       return $separator;
     }
