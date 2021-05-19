@@ -61,11 +61,11 @@ class ExceptionHelper
         $lines[] = sprintf(
           "#%s %s(%s): %s%s%s(%s)",
           $count,
-          $frame['file'],
-          $frame['line'],
-          $frame['class'],
-          $frame['type'],
-          $frame['function'],
+          $frame['file'] ?? '',
+          $frame['line'] ?? '',
+          $frame['class'] ?? '',
+          $frame['type'] ?? '',
+          $frame['function'] ?? '',
           $args
         );
       }
@@ -74,9 +74,9 @@ class ExceptionHelper
         $lines[] = sprintf(
           "#%s [internal function]: %s%s%s(%s)",
           $count,
-          $frame['class'],
-          $frame['type'],
-          $frame['function'],
+          $frame['class'] ?? '',
+          $frame['type'] ?? '',
+          $frame['function'] ?? '',
           $args
         );
       }
