@@ -18,10 +18,7 @@ class ValueAsTest extends TestCase
    */
   public function testExactConversions($method, $value, $default, $expect)
   {
-    static::assertSame(
-      $expect,
-      ValueAs::$method($value, $default)
-    );
+    static::assertSame($expect, ValueAs::$method($value, $default));
   }
 
   /**
@@ -76,6 +73,7 @@ class ValueAsTest extends TestCase
       ['arr', "hey", null, ["hey"]],
       ['arr', "hello,world", null, ["hello", "world"]],
       ['arr', "test=one&unit=two", null, ["test" => 'one', "unit" => 'two']],
+      ['arr', "test=one", null, ["test" => 'one']],
       ['arr', "", ["test"], ["test"]],
       ['arr', tmpfile(), ["test"], ["test"]],
       ['arr', $objectTest, ["test"], ["item" => "value"]],

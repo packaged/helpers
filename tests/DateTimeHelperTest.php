@@ -154,7 +154,7 @@ class DateTimeHelperTest extends TestCase
 
   public function testMilliseconds()
   {
-    static::assertIsInt(DateTimeHelper::milliseconds());
+    static::assertInternalType('int', DateTimeHelper::milliseconds());
   }
 
   public function testToSeconds()
