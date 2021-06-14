@@ -75,6 +75,7 @@ class ValueAsTest extends TestCase
       ['arr', "test=one&unit=two", null, ["test" => 'one', "unit" => 'two']],
       ['arr', "test.one=one.test", null, ["test.one" => 'one.test']],
       ['arr', "test=one", null, ["test" => 'one']],
+      ['arr', "hello&world=two", null, ['hello' => '', 'world' => 'two']],
       ['arr', "", ["test"], ["test"]],
       ['arr', tmpfile(), ["test"], ["test"]],
       ['arr', $objectTest, ["test"], ["item" => "value"]],
