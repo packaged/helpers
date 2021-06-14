@@ -152,7 +152,7 @@ class ValueAs
         $array = [];
         foreach(explode('&', $value) as $pair)
         {
-          [$key, $val] = explode('=', $pair);
+          list($key, $val) = explode('=', $pair);
           $array[$key] = $val;
         }
         return $array;
