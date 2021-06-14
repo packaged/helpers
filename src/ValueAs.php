@@ -150,7 +150,11 @@ class ValueAs
       if(strpos($value, '=') !== false)
       {
         $array = [];
-        parse_str($value, $array);
+        foreach(explode('&', $value) as $pair)
+        {
+          [$key, $val] = explode('=', $pair);
+          $array[$key] = $val;
+        }
         return $array;
       }
       if(stristr($value, ','))

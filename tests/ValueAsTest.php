@@ -73,6 +73,7 @@ class ValueAsTest extends \PHPUnit_Framework_TestCase
       ['arr', "hey", null, ["hey"]],
       ['arr', "hello,world", null, ["hello", "world"]],
       ['arr', "test=one&unit=two", null, ["test" => 'one', "unit" => 'two']],
+      ['arr', "test.one=one.test", null, ["test.one" => 'one.test']],
       ['arr', "test=one", null, ["test" => 'one']],
       ['arr', "", ["test"], ["test"]],
       ['arr', tmpfile(), ["test"], ["test"]],
