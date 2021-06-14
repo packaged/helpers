@@ -161,7 +161,11 @@ class ValueAs
       if(strpos($value, '=') !== false)
       {
         $array = [];
-        parse_str($value, $array);
+        preg_match_all('/([^=&]+)(?:=)?([^&]+)?(?:&)?/', $value, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL);
+        foreach($matches as $match)
+        {
+          $array[$match[1]] = $match[2] ?: '';
+        }
         return $array;
       }
 
