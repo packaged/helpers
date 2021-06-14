@@ -147,14 +147,10 @@ class ValueAs
 
     if(is_string($value))
     {
-      if(stristr($value, '=') && stristr($value, '&'))
+      if(strpos($value, '=') !== false)
       {
         $array = [];
-        foreach(explode('&', $value) as $set)
-        {
-          list($key, $val) = explode('=', $set, 2);
-          $array[$key] = $val;
-        }
+        parse_str($value, $array);
         return $array;
       }
       if(stristr($value, ','))
