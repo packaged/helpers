@@ -161,10 +161,10 @@ class ValueAs
       if(strpos($value, '=') !== false)
       {
         $array = [];
-        foreach(explode('&', $value) as $pair)
+        preg_match_all('/([^=&]+)(?:=)?([^&]+)?(?:&)?/', $value, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL);
+        foreach($matches as $match)
         {
-          [$key, $val] = array_pad(explode('=', $pair, 2), 2, '');
-          $array[$key] = $val;
+          $array[$match[1]] = $match[2] ?: '';
         }
         return $array;
       }
