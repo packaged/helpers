@@ -65,6 +65,12 @@ class FQDN
     return $this;
   }
 
+  public function fullDomain()
+  {
+    $this->_prepareHost();
+    return $this->_domain . '.' . $this->_tld;
+  }
+
   /**
    * Define accepted TLDs for use when determining tlds
    *
