@@ -203,7 +203,6 @@ class Strings
 
   /**
    * Split a string into an array based on expected human input
-   *
    * Ranged are allowed with hyphens, e.g. 1-3 will produce [1,2,3]
    * Splitting can be done with spaces, commas, semi colons and pipes
    *
@@ -219,7 +218,7 @@ class Strings
     {
       if(strpos($range, '-') !== false)
       {
-        list($start, $end) = explode("-", $range, 2);
+        [$start, $end] = explode("-", $range, 2);
         if(is_numeric($start) && is_numeric($end))
         {
           $result = array_merge($result, range($start, $end));
@@ -508,7 +507,6 @@ class Strings
    * @param string $parameter Assert that this data is valid.
    *
    * @return void
-   *
    * @throws InvalidArgumentException
    */
   public static function stringable($parameter)
@@ -540,7 +538,6 @@ class Strings
    * Split a corpus of text into lines. This function splits on "\n", "\r\n",
    * or
    * a mixture of any of them.
-   *
    * NOTE: This function does not treat "\r" on its own as a newline because
    * none of SVN, Git or Mercurial do on any OS.
    *
@@ -583,12 +580,11 @@ class Strings
    * @param string      $string    The input string.
    * @param array|mixed $defaults  Array to return, with replacements made,
    *                               or a padding value
-   * @param int|null    $limit     Passed through to the initial explode
+   * @param int         $limit     Passed through to the initial explode
    *
    * @return array
-   *
    */
-  public static function explode($delimiter, $string, $defaults = null, $limit = null)
+  public static function explode($delimiter, $string, $defaults = null, $limit = 0)
   {
     if($limit === null)
     {
@@ -651,7 +647,6 @@ class Strings
    * @param      $haystack
    * @param      $needle
    * @param bool $case
-   *
    * @param null $knownNeedleLength
    *
    * @return bool
@@ -781,7 +776,6 @@ class Strings
    * @param      $haystack
    * @param      $needle
    * @param bool $case
-   *
    * @param null $knownNeedleLength
    *
    * @return bool
