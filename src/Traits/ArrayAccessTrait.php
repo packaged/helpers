@@ -20,7 +20,8 @@ trait ArrayAccessTrait
    * <p>
    * The return value will be casted to boolean if non-boolean was returned.
    */
-  public function offsetExists($offset)
+  #[\ReturnTypeWillChange]
+  public function offsetExists( $offset)
   {
     return isset($this->_arrayAccessData[$offset]);
   }
@@ -37,6 +38,7 @@ trait ArrayAccessTrait
    *
    * @return mixed Can return all value types.
    */
+  #[\ReturnTypeWillChange]
   public function offsetGet($offset)
   {
     if(isset($this->_arrayAccessData[$offset]))
@@ -61,6 +63,7 @@ trait ArrayAccessTrait
    *
    * @return void
    */
+  #[\ReturnTypeWillChange]
   public function offsetSet($offset, $value)
   {
     $this->_arrayAccessData[$offset] = $value;
@@ -78,6 +81,7 @@ trait ArrayAccessTrait
    *
    * @return void
    */
+  #[\ReturnTypeWillChange]
   public function offsetUnset($offset)
   {
     unset($this->_arrayAccessData[$offset]);
