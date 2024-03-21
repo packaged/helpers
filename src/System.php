@@ -161,7 +161,7 @@ class System
       $server = $_SERVER['SERVER_SOFTWARE'];
     }
 
-    return strpos($server, 'Google App Engine') !== false;
+    return $server && strpos($server, 'Google App Engine') !== false;
   }
 
   /**
