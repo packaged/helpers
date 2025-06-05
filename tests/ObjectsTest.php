@@ -125,18 +125,18 @@ class ObjectsTest extends TestCase
 
     Objects::hydrate($dest, $source, ['name']);
 
-    static::assertObjectHasAttribute('name', $dest);
+    static::assertObjectHasProperty('name', $dest);
     static::assertEquals('Test', $dest->name);
 
-    static::assertObjectNotHasAttribute('age', $dest);
+    static::assertObjectNotHasProperty('age', $dest);
     Objects::hydrate($dest, $source, ['age']);
 
-    static::assertObjectHasAttribute('age', $dest);
+    static::assertObjectHasProperty('age', $dest);
     static::assertEquals('19', $dest->age);
 
     $dest->name = null;
     Objects::hydrate($dest, $source);
-    static::assertObjectHasAttribute('name', $dest);
+    static::assertObjectHasProperty('name', $dest);
     static::assertEquals('Test', $dest->name);
 
     $dest = new stdClass();
@@ -174,23 +174,23 @@ class ObjectsTest extends TestCase
 
     Objects::mapHydrate($dest, $source, ['name' => true]);
 
-    static::assertObjectHasAttribute('name', $dest);
+    static::assertObjectHasProperty('name', $dest);
     static::assertEquals('Test', $dest->name);
 
-    static::assertObjectNotHasAttribute('age', $dest);
+    static::assertObjectNotHasProperty('age', $dest);
     Objects::mapHydrate($dest, $source, ['age' => true]);
 
-    static::assertObjectHasAttribute('age', $dest);
+    static::assertObjectHasProperty('age', $dest);
     static::assertEquals('19', $dest->age);
 
     $dest->name = null;
     Objects::mapHydrate($dest, $source, ['name' => true]);
-    static::assertObjectHasAttribute('name', $dest);
+    static::assertObjectHasProperty('name', $dest);
     static::assertEquals('Test', $dest->name);
 
     Objects::mapHydrate($dest, $source, ['age' => function ($val) { return $val * 10; }]);
 
-    static::assertObjectHasAttribute('age', $dest);
+    static::assertObjectHasProperty('age', $dest);
     static::assertEquals(190, $dest->age);
 
     $this->expectException(\Exception::class);

@@ -71,7 +71,7 @@ class Objects
    *
    * @throws Exception
    */
-  public static function hydrate($destination, $source, array $properties = null, $copyNull = true)
+  public static function hydrate($destination, $source, ?array $properties = null, $copyNull = true)
   {
     if(!is_object($destination) || !is_object($source))
     {

@@ -22,7 +22,7 @@ class RetryHelper
    * @throws Exception
    */
   public static function retry(
-    $retries, callable $callFunction, callable $catchFunction = null
+    $retries, callable $callFunction, ?callable $catchFunction = null
   )
   {
     $return = null;
