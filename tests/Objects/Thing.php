@@ -3,6 +3,11 @@ namespace Packaged\Tests\Objects;
 
 final class Thing
 {
+  private $_name;
+  private $_type;
+  private $_colour;
+  private $_group;
+
   public function __construct($name, $type, $colour, $group)
   {
     $this->_name = $this->nameProperty = $name;

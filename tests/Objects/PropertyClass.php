@@ -3,6 +3,7 @@ namespace Packaged\Tests\Objects;
 
 use Packaged\Helpers\Objects;
 
+#[\AllowDynamicProperties]
 class PropertyClass
 {
   public $name;
