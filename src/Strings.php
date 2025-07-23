@@ -891,4 +891,15 @@ class Strings
     }
     return $return;
   }
+
+  public static function acronym($string, $uppersOnly = true)
+  {
+    if($uppersOnly)
+    {
+      return strtoupper(preg_replace('/[^A-Z]/', '', $string));
+    }
+    $matches = [];
+    preg_match_all('/(^.|[A-Z]|(?<=[^a-zA-Z0-9])[a-z])/', $string, $matches);
+    return isset($matches[0]) ? strtoupper(implode('', $matches[0])) : '';
+  }
 }

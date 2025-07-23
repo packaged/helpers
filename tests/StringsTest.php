@@ -723,4 +723,26 @@ class StringsTest extends TestCase
     $label = Strings::namedSplit(':', 'label:x:value', 'label', null, 'value');
     static::assertSame(['label' => 'label', 'value' => 'value',], $label);
   }
+
+  public function testAcrynym()
+  {
+    $expectations = [
+      ["first name", "FN"],
+      ["second_name", "SN"],
+      ["thirdName", "TN"],
+      ["Band Name", "BN"],
+      ["First_Lane", "FL"],
+      ["FirstPine", "FP"],
+      ["First Name Third Name", "FNTN"],
+      ["First_Name Band_Name", "FNBN"],
+      ["FirstName XeroName", "FNXN"],
+    ];
+    foreach($expectations as $expect)
+    {
+      static::assertEquals(
+        $expect[1],
+        Strings::acronym($expect[0], false)
+      );
+    }
+  }
 }
