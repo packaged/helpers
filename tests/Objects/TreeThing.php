@@ -54,7 +54,8 @@ class TreeThing implements JsonSerializable
   /**
    * @inheritDoc
    */
-  public function jsonSerialize(): mixed
+  #[\ReturnTypeWillChange]
+  public function jsonSerialize()
   {
     return [
       'id'       => $this->_id,
