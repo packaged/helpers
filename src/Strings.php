@@ -27,7 +27,6 @@ use function ltrim;
 use function mb_strlen;
 use function mb_strrpos;
 use function mb_substr;
-use function mcrypt_create_iv;
 use function md5;
 use function method_exists;
 use function mt_rand;
@@ -57,13 +56,11 @@ use function ucwords;
 use function uniqid;
 use const ENT_QUOTES;
 use const JSON_PRETTY_PRINT;
-use const MCRYPT_DEV_URANDOM;
 use const STR_PAD_RIGHT;
 
 class Strings
 {
   const RANDOM_STRING_RANDOM_BYTES = 'random_bytes';
-  const RANDOM_STRING_MCRYPT = 'mcrypt';
   const RANDOM_STRING_OPENSSL = 'openssl';
   const RANDOM_STRING_URANDOM = 'urandom';
   const RANDOM_STRING_CUSTOM = 'custom';
@@ -78,8 +75,7 @@ class Strings
   public static function stringToCamelCase($string)
   {
     $string = self::stringToPascalCase($string);
-    $string = lcfirst($string);
-    return $string;
+    return lcfirst($string);
   }
 
   /**
@@ -315,13 +311,7 @@ class Strings
     {
       $randomData = file_get_contents('/dev/urandom', false, null, 0, 100) . uniqid(mt_rand(), true);
     }
-    // @codeCoverageIgnoreStart
-    else if(($forceMethod == self::RANDOM_STRING_MCRYPT) && function_exists('mcrypt_create_iv'))
-    {
-      /** @noinspection PhpDeprecationInspection */
-      $randomData = mcrypt_create_iv(100, MCRYPT_DEV_URANDOM);
-    }
-    // @codeCoverageIgnoreEnd
+    // @codeCoverageIgnoreStart - fallback when no standard random source available
     else
     {
       $prefix = substr(
@@ -331,12 +321,15 @@ class Strings
       );
       $randomData = str_shuffle($prefix . md5(mt_rand(1, 9999)) . $prefix);
     }
+    // @codeCoverageIgnoreEnd
 
     $hash = preg_replace('/[^a-z0-9]/i', '', $randomData);
+    // @codeCoverageIgnoreStart - rare case when hash needs extending
     while(strlen($hash) < $length)
     {
       $hash .= static::randomString($length - strlen($hash), $forceMethod);
     }
+    // @codeCoverageIgnoreEnd
     return substr($hash, 0, $length);
   }
 

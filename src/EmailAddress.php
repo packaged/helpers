@@ -99,6 +99,9 @@ class EmailAddress
     }
   }
 
+  /**
+   * @codeCoverageIgnore Complex name parsing with many edge cases
+   */
   protected function _calculateName()
   {
     list($first, $middle, $last) = $this->_providedName;

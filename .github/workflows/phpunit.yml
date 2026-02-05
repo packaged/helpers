@@ -1,0 +1,45 @@
+name: PHPUnit
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5' ]
+
+    name: PHP ${{ matrix.php }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: bcmath
+          coverage: xdebug
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --coverage-text=coverage.txt
+
+      - name: Check coverage
+        run: |
+          cat coverage.txt
+          COVERAGE=$(grep -A3 'Summary:' coverage.txt | grep 'Lines:' | grep -oP '\d+\.\d+(?=%)')
+          THRESHOLD=98
+          if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
+            echo "Coverage is $COVERAGE%, below ${THRESHOLD}% threshold"
+            exit 1
+          fi
+          echo "Coverage is $COVERAGE% (threshold: ${THRESHOLD}%)"

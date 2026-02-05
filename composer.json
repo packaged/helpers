@@ -9,11 +9,17 @@
     }
   ],
   "require": {
-    "php": ">=8.0",
+    "php": ">=7.4",
     "ext-json": "*"
   },
+  "suggest": {
+    "ext-mbstring": "Required for Strings::excerpt(), Strings::wordWrap()",
+    "ext-openssl": "Required for Strings::randomString() with openssl method",
+    "ext-bcmath": "Required for BitWise operations",
+    "ext-gmp": "Required for BitWiseGmp operations"
+  },
   "require-dev": {
-    "phpunit/phpunit": "^9.0"
+    "phpunit/phpunit": "~9"
   },
   "autoload": {
     "psr-4": {

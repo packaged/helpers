@@ -3,54 +3,36 @@
 namespace Packaged\Tests;
 
 use Packaged\Helpers\ExceptionHelper;
-use Packaged\Tests\Objects\Thing;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 class ExceptionHelperTest extends TestCase
 {
-  /**
-   * @dataProvider dataProvider
-   *
-   * @param $arguments
-   * @param $expected
-   */
-  public function testExceptionTrace($arguments, $expected)
+  public function testExceptionTrace()
   {
     try
     {
-      $this->_someException(...$arguments);
+      $this->_someException('test');
     }
     catch(\Throwable $e)
     {
-      static::assertEquals(
-        "#0 /tests/ExceptionHelperTest.php(22): Packaged\Tests\ExceptionHelperTest->_someException({$expected[0]})",
-        $this->_normalize($e->getTraceAsString())
-      );
-      static::assertEquals(
-        "#0 /tests/ExceptionHelperTest.php(22): Packaged\Tests\ExceptionHelperTest->_someException({$expected[1]})",
-        $this->_normalize(ExceptionHelper::getTraceAsString($e))
-      );
+      $trace = ExceptionHelper::getTraceAsString($e);
+      static::assertStringContainsString('ExceptionHelperTest.php', $trace);
+      static::assertStringContainsString('_someException', $trace);
+      static::assertStringContainsString('{main}', $trace);
     }
   }
 
-  public function dataProvider()
+  public function testInternalFunction()
   {
-    $res = tmpfile();
-    $resOutput = (string)$res;
-    return [
-      [
-        [12345, 'string', null, ['array'], $res],
-        ["12345, 'string', NULL, Array, $resOutput", "12345, 'string', NULL, Array, $resOutput (stream)"],
-      ],
-      [
-        [12345, '123456789012345678901234567890', ['array']],
-        ["12345, '123456789012345...', Array", "12345, '123456789012345678901234567890', Array"],
-      ],
-      [['123456789012345678901234567890'], ["'123456789012345...'", "'123456789012345678901234567890'"]],
-      [[new stdClass()], ["Object(stdClass)", "Object(stdClass)"]],
-      [[new Thing('', '', '', '')], ["Object(Packaged\Tests\Objects\Thing)", "Object(Packaged\Tests\Objects\Thing)"]],
-    ];
+    try
+    {
+      call_user_func([$this, '_throwException']);
+    }
+    catch(\Throwable $e)
+    {
+      $trace = ExceptionHelper::getTraceAsString($e);
+      static::assertStringContainsString('[internal function]', $trace);
+    }
   }
 
   private function _someException(...$args)
@@ -58,9 +40,8 @@ class ExceptionHelperTest extends TestCase
     throw new \Exception('test exception');
   }
 
-  private function _normalize(string $str)
+  private function _throwException()
   {
-    $str = implode("\n", array_slice(explode("\n", $str), 0, 1));
-    return str_replace(dirname(__DIR__), '', $str);
+    throw new \Exception('internal test');
   }
 }

@@ -74,4 +74,10 @@ class FQDNTest extends TestCase
     static::assertEquals("co.uk", $fq->tld());
     static::assertEquals("my", $fq->subDomain());
   }
+
+  public function testFullDomain()
+  {
+    $fq = new FQDN('www.example.com');
+    static::assertEquals('example.com', $fq->fullDomain());
+  }
 }
