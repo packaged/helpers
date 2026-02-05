@@ -70,4 +70,49 @@ class ExceptionHelperTest extends TestCase
     $str = implode("\n", array_slice(explode("\n", $str), 0, 1));
     return str_replace(dirname(__DIR__), '', $str);
   }
+
+  public function testInternalFunction()
+  {
+    try
+    {
+      // call_user_func creates an internal function frame
+      call_user_func([$this, '_throwException']);
+    }
+    catch(\Throwable $e)
+    {
+      $trace = ExceptionHelper::getTraceAsString($e);
+      // Should contain [internal function] for the call_user_func frame
+      static::assertStringContainsString('[internal function]', $trace);
+    }
+  }
+
+  public function testBooleanArgs()
+  {
+    // zend.exception_ignore_args may be enabled
+    $argsAvailable = !empty((new \Exception())->getTrace()[0]['args'] ?? []);
+    if(!$argsAvailable)
+    {
+      $this->markTestSkipped('Args not available in trace');
+    }
+
+    try
+    {
+      $this->_boolException(true, false);
+    }
+    catch(\Throwable $e)
+    {
+      $trace = ExceptionHelper::getTraceAsString($e);
+      static::assertStringContainsString('true, false', $trace);
+    }
+  }
+
+  private function _throwException()
+  {
+    throw new \Exception('internal test');
+  }
+
+  private function _boolException($a, $b)
+  {
+    throw new \Exception('bool test');
+  }
 }

@@ -138,4 +138,46 @@ class BranchTest extends TestCase
     $tree = Branch::trunk()->mHydrate($input, 'getId', 'getParentId');
     static::assertEquals('ABCDEFGHIJ', implode('', Objects::mpull($tree->flatten(), 'getId')));
   }
+
+  public function testIterate()
+  {
+    $input = [
+      Objects::create(TreeThing::class, ['A', null]),
+      Objects::create(TreeThing::class, ['B', 'A']),
+    ];
+
+    $tree = Branch::trunk()->mHydrate($input, 'getId', 'getParentId');
+    $items = [];
+    foreach($tree->iterate() as $item)
+    {
+      $items[] = $item->getId();
+    }
+    static::assertEquals(['A', 'B'], $items);
+  }
+
+  public function testEmptyTree()
+  {
+    $tree = Branch::trunk();
+    static::assertFalse($tree->hasChildren());
+    static::assertEquals([], $tree->flatten());
+  }
+
+  public function testIterateWithNoChildren()
+  {
+    $tree = Branch::trunk();
+    $items = iterator_to_array($tree->iterate());
+    static::assertEquals([], $items);
+  }
+
+  public function testJsonSerializeWithItem()
+  {
+    $input = [
+      (object)['id' => 1, 'parentId' => null],
+    ];
+    $tree = Branch::trunk()->pHydrate($input, 'id', 'parentId');
+    $child = $tree->getChildren()[0];
+    $json = json_encode($child);
+    static::assertStringContainsString('"object":', $json);
+    static::assertStringContainsString('"children":', $json);
+  }
 }
