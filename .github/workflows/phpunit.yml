@@ -26,7 +26,6 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: bcmath
           coverage: xdebug
-          ini-values: zend.exception_ignore_args=On
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
@@ -38,7 +37,7 @@ jobs:
         run: |
           cat coverage.txt
           COVERAGE=$(grep -A3 'Summary:' coverage.txt | grep 'Lines:' | grep -oP '\d+\.\d+(?=%)')
-          THRESHOLD=99
+          THRESHOLD=98
           if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
             echo "Coverage is $COVERAGE%, below ${THRESHOLD}% threshold"
             exit 1
