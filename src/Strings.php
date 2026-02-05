@@ -311,6 +311,7 @@ class Strings
     {
       $randomData = file_get_contents('/dev/urandom', false, null, 0, 100) . uniqid(mt_rand(), true);
     }
+    // @codeCoverageIgnoreStart - fallback when no standard random source available
     else
     {
       $prefix = substr(
@@ -320,12 +321,15 @@ class Strings
       );
       $randomData = str_shuffle($prefix . md5(mt_rand(1, 9999)) . $prefix);
     }
+    // @codeCoverageIgnoreEnd
 
     $hash = preg_replace('/[^a-z0-9]/i', '', $randomData);
+    // @codeCoverageIgnoreStart - rare case when hash needs extending
     while(strlen($hash) < $length)
     {
       $hash .= static::randomString($length - strlen($hash), $forceMethod);
     }
+    // @codeCoverageIgnoreEnd
     return substr($hash, 0, $length);
   }
 

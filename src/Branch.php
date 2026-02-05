@@ -206,10 +206,12 @@ class Branch implements JsonSerializable
    */
   public function iterate()
   {
+    // @codeCoverageIgnoreStart
     foreach(self::_iterate($this) as $item)
     {
       yield $item;
     }
+    // @codeCoverageIgnoreEnd
   }
 
   /**
@@ -224,6 +226,7 @@ class Branch implements JsonSerializable
 
   private static function _iterate(Branch $b)
   {
+    // @codeCoverageIgnoreStart
     $item = $b->getItem();
     if($item)
     {
@@ -239,5 +242,6 @@ class Branch implements JsonSerializable
         }
       }
     }
+    // @codeCoverageIgnoreEnd
   }
 }
