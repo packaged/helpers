@@ -36,7 +36,7 @@ jobs:
       - name: Check coverage
         run: |
           cat coverage.txt
-          COVERAGE=$(awk '/Summary:/{found=1} found && /Lines:/{match($0, /([0-9]+\.[0-9]+)%/, a); print a[1]; exit}' coverage.txt)
+          COVERAGE=$(grep -A3 'Summary:' coverage.txt | grep 'Lines:' | grep -oP '\d+\.\d+(?=%)')
           if [ "$COVERAGE" != "100.00" ]; then
             echo "Coverage is $COVERAGE%, not 100%"
             exit 1
