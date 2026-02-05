@@ -266,19 +266,12 @@ class StringsTest extends TestCase
     }
 
     $types = [
+      Strings::RANDOM_STRING_RANDOM_BYTES,
       Strings::RANDOM_STRING_OPENSSL,
       Strings::RANDOM_STRING_URANDOM,
       Strings::RANDOM_STRING_CUSTOM,
       'invalid',
     ];
-    if(PHP_MAJOR_VERSION >= 7)
-    {
-      $types[] = Strings::RANDOM_STRING_RANDOM_BYTES;
-    }
-    if(PHP_MAJOR_VERSION < 7 || (PHP_MAJOR_VERSION == 7 && PHP_MINOR_VERSION < 1))
-    {
-      $types[] = Strings::RANDOM_STRING_MCRYPT;
-    }
     foreach($types as $type)
     {
       static::assertEquals(
