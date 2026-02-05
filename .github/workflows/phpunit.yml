@@ -25,10 +25,15 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: bcmath
-          coverage: none
+          coverage: xdebug
 
       - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist
+        run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Run PHPUnit
-        run: vendor/bin/phpunit
+        run: |
+          vendor/bin/phpunit --coverage-text --coverage-filter src 2>&1 | tee coverage.txt
+          if ! grep -q "Lines:\s*100.00%" coverage.txt; then
+            echo "Coverage is not 100%"
+            exit 1
+          fi
