@@ -17,6 +17,13 @@ class ExceptionHelperTest extends TestCase
    */
   public function testExceptionTrace($arguments, $expected)
   {
+    // zend.exception_ignore_args may be enabled, which excludes args from traces
+    $argsAvailable = !empty((new \Exception())->getTrace()[0]['args'] ?? []);
+    if(!$argsAvailable)
+    {
+      $expected = ['', ''];
+    }
+
     try
     {
       $this->_someException(...$arguments);
@@ -24,11 +31,11 @@ class ExceptionHelperTest extends TestCase
     catch(\Throwable $e)
     {
       static::assertEquals(
-        "#0 /tests/ExceptionHelperTest.php(22): Packaged\Tests\ExceptionHelperTest->_someException({$expected[0]})",
+        "#0 /tests/ExceptionHelperTest.php(29): Packaged\Tests\ExceptionHelperTest->_someException({$expected[0]})",
         $this->_normalize($e->getTraceAsString())
       );
       static::assertEquals(
-        "#0 /tests/ExceptionHelperTest.php(22): Packaged\Tests\ExceptionHelperTest->_someException({$expected[1]})",
+        "#0 /tests/ExceptionHelperTest.php(29): Packaged\Tests\ExceptionHelperTest->_someException({$expected[1]})",
         $this->_normalize(ExceptionHelper::getTraceAsString($e))
       );
     }
