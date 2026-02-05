@@ -180,4 +180,19 @@ class BranchTest extends TestCase
     static::assertStringContainsString('"object":', $json);
     static::assertStringContainsString('"children":', $json);
   }
+
+  public function testIterateLeafNode()
+  {
+    // Test iterating a single item with no children (leaf node)
+    $input = [
+      (object)['id' => 1, 'parentId' => null],
+    ];
+    $tree = Branch::trunk()->pHydrate($input, 'id', 'parentId');
+    $items = [];
+    foreach($tree->iterate() as $item)
+    {
+      $items[] = $item->id;
+    }
+    static::assertEquals([1], $items);
+  }
 }
